@@ -6,5 +6,4 @@
 config
 extend
 runtime
-thinkphp
 vender
