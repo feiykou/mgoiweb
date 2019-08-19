@@ -49,7 +49,7 @@ class User extends Model
     // 获取当前所有数据
     public function getUserAllData(){
         $data = [
-            'status'    => ['neq',-1]
+            ['status','neq',-1]
         ];
         $order = [
             'id'     => 'desc'
