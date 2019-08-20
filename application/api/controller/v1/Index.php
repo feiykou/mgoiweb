@@ -10,6 +10,7 @@ namespace app\api\controller\v1;
 
 
 use app\api\controller\BaseController;
+use app\api\validate\Count;
 use app\common\model\Column;
 use app\common\model\Procate;
 use app\common\model\Product;
@@ -66,9 +67,10 @@ class Index extends BaseController
         return $topCateData;
     }
 
-    public function getIndexColumn(){
+    public function getIndexColumn($count){
+        (new Count())->goCheck();
         // 推荐专栏
-        $resColumnData = Column::getIndexResc();
+        $resColumnData = Column::getIndexResc($count);
         return $resColumnData;
     }
 

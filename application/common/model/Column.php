@@ -96,7 +96,7 @@ class Column extends Model
      */
 
     // 获取推荐产品
-    public static function getIndexResc($rescId=1){
+    public static function getIndexResc($rescId=1,$count=4){
         $data = [
             'status' => 1
         ];
@@ -107,6 +107,7 @@ class Column extends Model
         $result = self::where($data)
             ->where('','exp',"find_in_set($rescId,attributes)")
             ->order($order)
+            ->limit($count)
             ->field('id,name,mobile_imgs_url,introduce')
             ->select();
         return $result;
