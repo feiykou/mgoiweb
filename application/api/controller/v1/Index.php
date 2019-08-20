@@ -70,7 +70,7 @@ class Index extends BaseController
     public function getIndexColumn($count){
         (new Count())->goCheck();
         // 推荐专栏
-        $resColumnData = Column::getIndexResc($count);
+        $resColumnData = Column::getIndexResc(1,$count);
         return $resColumnData;
     }
 
