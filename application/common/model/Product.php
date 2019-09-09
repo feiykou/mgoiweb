@@ -271,6 +271,7 @@ class Product extends Model
             ->where('','exp',"find_in_set($rescId,attributes)")
             ->order($order)
             ->limit(4)
+            ->distinct(true)
             ->select();
         if($result && count($result) >= 1){
             foreach ($result as &$val){
