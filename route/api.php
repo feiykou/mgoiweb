@@ -25,8 +25,8 @@ Route::get('api/:version/columnCate/sonCate','api/:version.ColumnCate/getSonById
 Route::get('api/:version/product/:id/detail','api/:version.Product/getOne',[],['id'=>'\d+']);
 Route::get('api/:version/product/:cate_id','api/:version.Product/lst',[],['cate_id'=>'\d+']);
 Route::get('api/:version/product/list/:cateid','api/:version.Product/getProductByCate',[],['cate_id'=>'\d+']);
-Route::get('api/:version/product/resc','api/:version.Product/getRescProductByCate');
-
+Route::get('api/:version/product/rescbycate','api/:version.Product/getRescProductByCate');
+Route::get('api/:version/product/resc','api/:version.Product/getRescProduct');
 
 
 // 礼物

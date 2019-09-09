@@ -325,6 +325,27 @@ class Product extends Model
         return $products;
     }
 
+    // 获取推荐专栏
+    public static function getResc($rescId=1,$count=1,$id=0){
+        $data = [
+            ['status','=',1]
+        ];
+        if($id){
+            array_push($data,['id','neq',$id]);
+        }
+        $order = [
+            'listorder' => 'desc',
+            'id' => 'desc'
+        ];
+        $result = self::where($data)
+            ->order($order)
+            ->where('','exp',"find_in_set($rescId,attributes)")
+            ->limit($count)
+            ->field('id,name,price,mobile_imgs_url,main_img_url,introduce,create_time')
+            ->select();
+        return $result;
+    }
+
 
 
 

@@ -129,5 +129,21 @@ class Product extends BaseController
         return json($productArr);
     }
 
+    /**
+     *  获取推荐产品
+     * @url
+     * @http  product/resc
+     * @param int $rescId
+     * @param int $count
+     * @return array|\PDOStatement|string|\think\Collection
+     * @throws \app\lib\exception\ParameterException
+     */
+    public function getRescProduct($rescId=1,$count=1,$id=0){
+        (new MustBePositiveInt())->goCheck('rescCount');
+        // 推荐专栏
+        $resColumnData = ProductModel::getResc($rescId, $count, $id);
+        return $resColumnData;
+    }
+
 
 }
