@@ -301,7 +301,7 @@ class Product extends Model
             ->field('p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.price,p.name_desc')
             ->rightJoin('product_cate c',['c.product_id = p.id',"c.cate_id in ($cateIds)"])
             ->order($order)
-            ->distinct(true)
+            ->group('p.id')
             ->paginate($size,true,['page'=>$page])
             ->each(function($item, $key){
                 $item['main_img_url'] = self::handleImgUrl($item['main_img_url']);
