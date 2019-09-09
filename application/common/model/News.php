@@ -32,7 +32,11 @@ class News extends Model
 
     private function handleImgUrl($val){
         $val = str_replace('\\','/',$val);
-        return explode(';',$val);
+        $arr = explode(';',$val);
+        foreach ($arr as &$item){
+            $item = config('APISetting.img_prefix').$item;
+        }
+        return $arr;
     }
 
 
@@ -105,6 +109,20 @@ class News extends Model
             'id'        => "desc"
         ];
         $result = self::where($data)->order($order)->select();
+        return $result;
+    }
+
+    public function getAllNews($page=1,$size=10){
+        $data = [
+            'status' => 1
+        ];
+        $order = [
+            'listorder' => "desc",
+            'id'        => "desc"
+        ];
+        $result = self::where($data)
+            ->order($order)
+            ->paginate($size, false, ['page' => $page]);
         return $result;
     }
 

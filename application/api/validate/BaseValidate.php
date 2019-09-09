@@ -9,31 +9,31 @@
 namespace app\api\validate;
 
 
+use app\lib\exception\ParameterException;
+use think\facade\Request;
 use think\Validate;
 
 class BaseValidate extends Validate
 {
     public function goCheck($scene=''){
-        // 获取http传入的参数
-        // 对这些参数做校验
-        $request = request();
-        $params = $request->param();
-
-        if(isset($scene) && !empty($scene)){
-            $result = $this->batch()->scene($scene)->check($params);
+        //必须设置contetn-type:application/json
+        $params = Request::param();
+        $params['token'] = Request::header('token');
+        if(!empty($scene)){
+            $result = $this->scene($scene)->check($params);
         }else{
-            $result = $this->batch()->check($params);
+            $result = $this->check($params);
         }
-
-        if(!$result){
-            return [
-                'type'=>false,
-                'msg' => is_array($this->getError()) ? implode(
-                    '，', $this->getError()) : $this->getError()
-            ];
-        }else{
-            return ['type'=>true];
+        if (!$result) {
+            $exception = new ParameterException(
+                [
+                    // $this->error有一个问题，并不是一定返回数组，需要判断
+                    'msg' => is_array($this->error) ? implode(
+                        ';', $this->error) : $this->error,
+                ]);
+            throw $exception;
         }
+        return true;
 
 
     }

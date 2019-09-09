@@ -16,7 +16,7 @@ class Column extends Model
 {
 
     protected $hidden = [
-        'delete_time','create_time','update_time','status','column_id','listorder','click_num'
+        'delete_time','update_time','status','column_id','listorder','click_num'
     ];
 
     public function cate(){
@@ -30,6 +30,11 @@ class Column extends Model
         return $this->handleImgUrl($val);
     }
 
+    protected function getContentAttr($val){
+        $val = str_replace('src="','src="'.config('APISetting.img_prefix'),$val);
+        return $val;
+    }
+
     private function handleImgUrl($val){
         $val = str_replace('\\','/',$val);
         $arr = explode(';',$val);
@@ -38,7 +43,6 @@ class Column extends Model
         }
         return $arr;
     }
-
 
     public function getAllNewsData($data=[]){
         $data[] = ['status','neq',-1];
@@ -53,7 +57,6 @@ class Column extends Model
         return $result;
     }
 
-
     // 判断是否存在同名
     public function is_unique($name="",$id=0){
         $data = [
@@ -64,6 +67,7 @@ class Column extends Model
         $result = $this->where($data)->find();
         return $result;
     }
+
     // 删除元素
     public function delSelChild($idArr=[]){
         $data = [
@@ -95,39 +99,80 @@ class Column extends Model
      * 前台数据调用
      */
 
-    // 获取推荐产品
-    public static function getIndexResc($rescId=1,$count=4){
+    // 获取推荐专栏
+    public static function getResc($rescId=1,$count=1,$id=0){
         $data = [
-            'status' => 1
+            ['status','=',1]
+        ];
+        if($id){
+            array_push($data,['id','neq',$id]);
+        }
+        $order = [
+            'listorder' => 'desc',
+            'id' => 'desc'
+        ];
+        $result = self::where($data)
+            ->order($order)
+            ->where('','exp',"find_in_set($rescId,attributes)")
+            ->limit($count)
+            ->field('id,name,mobile_imgs_url,main_img_url,introduce,create_time')
+            ->select();
+        return $result;
+    }
+
+    public static function getIndexResc($cateIds,$rescId=1,$count=4){
+        $data = [
+            ['status','=',1],
+            ['cate_id','in',$cateIds]
         ];
         $order = [
             'listorder' => 'desc',
             'id' => 'desc'
         ];
         $result = self::where($data)
-            ->where('','exp',"find_in_set($rescId,attributes)")
             ->order($order)
+            ->where('','exp',"find_in_set($rescId,attributes)")
             ->limit($count)
-            ->field('id,name,mobile_imgs_url,introduce')
+            ->field('id,name,mobile_imgs_url,main_img_url,introduce,create_time')
             ->select();
         return $result;
     }
 
-    public static function getNewsIndexData($cateId){
-        // 获取产品子栏目产品
-        $cateTree = new Catetree();
-        $idArr = $cateTree->childrenids($cateId,model('column_cate'));
-        $idArr[] = $cateId;
+    // 通过分类获取产品
+    public static function getColumnsByCate($cateIds,$page=1,$size=10){
         $data = [
             ['status','=',1],
-            ['cate_id','in',$idArr]
+            ['cate_id','in',$cateIds]
         ];
         $order = [
             'listorder' => "desc",
             'id'        => "desc"
         ];
-        $result = self::where($data)->order($order)->select();
+        $result = self::where($data)
+            ->order($order)
+            ->field('id,name,sub_name,mobile_imgs_url,main_img_url,introduce,create_time')
+            ->paginate($size,true,['page'=>$page]);
         return $result;
+    }
+
+    /**
+     * 获取搜索结果
+     */
+    public function getSearchResult($params,$size=10,$page=1){
+        $data = [
+            ['status','=',1],
+            ['name','like','%'.$params['q'].'%']
+        ];
+        $order = [
+            'listorder' => 'desc',
+            'create_time' => 'desc'
+        ];
+
+        $data = self::where($data)
+            ->order($order)
+            ->field('id,name,sub_name,mobile_imgs_url,main_img_url,introduce,create_time')
+            ->paginate($size,false,['page'=>$page]);
+        return $data;
     }
 
 

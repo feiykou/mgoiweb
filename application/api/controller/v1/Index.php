@@ -10,11 +10,13 @@ namespace app\api\controller\v1;
 
 
 use app\api\controller\BaseController;
+use app\api\validate\MustBePositiveInt;
+use app\common\model\BannerItem;
 use app\api\validate\Count;
 use app\common\model\Column;
 use app\common\model\Procate;
 use app\common\model\Product;
-use app\home\model\BannerItem;
+use \app\common\model\Theme;
 
 class Index extends BaseController
 {
@@ -55,6 +57,13 @@ class Index extends BaseController
     }
 
 
+    public function themesResc($rescId=1){
+        (new MustBePositiveInt())->goCheck('resc');
+        $resThemeData = Theme::getRescTheme($rescId);
+        return $resThemeData;
+    }
+
+
     /**
      * 获取顶级类
      * @url    /index/topCate
@@ -67,11 +76,11 @@ class Index extends BaseController
         return $topCateData;
     }
 
-    public function getIndexColumn($count){
-        (new Count())->goCheck();
-        // 推荐专栏
-        $resColumnData = Column::getIndexResc(1,$count);
-        return $resColumnData;
-    }
+//    public function getIndexColumn($count){
+//        (new Count())->goCheck();
+//        // 推荐专栏
+//        $resColumnData = Column::getIndexResc(1,$count);
+//        return $resColumnData;
+//    }
 
 }

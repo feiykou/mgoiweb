@@ -162,10 +162,23 @@
 							{/volist}
 						</select>
 						<input type="hidden" name="prop_name[]">
+
 					</div>
 					<div class="formControls" style="float: left; width: 200px; margin-left: 10px;">
 						<input type="text" class="input-text" style="height: 24px;" value="" name="prop_value[]">
 					</div>
+                    <div class="formControls skin-minimal">
+						<div class="check-box" style="float: left;margin-left: 20px;">
+							<label class="checkbox-input">
+								<input type="radio" name="prop_is_product[]" checked value="0">否
+							</label>
+						</div>
+						<div class="check-box" style="float: left;">
+							<label class="checkbox-input">
+								<input type="radio" name="prop_is_product[]" value="1">是
+							</label>
+						</div>
+                    </div>
 				</div>
 			</div>
 		</div>
@@ -261,9 +274,36 @@
 	function addrow(obj){
         var $div=$(obj).parent().parent();
         if($(obj).html() == '[+]'){
-			var newdiv = $div.clone();
-            newdiv.find('a').html('[-]');
-            newdiv.find('input[type="text"]').val('');
+            var newdiv = `<div style="overflow: hidden; margin-bottom: 10px;">
+				<div class="formControls" style="float: left; width: 20px; text-align: center; line-height: 20px; font-size: 12px;">
+					<a href="javascript:;" class="btn-add-reduce" onclick="addrow(this);">[+]</a>
+				</div>
+				<div class="formControls" style="float: left; width: 100px; margin-left: 10px;">
+					<select class="select" name="prop_id[]" onchange="propChange(this,event)">
+						<option value="">选择属性</option>
+						{volist name="propData" id="prop"}
+						<option value="{$prop.id}">{$prop.name}</option>
+						{/volist}
+					</select>
+					<input type="hidden" value="" name="prop_name[]">
+				</div>
+				<div class="formControls" style="float: left; width: 200px; margin-left: 10px;">
+					<input type="text" class="input-text" style="height: 24px;" value="" name="prop_value[]">
+				</div>
+				<div class="formControls skin-minimal">
+					<div class="check-box" style="float: left;margin-left: 20px;">
+						<label class="checkbox-input">
+							<input type="radio" name="prop_is_product[]" checked value="0">否
+						</label>
+
+					</div>
+					<div class="check-box" style="float: left;">
+						<label class="checkbox-input">
+							<input type="radio" name="prop_is_product[]" value="1">是
+						</label>
+					</div>
+				</div>
+			</div>`;
             $div.parent().append(newdiv);
 		}else{
             $div.remove();

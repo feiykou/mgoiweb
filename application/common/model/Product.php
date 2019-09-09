@@ -39,28 +39,33 @@ class Product extends Model
         return $this->hasMany('product_giftcategory','product_id','id');
     }
 
-
-
     public function prop(){
         return $this->hasMany('product_prop','product_id','id');
     }
     public function property(){
         return $this->belongsToMany('property');
     }
+
+
+
     protected function getImgsUrlAttr($val,$data){
-        return $this->handleImgUrl($val);
+        return self::handleImgUrl($val);
     }
     protected function getMainImgUrlAttr($val,$data){
-        return $this->handleImgUrl($val);
+        return self::handleImgUrl($val);
     }
     protected function getMobileImgsUrlAttr($val,$data){
-        return $this->handleImgUrl($val);
+        return self::handleImgUrl($val);
     }
     protected function getCodeImgAttr($val,$data){
-        return $this->handleImgUrl($val);
+        return self::handleImgUrl($val);
+    }
+    protected function getContentAttr($val){
+        $val = str_replace('src="','src='.config('APISetting.img_prefix'),$val);
+        return str_replace('" title=',' title=',$val);
     }
 
-    private function handleImgUrl($val){
+    private static function handleImgUrl($val){
         $val = str_replace('\\','/',$val);
         $arr = explode(';',$val);
         foreach ($arr as &$item){
@@ -69,9 +74,15 @@ class Product extends Model
         return $arr;
     }
 
+
+//    protected function getNameAttr($val,$data){
+//        return explode(',', $val);
+//    }
+
     protected function getCateIdAttr($val,$data){
         return explode(',',$val);
     }
+
 
     protected static function init()
     {
@@ -85,6 +96,12 @@ class Product extends Model
                     $param['prop_id'] = $val;
                     $param['prop_value'] = $productData['prop_value'][$key];
                     $param['prop_name'] = $productData['prop_name'][$key];
+
+                    if($productData['prop_is_product'][$key]){
+                        $param['is_product'] = $productData['prop_is_product'][$key];
+                    }else{
+                        $param['is_product'] = 0;
+                    }
                     $data[] = $param;
                 }
                 if(!$data) return;
@@ -131,6 +148,11 @@ class Product extends Model
                     $param['prop_id'] = $val;
                     $param['prop_value'] = $productData['prop_value'][$key];
                     $param['prop_name'] = $productData['prop_name'][$key];
+                    if($productData['prop_is_product'][$key]){
+                        $param['is_product'] = $productData['prop_is_product'][$key];
+                    }else{
+                        $param['is_product'] = 0;
+                    }
                     $data[] = $param;
                 }
                 if(!$data) return;
@@ -195,7 +217,7 @@ class Product extends Model
             ['id','in',$idArr]
         ];
         $result = $this->where($data)->update(['status'=>-1]);
-        db('product_prop')->where(['product_id'=>['in',$idArr]])->delete();
+        db('product_prop')->where(['product_id','in',$idArr])->delete();
         return $result;
     }
 
@@ -232,9 +254,125 @@ class Product extends Model
     /**
      * 前台数据调用
      */
-    protected function getNameAttr($val,$data){
-        return explode(',', $val);
+    // 获取分类下的产品
+    public static function getRescCateProducts($cateIds, $rescId){
+        $cateIds = implode(',',$cateIds);
+        $data = [
+            ['p.status','=',1]
+        ];
+        $order = [
+            'p.listorder' => "desc",
+            'p.id'        => "desc"
+        ];
+        $result = db('product')->alias('p')
+            ->where($data)
+            ->field('p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.price')
+            ->rightJoin('product_cate c',['c.product_id = p.id',"c.cate_id in ($cateIds)"])
+            ->where('','exp',"find_in_set($rescId,attributes)")
+            ->order($order)
+            ->limit(4)
+            ->distinct(true)
+            ->select();
+        if($result && count($result) >= 1){
+            foreach ($result as &$val){
+                if($val['main_img_url']){
+                    $val['main_img_url'] = self::handleImgUrl($val['main_img_url']);
+                }
+            }
+        }
+        return $result;
     }
+
+
+    // 通过分类获取产品
+    public static function getProductsByCate($cateIds,$sort=0,$page=1,$size=10){
+        $cateIds = implode(',',$cateIds);
+        $data = [
+            ['p.status','=',1]
+        ];
+        if($sort){
+            $type = $sort == 1 ? 'desc' : 'asc';
+            $order['p.price'] = $type;
+        }
+        $order['id'] = 'desc';
+        $order['listorder'] = 'desc';
+        $result = db('product')->alias('p')
+            ->where($data)
+            ->field('p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.price,p.name_desc')
+            ->rightJoin('product_cate c',['c.product_id = p.id',"c.cate_id in ($cateIds)"])
+            ->order($order)
+            ->distinct(true)
+            ->paginate($size,true,['page'=>$page])
+            ->each(function($item, $key){
+                $item['main_img_url'] = self::handleImgUrl($item['main_img_url']);
+                return $item;
+            });
+        return $result;
+    }
+
+    /*
+     * 获取产品详情
+     */
+    public static function getProductDetail($id){
+        $data = [
+            'id'      => $id
+        ];
+        $products = self::where($data)
+            ->with(['prop'=>function($query){
+                $query->where('is_product',1);
+            }])
+            ->find();
+        return $products;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function getProAndPropData($id=0){
         $data = [

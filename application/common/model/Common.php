@@ -42,6 +42,19 @@ class Common extends Model
             ->insert($data);
     }
 
+    public function is_unique($name="",$id=0,$where=['status','neq',-1]){
+        $data = [
+            ['id','neq',$id],
+            ['name','=',$name]
+        ];
+        array_push($data,$where);
+        $result = $this->where($data)->find();
+        if(!$result){
+            return false;
+        }
+        return $data;
+    }
+
     /**
      * 获取全部数据
      * @url

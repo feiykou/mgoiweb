@@ -34,8 +34,12 @@ class Theme extends Base
         $CategoryObj=model('theme_category');
         $CategoryRes=$CategoryObj->findAll([],'listorder DESC');
         $CategoryRes=$Category->Catetree($CategoryRes);
+        $attrData = config('attributes.theme_type');
+        $labelsData = config('attributes.labels_type');
         $this->assign([
-            'CategoryRes'  => $CategoryRes
+            'CategoryRes'  => $CategoryRes,
+            'attrData'     => $attrData,
+            'labelsData'  => $labelsData,
         ]);
         return view();
     }
@@ -52,10 +56,16 @@ class Theme extends Base
         $CategoryObj=model('theme_category');
         $CategoryRes=$CategoryObj->findAll([],'listorder DESC');
         $CategoryRes=$Category->Catetree($CategoryRes);
+        $attrData = config('attributes.theme_type');
+        $labelsData = config('attributes.labels_type');
+        $themeData['attributes'] = explode(',',$themeData['attributes']);
+        $themeData['label_attr'] = explode(',',$themeData['label_attr']);
 
         $this->assign([
             'themeData'      => $themeData,
-            'CategoryRes'    => $CategoryRes
+            'CategoryRes'    => $CategoryRes,
+            'attrData'     => $attrData,
+            'labelsData'  => $labelsData,
         ]);
         return view();
     }
@@ -64,7 +74,7 @@ class Theme extends Base
         if(!request()->post()){
             $this->error("请求失败");
         }
-        $validate = (new ThemeValidate())->goCheck('');
+        $validate = (new ThemeValidate())->goCheck();
         if(!$validate['type']){
             $this->result("",'0',$validate['msg']);
         }
@@ -78,6 +88,9 @@ class Theme extends Base
         if($is_unique){
             $this->result('','0','存在同名类');
         }
+
+        $data['attributes'] = keyInArray($data,'attributes')? implode(',',$data['attributes']):'';
+        $data['label_attr']  = keyInArray($data,'label_attr')? implode(',',$data['label_attr']):'';
 
         // 更新数据
         if(!$is_exist_id){

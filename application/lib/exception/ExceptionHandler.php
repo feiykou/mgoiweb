@@ -39,11 +39,10 @@ class ExceptionHandler extends Handle
             $this->recordErrorLog($e);
         }
 
-        $request = Request::instance();
         $result = [
             'msg' => $this->msg,
             'error_code' => $this->errorCode,
-            'request_url' => $request = $request->url()
+            'request_url' => $request = \think\facade\Request::url()
         ];
         return json($result, $this->code);
     }

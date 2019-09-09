@@ -19,10 +19,9 @@ class ThemeValidate extends BaseValidate
     ];
 
     protected $message = [
-        'name.require' => '主题名称不能为空',
-        'name.unique' => '主题名称不能重复',
+        'name' => '主题名称不能为空',
         'main_img_url' => '主题封面图不能为空',
-        'content' => '主题内容不能为空'
+        'content' => '内容不能为空'
     ];
 
 }

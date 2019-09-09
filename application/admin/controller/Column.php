@@ -45,7 +45,7 @@ class Column extends Base
 
         $cateData = model('column_cate')->getCateData();
         $newsAllData = $this->model->getAllNewsData($sdata);
-        $attrData = config('attributes.news_attr_type');
+        $attrData = config('attributes.column_attr_type');
         return $this->fetch('',[
             'newsAllData'   => $newsAllData,
             'cateData' => $cateData,
@@ -61,7 +61,7 @@ class Column extends Base
 //        (new ProductValidate())->goCheck('add');
         $columnSortData = model('category')->getColumnCate();
         $newCates = model('column_cate')->getCateData();
-        $attrData = config('attributes.news_attr_type');
+        $attrData = config('attributes.column_attr_type');
         return $this->fetch('',[
             'columnSortData' => $columnSortData,
             'attrData'     => $attrData,
@@ -112,7 +112,7 @@ class Column extends Base
         $columnSortData = model('category')->getColumnCate();
         $newCates = model('column_cate')->getCateData();
 
-        $attrData = config('attributes.news_attr_type');
+        $attrData = config('attributes.column_attr_type');
         $newsAllData['attributes'] = explode(',',$newsAllData['attributes']);
 
         return $this->fetch('',[

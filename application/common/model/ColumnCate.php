@@ -60,9 +60,10 @@ class ColumnCate extends Model
                 $ids.= $value['id'].',';
             }
             $ids .= trim($id);
-            $parentDept = $model->where(
+            $parentDept = $model->where([
                 ['id','not in',$ids],
-                ['status','=',1])->select();
+                ['status','=',1]
+            ])->select();
         }else{
             $parentDept = $ModelDatas;
         }
@@ -148,8 +149,70 @@ class ColumnCate extends Model
 
 
     /**
-     * 获取home数据
+     * 获取api数据
      */
+    // 获取当前分类的所有子类id，包括当前id
+    public static function getAllCateById($cateId){
+        $cateTree = new Catetree();
+        $arr = $cateTree->sonids($cateId, new self());
+        array_push($arr,$cateId);
+        return $arr;
+    }
+
+    /**
+     * 获取当前分类下的所有子分类
+     * @url
+     * @http
+     * @param $cateId
+     * @return array
+     */
+    public static function getAllSonData($cateId){
+        $cateTree = new Catetree();
+        $ids = $cateTree->childrenids($cateId, new self());
+        $data = [];
+        if(count($ids) > 0){
+            $data = self::_getSelCate($ids)->toArray();
+            $data = $cateTree->generateTree($data);
+        }
+        return $data;
+    }
+
+    /*
+     * 获取分类信息  --- 多个分类
+     */
+    private static function _getSelCate($ids=[],$fieldStr=''){
+        $field = 'id,pid,name,img_url';
+        if($fieldStr) $field .= $fieldStr;
+        $data = self::where('status','=',1)
+            ->field($field)
+            ->order([
+                'listorder' => 'desc',
+                'id' => 'desc'
+            ])->select($ids);
+        return $data;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public static function getIndexCateProduct(){
         $data = [
             'status'    =>  1,

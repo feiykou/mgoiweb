@@ -90,15 +90,15 @@ class Theme extends Common
 
 
     // 判断是否存在同名
-    public function is_unique($name="",$id=0){
-        $data = [
-            ['status','neq',-1],
-            ['id','neq',$id],
-            ['name','=',$name]
-        ];
-        $result = $this->where($data)->find();
-        return $result;
-    }
+//    public function is_unique($name="",$id=0){
+//        $data = [
+//            ['status','neq',-1],
+//            ['id','neq',$id],
+//            ['name','=',$name]
+//        ];
+//        $result = $this->where($data)->find();
+//        return $result;
+//    }
 
 
     // api =======================
@@ -114,6 +114,25 @@ class Theme extends Common
             ->with(['product'])
             ->find();
         return $products;
+    }
+
+    /**
+     * 获取推荐的主题
+     */
+    public static function getRescTheme($rescId=1){
+        $data = [
+            'status' => 1
+        ];
+        $order = [
+            'listorder' => 'desc',
+            'id' => 'desc'
+        ];
+        $result = self::where($data)
+            ->where('','exp',"find_in_set($rescId,attributes)")
+            ->field('id,name,description,main_img_url,mobile_imgs_url')
+            ->order($order)
+            ->select();
+        return $result;
     }
 
     public static function getThemeByCate($cate_id){

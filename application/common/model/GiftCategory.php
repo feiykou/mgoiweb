@@ -31,7 +31,7 @@ class GiftCategory extends Model
         return $arr;
     }
 
-    protected function productCate(){
+    public function productCate(){
         return $this->belongsToMany('product','product_giftcategory','product_id','gcate_id');
     }
 
@@ -169,32 +169,44 @@ class GiftCategory extends Model
     }
 
 
+
+
+
+
+
+
     /**
      * 获取home数据
      */
-    public static function getIndexCateProduct(){
+    public static function getIndexCateAndProduct($cateIds){
         $data = [
-            'status'    =>  1,
-            'pid' =>  0,
+            ['status','=',1],
+            ['id','in',$cateIds]
         ];
         $order = [
             'listorder' => 'desc',
             'id'        => 'desc'
         ];
-        $column =self::where($data)->order($order)->field('id,name')->select();
-        $cateData = [];
-        foreach ($column as $key => $val){
-            $tempData = [];
-            $result = Product::getProductByCate($val['id']);
-            if($result){
-                $tempData['data'] = $result;
-                $tempData['name'] = $val['name'];
-                array_push($cateData,$tempData);
-            }
 
-        }
-        return $cateData;
+        $result = self::where($data)
+            ->order($order)
+            ->with(['productCate' => function($query){
+                $query->field('id,name,main_img_url');
+            }])
+            ->select();
+        return $result;
     }
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      *  获取顶级分类
@@ -298,12 +310,11 @@ class GiftCategory extends Model
     }
 
     // 获取当前分类的所有子类id，包括当前id
-    public static function getAllCateById($cateId){
+    public static function getAllCateById($cateId, $isContain=true){
         $cateTree = new Catetree();
         $arr = $cateTree->sonids($cateId, new self());
-        $cateId = [$cateId];
-        $ids = array_merge($cateId,$arr);
-        return $ids;
+        if($isContain) array_push($arr,$cateId);
+        return $arr;
     }
 
     public static function getCrumb($cateId){

@@ -4,28 +4,58 @@ Route::get('api/:version/index/banner','api/:version.Index/indexBanner');
 Route::get('api/:version/index/rescProduct','api/:version.Index/rescProduct');
 Route::get('api/:version/index/newsProduct','api/:version.Index/newsProduct');
 Route::get('api/:version/index/topCate','api/:version.Index/topCate');
-Route::get('api/:version/index/column','api/:version.Index/getIndexColumn');
+Route::get('api/:version/index/rescTheme','api/:version.Index/themesResc');
 
-Route::get('api/:version/column/detail/:id','api/:version.Column/detail');
-Route::get('api/:version/column/:cate_id','api/:version.Column/getColumnByCateId',[],['cate_id'=>'\d+']);
+
+Route::get('api/:version/column/indexResc','api/:version.Column/getIndexColumn');
+Route::get('api/:version/column/detail/:id','api/:version.Column/detail',[],['id'=>'\d+']);
+Route::get('api/:version/column/:cate_id','api/:version.Column/getColumnsByCate',[],['cate_id'=>'\d+']);
 Route::get('api/:version/column/top_cate','api/:version.Column/getTopCate');
-Route::get('api/:version/columnCate/:id','api/:version.ColumnCate/getColumnCateById');
+Route::get('api/:version/column/resc','api/:version.Column/getRescColumn');
+Route::get('api/:version/column/topBottom/:id','api/:version.Column/getTopAndBottom',[],['id'=>'\d+']);
+Route::get('api/:version/column/search','api/:version.Column/search');
 
+
+Route::get('api/:version/columnCate/:id','api/:version.ColumnCate/getColumnCateById',[],['id'=>'\d+']);
+Route::get('api/:version/columnCate/sonCate','api/:version.ColumnCate/getSonById');
+
+
+
+
+Route::get('api/:version/product/:id/detail','api/:version.Product/getOne',[],['id'=>'\d+']);
 Route::get('api/:version/product/:cate_id','api/:version.Product/lst',[],['cate_id'=>'\d+']);
+Route::get('api/:version/product/list/:cateid','api/:version.Product/getProductByCate',[],['cate_id'=>'\d+']);
+Route::get('api/:version/product/resc','api/:version.Product/getRescProductByCate');
+
+
+
+// 礼物
+Route::get('api/:version/giftCate/resc','api/:version.GiftCate/getRescGiftCate');
+
 
 // 公共
 Route::get('api/:version/cate/second','api/BaseController/cate');
 Route::get('api/:version/cate/all','api/:version.Cate/getAllCate');
 Route::get('api/:version/cate/topCate','api/:version.Cate/getTopCate');
-Route::get('api/:version/cate/sonCate/:cate_id','api/:version.Cate/getSonById',[],['cate_id'=>'\d+']);
+Route::get('api/:version/cate/sonAllCate/:cate_id','api/:version.Cate/getSonById',[],['cate_id'=>'\d+']);
+Route::get('api/:version/cate/sonCate/:id','api/:version.Cate/getSonCate',[],['id'=>'\d+']);
+Route::get('api/:version/cate/parents/:id','api/:version.Cate/getParentCate',[],['id'=>'\d+']);
+
+
 
 // 搜索
 Route::get('api/:version/product/search', 'api/:version.Product/search');
 
-// 主题
-Route::get('api/:version/theme/:id', 'api/:version.Theme/getThemeDetail',[],['id'=>'\d+']);
+// 主题 改动
+Route::get('api/:version/theme/:id/detail', 'api/:version.Theme/getThemeDetail',[],['id'=>'\d+']);
 Route::get('api/:version/theme/list/:cate_id', 'api/:version.Theme/getThemeByCate',[],['cate_id'=>'\d+']);
 Route::get('api/:version/theme/topCate', 'api/:version.ThemeCategory/getTopCate',[],['cate_id'=>'\d+']);
+
+
+// 新闻
+Route::get('api/:version/news/all', 'api/:version.News/getAllNews');
+Route::get('api/:version/news/:id', 'api/:version.News/detail',[],['id'=>'\d+']);
+Route::get('api/:version/news/topBottom/:id','api/:version.News/getTopAndBottom',[],['id'=>'\d+']);
 
 
 

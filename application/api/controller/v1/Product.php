@@ -10,8 +10,13 @@ namespace app\api\controller\v1;
 
 
 use app\api\controller\BaseController;
+use app\api\validate\IDMustBePositiveInt;
+use app\api\validate\MustBePositiveInt;
 use app\api\validate\Search;
 use app\common\model\Procate;
+use app\common\model\Product as ProductModel;
+use app\api\validate\Product as ProductValidate;
+use catetree\Catetree;
 
 class Product extends BaseController
 {
@@ -22,14 +27,14 @@ class Product extends BaseController
         $this->model = model('product');
     }
 
-//    public function lst($cate_id=0){
-//        if($cate_id == 0){
-//            $products = $this->model->getAllProData();
-//        }else{
-//            $products = model('procate')->getProductByClumn($cate_id);
-//        }
-//        return $products;
-//    }
+    public function getRescProductByCate(){
+        (new MustBePositiveInt())->goCheck('productResc');
+        $cateId = input('cateId',0,'intval');
+        $rescId = input('rescId',0,'intval');
+        $cateIdArr = Procate::getAllCateById($cateId);
+        $data = ProductModel::getRescCateProducts($cateIdArr,$rescId);
+        return json($data);
+    }
 
     public function lst($cate_id=0){
         if($cate_id == 0){
@@ -76,4 +81,53 @@ class Product extends BaseController
         }
         return $searchData;
     }
+
+    /**
+     * 获取产品详情
+     * @url     /product/:id/detail
+     * @http    get
+     * @param   $id
+     * @return  array|false|\PDOStatement|string|\think\Model
+     * @throws  ProductException
+     */
+    public function getOne($id)
+    {
+        (new IDMustBePositiveInt())->goCheck();
+        $product = ProductModel::getProductDetail($id);
+        return $product;
+    }
+
+    /**
+     * 获取分类下的所有产品
+     * @url  /product/list/:cateid?page=1&size=10
+     * @http
+     * @param $cateid
+     * @return false|\PDOStatement|string|\think\Collection
+     * @throws CategoryException
+     */
+    public function getProductByCate($cateid=0,$page=1,$size=10){
+        (new ProductValidate())->goCheck('all');
+        $sort = input('sort',0,'intval');
+        if($cateid == 0){
+            $order = ['listorder'=>'desc'];
+            if($sort){
+                $type = $sort == 1 ? 'desc' : 'asc';
+                array_push($order,[
+                    'price' => $type
+                ]);
+            }
+            $productArr = ProductModel::where('status','=',1)
+                ->order($order)
+                ->field('id,name,introduce,main_img_url,price,name_desc')
+                ->paginate($size,true,['page'=>$page]);
+        }else{
+            $catetree = new Catetree();
+            $sonids = $catetree->childrenids($cateid, new Procate());
+            $sonids[] = intval($cateid);
+            $productArr = ProductModel::getProductsByCate($sonids,$sort,$page,$size);
+        }
+        return json($productArr);
+    }
+
+
 }

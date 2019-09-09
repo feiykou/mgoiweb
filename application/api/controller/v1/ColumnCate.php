@@ -13,9 +13,9 @@ use app\api\controller\BaseController;
 
 class ColumnCate extends BaseController
 {
-    public function _initialize()
+    public function __construct()
     {
-        parent::_initialize();
+        parent::__construct();
         $this->model = model('column_cate');
     }
 
@@ -23,5 +23,14 @@ class ColumnCate extends BaseController
         if(intval($id) <= 0) return;
         $cateData = $this->model->getCateById($id);
         return $cateData;
+    }
+
+    /**
+     * 获取当前分类下的所有子分类，并设置成树形结构
+     */
+    public function getSonById(){
+        $id = input('cate_id',0,'intval');
+        $cateData = $this->model->getAllSonData($id);
+        return json($cateData);
     }
 }

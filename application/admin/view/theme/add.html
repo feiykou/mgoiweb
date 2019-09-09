@@ -22,8 +22,26 @@
 				<input type="text" class="input-text" value="" placeholder="" name="description">
 			</div>
 		</div>
-
-
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">推荐位：</label>
+			<div class="formControls skin-minimal col-xs-5">
+				{volist name="attrData" id="attr" key="k"}
+				<div class="check-box">
+					<label class="checkbox-input"><input type="checkbox" name="attributes[]" value="{$k}"><span class="checkbox-name">{$attr}</span></label>
+				</div>
+				{/volist}
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">标签位：</label>
+			<div class="formControls skin-minimal col-xs-5">
+				{volist name="labelsData" id="labelAttr" key="k"}
+				<div class="check-box">
+					<label class="checkbox-input"><input type="checkbox" name="labelsAttr[]" value="{$k}"><span class="checkbox-name">{$labelAttr}</span></label>
+				</div>
+				{/volist}
+			</div>
+		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>封面图：</label>
 			<div class="formControls col-xs-8 col-sm-9">

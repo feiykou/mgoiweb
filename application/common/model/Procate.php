@@ -188,7 +188,6 @@ class Procate extends Model
                 $tempData['name'] = $val['name'];
                 array_push($cateData,$tempData);
             }
-
         }
         return $cateData;
     }
@@ -221,7 +220,7 @@ class Procate extends Model
     private static function _getSelCate($ids=[],$fieldStr=''){
         $field = 'id,pid,name,img_url';
         if($fieldStr) $field .= $fieldStr;
-        $data = self::where('status','=','1')
+        $data = self::where('status','=',1)
             ->field($field)
             ->order([
                 'listorder' => 'desc',
@@ -322,9 +321,8 @@ class Procate extends Model
     public static function getAllCateById($cateId){
         $cateTree = new Catetree();
         $arr = $cateTree->sonids($cateId, new self());
-        $cateId = [$cateId];
-        $ids = array_merge($cateId,$arr);
-        return $ids;
+        array_push($arr,$cateId);
+        return $arr;
     }
 
     public static function getCrumb($cateId){

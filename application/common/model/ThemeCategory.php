@@ -105,17 +105,6 @@ class ThemeCategory extends Common
         return $modelDatas;
     }
 
-    // 判断是否存在同名
-    public function is_unique($name="",$id=0){
-        $data = [
-            ['status','=',1],
-            ['id','neq',$id],
-            ['name','=',$name]
-        ];
-        $result = $this->where($data)->find();
-        return $result;
-    }
-
     // 判断当前id是否存在子类
     public function is_child($id=-1){
         if(is_numeric($id)){

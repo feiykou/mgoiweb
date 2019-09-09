@@ -73,10 +73,13 @@ class BannerItem extends Model
     // 判断是否存在同名
     public function is_unique($name="",$id=0){
         $data = [
-            'id'        => ['neq',$id],
-            'name'      => $name
+            ['id','neq',$id],
+            ['name','=',$name]
         ];
         $result = $this->where($data)->find();
-        return $result;
+        if(!$result){
+            return false;
+        }
+        return true;
     }
 }
