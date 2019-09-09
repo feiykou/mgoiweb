@@ -227,17 +227,13 @@
 					<div class="formControls" style="float: left; width: 200px; margin-left: 10px;">
 						<input type="text" class="input-text" style="height: 24px;" value="{$property.prop_value}" name="prop_value[]">
 					</div>
-					<div class="formControls skin-minimal">
-						<div class="check-box" style="float: left;margin-left: 20px;">
-							<label class="checkbox-input">
-								<input type="radio" name="prop_is_product[]" value="0" {if condition="$property.is_product eq 0"}checked{/if}>否
-							</label>
-						</div>
-						<div class="check-box" style="float: left;">
-							<label class="checkbox-input">
-								<input type="radio" name="prop_is_product[]" value="1" {if condition="$property.is_product eq 1"}checked{/if}>是
-							</label>
-						</div>
+					<div class="formControls" style="float: left; margin-left: 10px;">
+						<label class="checkbox-input">
+							<input type="checkbox" name="prop_is_product[]" value="1" {if condition="$property.is_product eq 1"}checked{/if}>是
+							{if condition="$property.is_product eq 0"}
+							<input type="hidden" name="prop_is_product[]" checked value="0">
+							{/if}
+						</label>
 					</div>
 				</div>
 				{/volist}
@@ -258,18 +254,11 @@
 					<div class="formControls" style="float: left; width: 200px; margin-left: 10px;">
 						<input type="text" class="input-text" style="height: 24px;" value="" name="prop_value[]">
 					</div>
-					<div class="formControls skin-minimal">
-						<div class="check-box" style="float: left;margin-left: 20px;">
-							<label class="checkbox-input">
-								<input type="radio" name="prop_is_product[]" checked value="0">否
-							</label>
-
-                        </div>
-						<div class="check-box" style="float: left;">
-							<label class="checkbox-input">
-								<input type="radio" name="prop_is_product[]" value="1">是
-							</label>
-						</div>
+					<div class="formControls" style="float: left; margin-left: 10px;">
+						<label class="checkbox-input">
+							<input type="checkbox" name="prop_is_product[]" value="1">是
+							<input type="hidden" name="prop_is_product[]" checked value="0">
+						</label>
 					</div>
 				</div>
 				{/if}
@@ -381,18 +370,11 @@
 					<div class="formControls" style="float: left; width: 200px; margin-left: 10px;">
 						<input type="text" class="input-text" style="height: 24px;" value="" name="prop_value[]">
 					</div>
-					<div class="formControls skin-minimal">
-						<div class="check-box" style="float: left;margin-left: 20px;">
-							<label class="checkbox-input">
-								<input type="radio" name="prop_is_product[]" checked value="0">否
-							</label>
-
-                        </div>
-						<div class="check-box" style="float: left;">
-							<label class="checkbox-input">
-								<input type="radio" name="prop_is_product[]" value="1">是
-							</label>
-						</div>
+					<div class="formControls" style="float: left; margin-left: 10px;">
+						<label class="checkbox-input">
+							<input type="checkbox" name="prop_is_product[]" value="1">是
+							<input type="hidden" name="prop_is_product[]" checked value="0">
+						</label>
 					</div>
 				</div>`;
                 $div.parent().append(newdiv);
@@ -412,6 +394,15 @@
 			radioClass: 'iradio-blue',
 			increaseArea: '20%'
 		});
+
+		$('.checkbox-input input').on('change',function(e){
+			var html = '<input type="hidden" name="prop_is_product[]" checked value="0">';
+			if(!e.currentTarget.checked){
+				$(this).parent().append(html);
+			}else{
+				$(this).parent().find("input:hidden").remove();
+			}
+		})
 		// 编辑器
 		$(function(){
 			var ue1 = UE.getEditor('detailCon',{
