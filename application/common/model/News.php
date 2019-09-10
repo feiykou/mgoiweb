@@ -39,6 +39,11 @@ class News extends Model
         return $arr;
     }
 
+    protected function getContentAttr($val){
+        $val = str_replace('src="','src="'.config('APISetting.img_prefix'),$val);
+        return $val;
+    }
+
 
     public function getAllNewsData($data=[]){
         $data[] = ['status','neq',-1];
