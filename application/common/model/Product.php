@@ -546,7 +546,7 @@ class Product extends Model
             ->order($order)
             ->paginate($size,false,['page'=>$page])
             ->visible([
-                'main_img_url', 'name', 'name_desc', 'introduce','id'
+                'main_img_url', 'name', 'name_desc', 'introduce','id', 'price'
             ]);
 
         return $data;
