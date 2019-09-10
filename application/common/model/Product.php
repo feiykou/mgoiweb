@@ -528,15 +528,18 @@ class Product extends Model
     /**
      * 获取搜索结果
      */
-    public function getSearchResult($params,$size=10,$page=1){
+    public function getSearchResult($params,$sort,$size=10,$page=1){
         $data = [
-            'status' => 1,
-            'name' => ['like','%'.$params['q'].'%']
+            ['status','=',1],
+            ['name','like','%'.$params['q'].'%']
         ];
-        $order = [
-            'listorder' => 'desc',
-            'create_time' => 'desc'
-        ];
+        $order = [];
+        if($sort){
+            $type = $sort == 1 ? 'desc' : 'asc';
+            $order['price'] = $type;
+        }
+        $order['create_time'] = 'desc';
+        $order['listorder'] = 'desc';
 
         $self = new self();
         $data = $self->where($data)

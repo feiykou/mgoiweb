@@ -72,7 +72,8 @@ class Product extends BaseController
                 'total' => 0
             ];
         }
-        $searchData = $this->model->getSearchResult($data,$size,$page);
+        $sort = input('sort',0,'intval');
+        $searchData = $this->model->getSearchResult($data,$sort,$size,$page);
         if($searchData->isEmpty()){
             $searchData = [
                 'data' => [],
