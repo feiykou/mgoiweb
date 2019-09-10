@@ -64,16 +64,16 @@ class Product extends BaseController
      * @return array
      */
     public function search($page=1, $size=4){
-        (new Search())->goCheck('');
-        $data = input('get.');
-        if(empty($data['q'])){
+        (new Search())->goCheck();
+        $q = urldecode(input('q'));
+        if(empty($q)){
             return [
                 'data' => [],
                 'total' => 0
             ];
         }
         $sort = input('sort',0,'intval');
-        $searchData = $this->model->getSearchResult($data,$sort,$size,$page);
+        $searchData = $this->model->getSearchResult($q,$sort,$size,$page);
         if($searchData->isEmpty()){
             $searchData = [
                 'data' => [],

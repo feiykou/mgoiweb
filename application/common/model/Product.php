@@ -528,11 +528,13 @@ class Product extends Model
     /**
      * 获取搜索结果
      */
-    public function getSearchResult($params,$sort,$size=10,$page=1){
+    public function getSearchResult($q,$sort,$size=10,$page=1){
         $data = [
-            ['status','=',1],
-            ['name','like','%'.$params['q'].'%']
+            ['status','=',1]
         ];
+        if(!empty($q)){
+            array_push($data,['name','like','%'.$q.'%']);
+        }
         $order = [];
         if($sort){
             $type = $sort == 1 ? 'desc' : 'asc';

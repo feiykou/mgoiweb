@@ -15,7 +15,7 @@ class Search extends BaseValidate
         'q' => 'require',
         'page' => 'isPositiveInteger',
         'size' => 'isPositiveInteger',
-        'sort' => 'isPositiveInteger'
+        'sort' => 'isInteger'
     ];
 
     protected $message = [
