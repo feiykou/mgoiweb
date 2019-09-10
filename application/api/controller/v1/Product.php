@@ -79,7 +79,7 @@ class Product extends BaseController
                 'total' => 0
             ];
         }
-        return $searchData;
+        return json($searchData);
     }
 
     /**
