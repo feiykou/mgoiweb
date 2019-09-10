@@ -16,7 +16,7 @@ class News extends Model
 {
 
     protected $hidden = [
-        'delete_time','create_time','update_time','status','column_id','listorder','click_num'
+        'delete_time','update_time','status','column_id','listorder','click_num'
     ];
 
     public function cate(){
