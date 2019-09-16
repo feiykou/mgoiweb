@@ -5,6 +5,7 @@ Route::get('api/:version/index/rescProduct','api/:version.Index/rescProduct');
 Route::get('api/:version/index/newsProduct','api/:version.Index/newsProduct');
 Route::get('api/:version/index/topCate','api/:version.Index/topCate');
 Route::get('api/:version/index/rescTheme','api/:version.Index/themesResc');
+//Route::get('api/:version/index/column','api/:version.Index/getIndexColumn');
 
 
 Route::get('api/:version/column/indexResc','api/:version.Column/getIndexColumn');
@@ -18,8 +19,6 @@ Route::get('api/:version/column/search','api/:version.Column/search');
 
 Route::get('api/:version/columnCate/:id','api/:version.ColumnCate/getColumnCateById',[],['id'=>'\d+']);
 Route::get('api/:version/columnCate/sonCate','api/:version.ColumnCate/getSonById');
-
-
 
 
 Route::get('api/:version/product/:id/detail','api/:version.Product/getOne',[],['id'=>'\d+']);
