@@ -20,7 +20,7 @@ class Theme extends Common
     ];
 
     public function product(){
-        return $this->belongsTo('product','id','theme_id')->field('id,theme_id,name,main_img_url,price,link_url,code_img,mobile_imgs_url,content,introduce');
+        return $this->hasMany('product','theme_id','id')->field('id,theme_id,name,main_img_url,price,mobile_imgs_url,introduce');
     }
 
     protected function getHeadImgUrlAttr($val,$data){
