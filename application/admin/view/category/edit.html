@@ -9,73 +9,97 @@
 <body>
 <div class="page-container">
     <form class="form form-horizontal form-o2o-add" id="form-wrapper">
+        <input type="hidden" name="id" value="{$category.id}">
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>栏目名称：</label>
-            <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="{$category->name}" placeholder="" id="name" name="name">
+            <div class="formControls col-xs-4 col-sm-4">
+                <input type="text" class="input-text" value="{$category.name}" placeholder="" id="name" name="name">
             </div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>栏目分类：</label>
-            <div class="formControls col-xs-8 col-sm-9">
+            <div class="formControls col-xs-4 col-sm-4">
 				<span class="select-box">
 				<select name="pid" class="select">
 					<option value="0">一级分类</option>
-				    {volist name="categorys" id="vo"}
-					<option value="{$vo.id}" {if condition="$category.pid eq $vo.id"} selected="selected"{/if}>--{$vo.name}</option>
+                    {volist name="categorys" id="vo"}
+                    <option {if condition="$category.pid == $vo.id"}selected {/if} value="{$vo.id}">├┄{$vo.name}</option>
                     {/volist}
 				</select>
 				</span>
             </div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>模板类型：</label>
-            <div class="formControls col-xs-8 col-sm-9">
-				<span class="select-box">
-				<select name="template_id" class="select template_sel">
-                    <option value="">选择模板</option>
-                    {volist name="template_type" id="vo" key="k"}
-                    <option value="{$vo['key']}" {if condition="$category.template_id eq $vo['key']"} selected="selected"{/if}"}>{$vo.name}</option>
-                    {/volist}
-				</select>
-				</span>
-            </div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>跳转链接：</label>
-            <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="{$category.link_url}" placeholder="" id="link_url" name="link_url">
-            </div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>上传图片：</label>
-            <div class="formControls col-xs-8 col-sm-9">
-                {Uploader:webuploader btnVal="上传缩略图" uploadId="mainImg"}
-                {if condition="$category.main_img_url neq ''"}
-                <ul class="filelist filelist-exist clearfix">
-                    <li class="state-complete" data-src="{$category.main_img_url}">
-                        <p class="imgWrap"><img src="{$category.main_img_url}" width="110" height="110"></p>
-                        <div class="file-panel"><span class="cancel">删除</span></div>
-                        <span class="success"></span>
-                    </li>
-                </ul>
-                {/if}
-                {/Uploader:webuploader}
-            </div>
-        </div>
-        <div class="row cl template_row none" {if condition="$category.template_id eq 2"} style="display:block;"{/if}>
-            <textarea name="single_con"  style="width:100%;height:400px; box-sizing: border-box; padding: 10px;">{$category.single_con}</textarea>
         </div>
 
         <div class="row cl">
-            <input type="hidden" name="id" value="{$category->id}">
+            <label class="form-label col-xs-4 col-sm-2">所属类型：</label>
+            <div class="formControls skin-minimal col-xs-8">
+                {volist name="category_type" id="labelAttr" key="k"}
+                <div class="check-box">
+                    <label class="radio-input"><input type="radio" name="type" {if condition="$category.type eq $k"} checked{/if} value="{$k}"><span class="radio-name">{$labelAttr}</span></label>
+                </div>
+                {/volist}
+                <div class="check-box">
+                    <label class="radio-input"><input type="radio" name="type" {if condition="$category.type eq 0"} checked{/if} value="0"><span class="radio-name">暂无</span></label>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>链接：</label>
+            <div class="formControls col-xs-4 col-sm-6">
+                <input type="text" class="input-text" value="{$category.link_url}" placeholder="" id="link_url" name="link_url">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">描述：</label>
+            <div class="formControls col-xs-8 col-sm-6">
+                <textarea name="description"  style="width:100%;height:100px; box-sizing: border-box; padding: 10px;">{$category.description}</textarea>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>缩略图：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {Uploader:webuploader btnVal="上传缩略图" uploadId="mainImg"}
+                <ul class="filelist filelist-exist clearfix">
+                    {volist name="$category.main_img_url" id="imgs_arr"}
+                    <li class="state-complete" data-src="{$imgs_arr}">
+                        <p class="imgWrap"><img src="{$imgs_arr}" width="110" height="110"></p>
+                        <div class="file-panel"><span class="cancel">删除</span></div>
+                        <span class="success"></span>
+                    </li>
+                    {/volist}
+                </ul>
+                {/Uploader:webuploader}
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>移动端缩略图：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {Uploader:webuploader btnVal="上传缩略图" uploadId="mobileMainImg"}
+                <ul class="filelist filelist-exist clearfix">
+                    {volist name="$category.mobile_imgs_url" id="imgs_arr"}
+                    <li class="state-complete" data-src="{$imgs_arr}">
+                        <p class="imgWrap"><img src="{$imgs_arr}" width="110" height="110"></p>
+                        <div class="file-panel"><span class="cancel">删除</span></div>
+                        <span class="success"></span>
+                    </li>
+                    {/volist}
+                </ul>
+                {/Uploader:webuploader}
+            </div>
+        </div>
+        <div class="row cl template_row none">
+
+        </div>
+        <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
                 <button type="button" class="btn btn-primary radius save-btn" ><i class="Hui-iconfont">&#xe632;</i> 保存</button>
                 <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
             </div>
         </div>
     </form>
-</div>
 </div>
 <!--包含头部文件-->
 {include file="public/footer" /}
@@ -89,20 +113,35 @@
 <!--引入webuploaderJS-->
 {Uploader:webuploaderjs/}
 <script>
+
     feiy_upload.init({
         wrap:$("#mainImg"),
         filePicker: $("#mainImg").find(".filePicker"),
         uploadId: "#mainImg",
         server: config.upload_server,
         fileNumLimit: 1
-    })
-    cancelImg();
+    });
+
+    feiy_upload.init({
+        wrap:$("#mobileMainImg"),
+        filePicker: $("#mobileMainImg").find(".filePicker"),
+        uploadId: "#mobileMainImg",
+        server: config.upload_server,
+        fileNumLimit: 1
+    });
+
+
 </script>
 <script>
+
     $(".save-btn").on("click",function(){
+        //数据提交
+        // 获取产品详情页
         var $main_list_childs = $("#mainImg .filelist > li");
         var main_img_url = setUpdateUrl($main_list_childs);
-        var params = "&main_img_url="+main_img_url;
+        var $mobile_list_childs = $("#mobileMainImg .filelist > li");
+        var mobile_imgs_url = setUpdateUrl($mobile_list_childs);
+        var params = "&main_img_url="+main_img_url+"&mobile_imgs_url="+mobile_imgs_url;
         $.ajax({
             url: "{:url('category/save')}",
             type: "post",
@@ -115,15 +154,46 @@
             }
         });
     });
-    var ue1 = UE.getEditor('singlePage');
-//    $(".template_sel").change(function(index){
-//        console.log($(this).val());
-//        if($(this).val() == '2'){
-//            $(".template_row").css('display','block');
-//        }else{
-//            $(".template_row").hide();
-//        }
-//    });
+
+
+    cancelImg();
+    // 检查图片数量是否超过设置值，超出则禁止
+    $(function () {
+        checkUpload();
+    });
+
+    function checkUpload(){
+        var $bannerImg_childs = $("#imgUrl .filelist > li");
+
+        setTimeout(function(){
+            setNoDrop($bannerImg_childs,3);
+        },500);
+    }
+
+    function setNoDrop($dom,num){
+        var num = num?num:1;
+        var length = $dom.length;
+        if(length >=num){
+            $dom.parents(".queueList").prev().find(".webuploader-pick").css({
+                'position': 'relative',
+                'zIndex': 1,
+                'background': '#f0f0f0',
+                'cursor': 'no-drop'
+            });
+        }
+    }
+
+    // 设置radio
+    $(function(){
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        })
+    });
+
+
 </script>
 </body>
 </html>
+

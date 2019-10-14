@@ -11,13 +11,13 @@ namespace app\admin\controller;
 use app\admin\validate\ThemeValidate;
 use catetree\Catetree;
 
-class Theme extends Base
+class Album extends Base
 {
     private $model;
     public function __construct()
     {
         parent::__construct();
-        $this->model = model('theme');
+        $this->model = model('album');
     }
 
     public function index(){
@@ -31,13 +31,13 @@ class Theme extends Base
     public function add(){
         // 商品分类
         $Category=new Catetree();
-        $CategoryObj=model('theme_category');
+        $CategoryObj=model('Album_category');
         $CategoryRes=$CategoryObj->findAll([],'listorder DESC');
         $CategoryRes=$Category->Catetree($CategoryRes);
 
         // 获取全部商品
         $proAllData = model('product')->getAllProData(1);
-        $attrData = config('attributes.theme_type');
+        $attrData = config('attributes.Album_type');
         $labelsData = config('attributes.labels_type');
         $this->assign([
             'CategoryRes'  => $CategoryRes,
@@ -58,11 +58,12 @@ class Theme extends Base
         $themeData['theme_product'] = $this->_setThemeProduct($themeData['product']);
         // 商品分类
         $Category=new Catetree();
-        $CategoryObj=model('theme_category');
+        $CategoryObj=model('Album_category');
         $CategoryRes=$CategoryObj->findAll([],'listorder DESC');
         $CategoryRes=$Category->Catetree($CategoryRes);
-        $attrData = config('attributes.theme_type');
+        $attrData = config('attributes.Album_type');
         $labelsData = config('attributes.labels_type');
+
         $themeData['attributes'] = explode(',',$themeData['attributes']);
         $themeData['label_attr'] = explode(',',$themeData['label_attr']);
 
@@ -133,7 +134,7 @@ class Theme extends Base
     }
 
     public function del($id){
-        $result = model('theme')->destroy($id);
+        $result = model('Album')->destroy($id);
         // 返回状态码
         if($result){
             $this->result($_SERVER['HTTP_REFERER'], 1, '删除完成');

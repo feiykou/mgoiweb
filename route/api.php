@@ -57,5 +57,14 @@ Route::get('api/:version/news/:id', 'api/:version.News/detail',[],['id'=>'\d+'])
 Route::get('api/:version/news/topBottom/:id','api/:version.News/getTopAndBottom',[],['id'=>'\d+']);
 
 
+// 栏目
+Route::get('api/:version/category/list','api/:version.Category/getCate');
+
+
+// 每月特辑
+Route::get('api/:version/album/:id/detail', 'api/:version.Album/getThemeDetail',[],['id'=>'\d+']);
+Route::get('api/:version/album/list/:cate_id', 'api/:version.Album/getThemeByCate',[],['cate_id'=>'\d+']);
+
+
 
 return [];

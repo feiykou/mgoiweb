@@ -11,7 +11,7 @@ namespace app\common\model;
 
 use catetree\Catetree;
 
-class Theme extends Common
+class Album extends Common
 {
     protected $field = true;
 
@@ -19,12 +19,9 @@ class Theme extends Common
         'create_time','update_time','price','category_id','on_sale','listorder'
     ];
 
-//    public function product(){
-//        return $this->hasMany('product','theme_id','id')->field('id,theme_id,name,main_img_url,price,mobile_imgs_url,introduce');
-//    }
 
     public function product(){
-        return $this->belongsToMany('product','theme_product','product_id','theme_id');
+        return $this->belongsToMany('product','album_product','product_id','album_id');
     }
 
     protected function getHeadImgUrlAttr($val,$data){
@@ -60,7 +57,7 @@ class Theme extends Common
 
     protected static function init(){
 
-        Theme::afterInsert(function ($theme) {
+        Album::afterInsert(function ($theme) {
             // 接收表单数据
             $themeData = input('post.');
             if(isset($themeData['product_ids'])){
@@ -68,11 +65,11 @@ class Theme extends Common
             }
         });
 
-        Theme::afterUpdate(function ($theme) {
+        Album::afterUpdate(function ($theme) {
             // 接收表单数据
             $themeData = input('post.');
             if(isset($themeData['product_ids'])){
-                model('theme_product')->where('theme_id',$theme->id)->delete();
+                model('album_product')->where('album_id',$theme->id)->delete();
                 $theme->product()->saveAll($themeData['product_ids']);
             }
         });
@@ -81,7 +78,7 @@ class Theme extends Common
             $themeId = $theme->id;
 
             if(isset($theme->product_ids)){
-                model('theme_product')->delete($themeId);
+                model('album_product')->delete($themeId);
             }
 
             // 删除内存中的主图
@@ -114,21 +111,11 @@ class Theme extends Common
     }
 
 
-    // 判断是否存在同名
-//    public function is_unique($name="",$id=0){
-//        $data = [
-//            ['status','neq',-1],
-//            ['id','neq',$id],
-//            ['name','=',$name]
-//        ];
-//        $result = $this->where($data)->find();
-//        return $result;
-//    }
-
-
     // api =======================
     /**
      * 获取主题详情
+     *
+     * 2019-10-10更改：添加$on_sale参数
      */
     public static function getThemeDetail($id, $on_sale = -1){
         $data = [
@@ -140,7 +127,7 @@ class Theme extends Common
         $products = self::where($data)
             ->hidden(['product.pivot'])
             ->with(['product'=>function($query){
-                $query->field('id,name,main_img_url');
+                $query->field('id,name,main_img_url,price');
             }])
             ->find();
         return $products;

@@ -186,9 +186,8 @@ class Product extends Model
 
     }
 
-
-    public function getAllProData($data=[]){
-        $data[] = ['status','neq',-1];
+    public function getAllProData(){
+        $data = [['status','eq',1]];
         $order = [
             'listorder' => 'desc',
             'id'        => 'desc',
@@ -198,8 +197,6 @@ class Product extends Model
             ->select();
         return $result;
     }
-
-
 
     // 判断是否存在同名
     public function is_unique($name="",$id=0){
@@ -211,6 +208,7 @@ class Product extends Model
         $result = $this->where($data)->find();
         return $result;
     }
+
     // 删除元素
     public function delSelChild($idArr=[]){
         $data = [
@@ -220,7 +218,6 @@ class Product extends Model
         db('product_prop')->where(['product_id','in',$idArr])->delete();
         return $result;
     }
-
 
     /**
      * 前端和后台公用
@@ -236,7 +233,6 @@ class Product extends Model
         return $proData;
     }
 
-
     public function getProByIds($ids=[], $mark=false){
         $data = [
             ['id','in',$ids],
@@ -245,10 +241,6 @@ class Product extends Model
         $proData = self::where($data)->select();
         return $proData;
     }
-
-
-
-
 
 
     /**

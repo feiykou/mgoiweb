@@ -5,18 +5,17 @@ namespace app\api\controller\v1;
 
 
 use app\api\controller\BaseController;
-use app\api\validate\IDMustBePositiveInt;
-use app\common\model\Theme as ThemeModel;
 use app\api\validate\Cate as CateValidate;
+use app\api\validate\IDMustBePositiveInt;
+use app\common\model\Album as AlbumModel;
 
-class Theme extends BaseController
+class Album extends BaseController
 {
-
     private $model;
     public function __construct()
     {
         parent::__construct();
-        $this->model = model('theme');
+        $this->model = model('album');
     }
 
     public function getThemeByCate($cate_id){
@@ -24,7 +23,7 @@ class Theme extends BaseController
         if($cate_id == 0){
             $themeData = $this->model->getAllTheme();
         }else{
-            $themeData = ThemeModel::getThemeByCate($cate_id);
+            $themeData = AlbumModel::getThemeByCate($cate_id);
         }
         return $themeData;
     }
@@ -32,7 +31,7 @@ class Theme extends BaseController
     public function getThemeDetail(){
         (new IDMustBePositiveInt())->goCheck();
         $id = input('id',0,'intval');
-        $data = ThemeModel::getThemeDetail($id, 1);
+        $data = AlbumModel::getThemeDetail($id, 1);
         return $data;
     }
 }

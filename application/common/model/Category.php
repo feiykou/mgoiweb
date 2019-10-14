@@ -14,6 +14,51 @@ use think\Model;
 
 class Category extends Model
 {
+
+    protected function getMainImgUrlAttr($val,$data){
+        return $this->handleImgUrl($val);
+    }
+
+    protected function getMobileImgsUrlAttr($val,$data){
+        return $this->handleImgUrl($val);
+    }
+
+    private function handleImgUrl($val){
+        $val = str_replace('\\','/',$val);
+        $arr = explode(';',$val);
+        foreach ($arr as &$item){
+            $item = config('APISetting.img_prefix').$item;
+        }
+        return $arr;
+    }
+
+    // 获取分类下的所有数据
+    public function getAllCate(){
+        $data = [
+            'status' => 1
+        ];
+        $order = [
+            'listorder' => 'desc',
+            'id' => 'desc'
+        ];
+        $result = self::where($data)->order($order)->select();
+        return $result;
+    }
+
+    // 获取列表数据，并获取父类name
+    public function getIndexCateData(){
+        $cateData = self::alias('a1')
+            ->field('a1.*,a2.name as pname')
+            ->where(['a1.status'=>1])
+            ->order([
+                'a1.listorder'=>'desc',
+                'a1.id' => 'desc'
+            ])
+            ->join('category a2','a1.pid=a2.id','left')
+            ->paginate();
+        return $cateData;
+    }
+
     // 获取顶级分类，如果有$id并且是顶级分类，则排除
     public function getNormalFirstCate($id=0){
         $data = [
@@ -90,6 +135,26 @@ class Category extends Model
             }
         }
         return $column;
+    }
+
+
+    public static function getCateJson($field='',$times,$pid=0){
+        $data = self::_cateData($field, $times,$pid);
+        return $data;
+    }
+
+
+    private static function _cateData($fieldStr='',$times, $pid=0){
+        $cateTree = new Catetree();
+        $field = "id,pid,name";
+        $field .= ',' . $fieldStr;
+        $arr = self::field($field)
+            ->order(['listorder'=> 'desc','id' => 'desc'])
+            ->select()
+            ->each(function($data){
+            });
+        // 生成无限极分类树
+        return $cateTree->hTree($arr, $pid, $times);
     }
 
 
