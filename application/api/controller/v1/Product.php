@@ -12,6 +12,7 @@ namespace app\api\controller\v1;
 use app\api\controller\BaseController;
 use app\api\validate\IDMustBePositiveInt;
 use app\api\validate\MustBePositiveInt;
+use app\api\validate\Price;
 use app\api\validate\Search;
 use app\common\model\Procate;
 use app\common\model\Product as ProductModel;
@@ -144,6 +145,39 @@ class Product extends BaseController
         // 推荐专栏
         $resColumnData = ProductModel::getResc($rescId, $count, $id);
         return $resColumnData;
+    }
+
+    public function getProductByPrice($from, $to, $page=1, $size=10){
+        (new Price())->goCheck();
+        $result = ProductModel::getProductByPrice($from, $to, $page, $size);
+        return json($result);
+    }
+
+    /**
+     * 获取栏目下的所有产品
+     * @url  /product/list/:cateid?page=1&size=10
+     * @http
+     * @param $cateid 栏目id
+     * @return false|\PDOStatement|string|\think\Collection
+     * @throws CategoryException
+     */
+    public function getProductByCategory($cateid=0,$page=1,$size=10){
+        (new ProductValidate())->goCheck('all');
+        $sort = input('sort',0,'intval');
+        $order = ['listorder'=>'desc'];
+        if($sort){
+            $type = $sort == 1 ? 'desc' : 'asc';
+            array_push($order,[
+                'price' => $type
+            ]);
+        }
+        $productArr = ProductModel::where([
+            'status' => 1,
+            'column_id' => $cateid
+        ])->order($order)
+            ->field('id,name,introduce,main_img_url,price,name_desc')
+            ->paginate($size,true,['page'=>$page]);
+        return json($productArr);
     }
 
 

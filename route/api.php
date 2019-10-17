@@ -59,11 +59,23 @@ Route::get('api/:version/news/topBottom/:id','api/:version.News/getTopAndBottom'
 
 // 栏目
 Route::get('api/:version/category/list','api/:version.Category/getCate');
+// 栏目下的所有产品 参数cate_id
+Route::get('api/:version/product/column','api/:version.Product/getProductByCategory');
+
 
 
 // 每月特辑
 Route::get('api/:version/album/:id/detail', 'api/:version.Album/getThemeDetail',[],['id'=>'\d+']);
 Route::get('api/:version/album/list/:cate_id', 'api/:version.Album/getThemeByCate',[],['cate_id'=>'\d+']);
+
+
+// 礼品
+Route::get('api/:version/gift/cate','api/:version.Gift/getCate');
+Route::get('api/:version/gift/season','api/:version.Gift/getSeasonResc');
+Route::get('api/:version/gift/banner','api/:version.Gift/getGiftBanner');
+Route::get('api/:version/gift/list','api/:version.Gift/getProductByGiftCate');
+Route::get('api/:version/gift/filter','api/:version.Product/getProductByPrice');
+
 
 
 

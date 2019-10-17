@@ -341,52 +341,6 @@ class Product extends Model
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function getProAndPropData($id=0){
         $data = [
             'id'     => $id,
@@ -544,5 +498,19 @@ class Product extends Model
             ]);
 
         return $data;
+    }
+
+    /**
+     * 通过价格范围获取产品
+     */
+    public static function getProductByPrice($from, $to, $page=1, $size=10){
+        $data[] = ['price','between',[intval($from),intval($to)]];
+        $result = self::where($data)
+            ->order('listorder desc')
+            ->paginate($size,false,['page'=>$page])
+            ->visible([
+                'main_img_url', 'name', 'name_desc', 'introduce','id', 'price'
+            ]);
+        return $result;
     }
 }
