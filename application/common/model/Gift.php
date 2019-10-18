@@ -226,7 +226,7 @@ class Gift extends Common
             'id' => $cate_id
         ];
         $result = self::where($data)
-            ->field('id,name')
+            ->field('id,name,content')
             ->hidden(['product.pivot'])
             ->with(['product'=>function($query){
                 $query->order('listorder desc')->field('id,name,main_img_url,price');
