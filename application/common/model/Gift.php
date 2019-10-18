@@ -33,6 +33,10 @@ class Gift extends Common
     protected function getMobileImgsUrlAttr($val,$data){
         return $this->handleImgUrl($val);
     }
+    protected function getContentAttr($val){
+        $val = str_replace('src="','src='.config('APISetting.img_prefix'),$val);
+        return str_replace('" title=',' title=',$val);
+    }
 
     private function handleImgUrl($val){
         $val = str_replace('\\','/',$val);
