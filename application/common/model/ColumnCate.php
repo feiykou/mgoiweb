@@ -15,7 +15,7 @@ use think\Model;
 class ColumnCate extends Model
 {
     protected $hidden = [
-        'create_time','update_time'
+        'update_time'
     ];
 
     protected function getImgUrlAttr($val,$data){
