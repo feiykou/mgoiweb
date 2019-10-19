@@ -276,7 +276,7 @@ class ColumnCate extends Model
             ->order('listorder desc')
             ->hidden(['pid','listorder','status','description','create_time','update_time'])
             ->with(['column'=>function($query){
-                $query->field('id,name,introduce,main_img_url,mobile_imgs_url,cate_id,create_time);
+                $query->field('id,name,introduce,main_img_url,mobile_imgs_url,cate_id,create_time');
             }])
             ->select();
         return $result;
