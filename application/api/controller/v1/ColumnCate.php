@@ -55,6 +55,6 @@ class ColumnCate extends BaseController
     public function getCrumbCate($cate_id=0){
         (new CateValidate())->goCheck();
         $result = ColumnCateModel::getCrumb($cate_id);
-        return $result;
+        return json($result);
     }
 }

@@ -140,7 +140,7 @@ class Theme extends Common
         $products = self::where($data)
             ->hidden(['product.pivot'])
             ->with(['product'=>function($query){
-                $query->field('id,name,main_img_url');
+                $query->field('id,name,main_img_url,price');
             }])
             ->find();
         return $products;

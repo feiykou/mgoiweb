@@ -288,6 +288,6 @@ class ColumnCate extends Model
     public static function getCrumb($cateId=0){
         $cateTree = new Catetree();
         $parentArr = $cateTree->parentids($cateId, new self(),'img_url');
-        return json($parentArr);
+        return $parentArr;
     }
 }
