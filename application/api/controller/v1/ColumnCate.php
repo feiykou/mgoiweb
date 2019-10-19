@@ -12,6 +12,7 @@ namespace app\api\controller\v1;
 use app\api\controller\BaseController;
 use app\common\model\ColumnCate as ColumnCateModel;
 use app\api\validate\Category as CategoryValidate;
+use app\api\validate\Cate as CateValidate;
 
 class ColumnCate extends BaseController
 {
@@ -49,5 +50,11 @@ class ColumnCate extends BaseController
         $pid = input('cate_id', 0, 'int');
         $proCateData = ColumnCateModel::getCateJson('img_url,create_time, description', $times, $pid);
         return json($proCateData);
+    }
+
+    public function getCrumbCate($cate_id=0){
+        (new CateValidate())->goCheck();
+        $result = ColumnCateModel::getCrumb($cate_id);
+        return $result;
     }
 }

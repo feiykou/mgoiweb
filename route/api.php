@@ -23,6 +23,8 @@ Route::get('api/:version/columnCate/:id','api/:version.ColumnCate/getColumnCateB
 Route::get('api/:version/columnCate/sonCate','api/:version.ColumnCate/getSonById');
 Route::get('api/:version/columnCate/cate','api/:version.ColumnCate/getCate');
 Route::get('api/:version/columnCate/cateList','api/:version.ColumnCate/getColumnList');
+Route::get('api/:version/columnCate/crumb','api/:version.ColumnCate/getCrumbCate');
+
 
 
 Route::get('api/:version/product/:id/detail','api/:version.Product/getOne',[],['id'=>'\d+']);

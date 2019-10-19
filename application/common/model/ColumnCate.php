@@ -281,4 +281,13 @@ class ColumnCate extends Model
             ->select();
         return $result;
     }
+
+    /**
+     *  获取面包屑
+     */
+    public static function getCrumb($cateId=0){
+        $cateTree = new Catetree();
+        $parentArr = $cateTree->parentids($cateId, new self(),'img_url');
+        return json($parentArr);
+    }
 }

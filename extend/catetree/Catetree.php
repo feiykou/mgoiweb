@@ -30,8 +30,10 @@ class Catetree {
         return $this->_getSonids($data,$cateid,TRUE);
     }
 
-    public function parentids($cateid,$obj){
-        $curData = $obj->where('id',$cateid)->field('pid,id,name')->find();
+    public function parentids($cateid,$obj,$addField){
+        $Field = 'pid,id,name';
+        $Field .= ',' . $addField;
+        $curData = $obj->where('id',$cateid)->field($Field)->find();
         $data=$obj->field('id,pid,name')->select();
         $result = $this->_parentids($data,$curData['pid'],TRUE);
         array_push($result,$curData);
