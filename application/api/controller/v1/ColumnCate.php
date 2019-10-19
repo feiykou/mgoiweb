@@ -47,7 +47,7 @@ class ColumnCate extends BaseController
     public function getCate($times){
         (new CategoryValidate())->goCheck();
         $pid = input('cate_id', 0, 'int');
-        $proCateData = ColumnCateModel::getCateJson('img_url, description', $times, $pid);
+        $proCateData = ColumnCateModel::getCateJson('img_url,create_time, description', $times, $pid);
         return json($proCateData);
     }
 }
