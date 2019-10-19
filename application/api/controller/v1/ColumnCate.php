@@ -10,6 +10,8 @@ namespace app\api\controller\v1;
 
 
 use app\api\controller\BaseController;
+use app\common\model\ColumnCate as ColumnCateModel;
+use app\api\validate\Category as CategoryValidate;
 
 class ColumnCate extends BaseController
 {
@@ -32,5 +34,20 @@ class ColumnCate extends BaseController
         $id = input('cate_id',0,'intval');
         $cateData = $this->model->getAllSonData($id);
         return json($cateData);
+    }
+
+    /**
+     * 获取分类
+     * @url
+     * @http
+     * @param $times 层级
+     * @param $cate_id 分类id
+     * @return \think\response\Json
+     */
+    public function getCate($times){
+        (new CategoryValidate())->goCheck();
+        $pid = input('cate_id', 0, 'int');
+        $proCateData = ColumnCateModel::getCateJson('img_url, description', $times, $pid);
+        return json($proCateData);
     }
 }

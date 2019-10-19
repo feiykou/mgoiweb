@@ -24,9 +24,17 @@ class ColumnCate extends Model
 
     private function handleImgUrl($val){
         $val = str_replace('\\','/',$val);
-        return explode(';',$val);
+        $arr = explode(';',$val);
+        foreach ($arr as &$item){
+            if(!$item) break;
+            $item = config('APISetting.img_prefix').$item;
+        }
+        return $arr;
     }
 
+    public function column(){
+        return $this->hasMany('column','cate_id','id');
+    }
 
     public function getAllCateData(){
         $cateData = self::alias('a1')
@@ -202,17 +210,6 @@ class ColumnCate extends Model
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     public static function getIndexCateProduct(){
         $data = [
             'status'    =>  1,
@@ -250,23 +247,38 @@ class ColumnCate extends Model
         return $column;
     }
 
-    public static function getCateJson(){
-        $cateTree = new Catetree();
-        $data = $cateTree->cateData(new self());
+    public static function getCateJson($field='',$times,$pid=0){
+        $data = self::_cateData($field, $times,$pid);
         return $data;
     }
 
-    public static function getSonData($cateId){
+
+    private static function _cateData($fieldStr='',$times, $pid=0){
         $cateTree = new Catetree();
-        $ids = $cateTree->childrenids($cateId, new self());
-        $data = null;
-        if(count($ids) > 0){
-            $data = self::where('status','=','1')
-                ->order([
-                    'listorder' => 'desc',
-                    'id' => 'desc'
-                ])->select($ids);
-        }
-        return $data;
+        $field = "id,pid,name";
+        $field .= ',' . $fieldStr;
+        $arr = self::field($field)
+            ->order(['listorder'=> 'desc','id' => 'desc'])
+            ->select()
+            ->each(function($data){
+            });
+        // 生成无限极分类树
+        return $cateTree->hTree($arr, $pid, $times);
+    }
+
+
+    public static function getColumnList($cate_id){
+        $data = [
+            'pid' => $cate_id,
+            'status' => 1
+        ];
+        $result = self::where($data)
+            ->order('listorder desc')
+            ->hidden(['pid','listorder','status','description','create_time','update_time'])
+            ->with(['column'=>function($query){
+                $query->field('id,name,introduce,main_img_url,mobile_imgs_url,cate_id,create_time);
+            }])
+            ->select();
+        return $result;
     }
 }

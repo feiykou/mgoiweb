@@ -175,5 +175,24 @@ class Column extends Model
         return $data;
     }
 
+    public static function getCateJson($field='',$times,$pid=0){
+        $data = self::_cateData($field, $times,$pid);
+        return $data;
+    }
+
+
+    private static function _cateData($fieldStr='',$times, $pid=0){
+        $cateTree = new Catetree();
+        $field = "id,pid,name";
+        $field .= ',' . $fieldStr;
+        $arr = self::field($field)
+            ->order(['listorder'=> 'desc','id' => 'desc'])
+            ->select()
+            ->each(function($data){
+            });
+        // 生成无限极分类树
+        return $cateTree->hTree($arr, $pid, $times);
+    }
+
 
 }

@@ -15,10 +15,14 @@ Route::get('api/:version/column/top_cate','api/:version.Column/getTopCate');
 Route::get('api/:version/column/resc','api/:version.Column/getRescColumn');
 Route::get('api/:version/column/topBottom/:id','api/:version.Column/getTopAndBottom',[],['id'=>'\d+']);
 Route::get('api/:version/column/search','api/:version.Column/search');
+Route::get('api/:version/column/list/:cate_id','api/:version.Column/getColumnList',[],['cate_id'=>'\d+']);
+
 
 
 Route::get('api/:version/columnCate/:id','api/:version.ColumnCate/getColumnCateById',[],['id'=>'\d+']);
 Route::get('api/:version/columnCate/sonCate','api/:version.ColumnCate/getSonById');
+Route::get('api/:version/columnCate/cate','api/:version.ColumnCate/getCate');
+Route::get('api/:version/columnCate/cateList','api/:version.ColumnCate/getColumnList');
 
 
 Route::get('api/:version/product/:id/detail','api/:version.Product/getOne',[],['id'=>'\d+']);

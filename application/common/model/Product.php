@@ -47,7 +47,6 @@ class Product extends Model
     }
 
 
-
     protected function getImgsUrlAttr($val,$data){
         return self::handleImgUrl($val);
     }

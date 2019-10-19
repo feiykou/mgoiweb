@@ -13,10 +13,10 @@ use app\api\controller\BaseController;
 use app\api\validate\IDMustBePositiveInt;
 use app\api\validate\MustBePositiveInt;
 use app\api\validate\Search;
-use app\api\validate\TopAndBottom;
 use app\common\model\Column as ColumnModel;
 use app\common\model\ColumnCate;
 use app\api\validate\Column as ColumnValidate;
+use app\api\validate\Cate as CateValidate;
 use catetree\Catetree;
 
 class Column extends BaseController
@@ -171,4 +171,15 @@ class Column extends BaseController
         }
         return json($searchData);
     }
+
+    /**
+     * 获取分类下的专栏
+     */
+    public function getColumnList($cate_id=0){
+        (new CateValidate())->goCheck();
+        $data = ColumnCate::getColumnList($cate_id);
+        return $data;
+    }
+
+
 }
