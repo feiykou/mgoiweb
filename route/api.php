@@ -32,6 +32,7 @@ Route::get('api/:version/product/:cate_id','api/:version.Product/lst',[],['cate_
 Route::get('api/:version/product/list/:cateid','api/:version.Product/getProductByCate',[],['cate_id'=>'\d+']);
 Route::get('api/:version/product/rescbycate','api/:version.Product/getRescProductByCate');
 Route::get('api/:version/product/resc','api/:version.Product/getRescProduct');
+Route::get('api/:version/product/label','api/:version.Product/getProductByLabel');
 
 
 // 礼物

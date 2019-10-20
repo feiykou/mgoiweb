@@ -10,14 +10,16 @@ class Product extends BaseValidate
         'cateid' => 'require|isInteger',
         'page' => 'isPositiveInteger',
         'size' => 'isPositiveInteger',
-        'sort' => 'isPositiveInteger'
+        'sort' => 'isPositiveInteger',
+        'label' => 'isPositiveInteger'
     ];
 
     protected $message = [
-        'cateid.require' => '分类必须填写',
+        'cateid.require' => '分类必须填写'
     ];
 
     protected $scene = [
-        'all' => ['cateId','page','size','sort']
+        'all' => ['cateId','page','size','sort'],
+        'label' => ['label']
     ];
 }

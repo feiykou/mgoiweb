@@ -147,6 +147,17 @@ class Product extends BaseController
         return $resColumnData;
     }
 
+    /**
+     * 获取产品通过价格
+     * @url
+     * @http
+     * @param $from 最低价格
+     * @param $to   最高价格
+     * @param int $page
+     * @param int $size
+     * @return \think\response\Json
+     * @throws \app\lib\exception\ParameterException
+     */
     public function getProductByPrice($from, $to, $page=1, $size=10){
         (new Price())->goCheck();
         $result = ProductModel::getProductByPrice($from, $to, $page, $size);
@@ -178,6 +189,13 @@ class Product extends BaseController
             ->field('id,name,introduce,main_img_url,price,name_desc')
             ->paginate($size,true,['page'=>$page]);
         return json($productArr);
+    }
+
+
+    public function getProductByLabel($label=1){
+        (new ProductValidate())->goCheck('label');
+        $result = ProductModel::getProductByLabel($label);
+        return $result;
     }
 
 

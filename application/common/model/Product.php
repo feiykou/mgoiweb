@@ -512,4 +512,18 @@ class Product extends Model
             ]);
         return $result;
     }
+
+    public static function getProductByLabel($label=1){
+        $data = [
+            ['status','=',1]
+        ];
+        $result = self::where($data)
+            ->where('','exp',"find_in_set($label,label_attr)")
+            ->order('listorder desc')
+            ->visible([
+                'main_img_url', 'name', 'name_desc', 'introduce','id', 'price'
+            ])
+            ->select();
+        return $result;
+    }
 }
