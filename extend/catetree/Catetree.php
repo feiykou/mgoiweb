@@ -30,6 +30,8 @@ class Catetree {
         return $this->_getSonids($data,$cateid,TRUE);
     }
 
+
+
     public function parentids($cateid,$obj,$addField=''){
         $Field = 'pid,id,name';
         if(!empty($addField)) $Field .= ',' . $addField;

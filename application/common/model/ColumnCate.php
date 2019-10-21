@@ -162,7 +162,7 @@ class ColumnCate extends Model
     // 获取当前分类的所有子类id，包括当前id
     public static function getAllCateById($cateId){
         $cateTree = new Catetree();
-        $arr = $cateTree->sonids($cateId, new self());
+        $arr = $cateTree->childrenids($cateId, new self());
         array_push($arr,$cateId);
         return $arr;
     }
