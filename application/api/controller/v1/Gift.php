@@ -104,7 +104,7 @@ class Gift extends BaseController
         }else{
             $data = GiftModel::getSonData($id);
         }
-        return $data;
+        return json($data);
     }
 
 
