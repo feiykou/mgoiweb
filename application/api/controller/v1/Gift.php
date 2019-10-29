@@ -107,6 +107,20 @@ class Gift extends BaseController
         return json($data);
     }
 
+    /**
+     * 获取当前分类id的所有父级id
+     * @url   /cate/parents/:id
+     * @http
+     * @param $id
+     * @return \think\response\Json
+     * @throws \app\lib\exception\ParameterException
+     */
+    public function getParentCate($id){
+        (new IDMustBeIsInteger())->goCheck();
+        $cateData = GiftModel::getCrumb($id);
+        return json($cateData);
+    }
+
 
 
 }

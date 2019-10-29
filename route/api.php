@@ -80,6 +80,7 @@ Route::get('api/:version/album/list/:cate_id', 'api/:version.Album/getThemeByCat
 // 礼品
 Route::get('api/:version/gift/cate','api/:version.Gift/getCate');
 Route::get('api/:version/gift/sonCate','api/:version.Gift/getSonCate');
+Route::get('api/:version/gift/parents/:id','api/:version.Gift/getParentCate',[],['id'=>'\d+']);
 Route::get('api/:version/gift/season','api/:version.Gift/getSeasonResc');
 Route::get('api/:version/gift/banner','api/:version.Gift/getGiftBanner');
 Route::get('api/:version/gift/list','api/:version.Gift/getProductByGiftCate');
