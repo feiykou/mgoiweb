@@ -193,13 +193,14 @@ class ThemeCategory extends Common
                 ['status', '=', 1],
                 ['id', '=', $cate_id]
             ])
-            ->with(['theme' => ['product' => function($query) {
-                $query->field('id,name,price,mobile_imgs_url,main_img_url,introduce');
-            }]])->find()->hidden([
+            ->hidden([
                 'status','pid','listorder','create_time','update_time',
                 'theme.content','theme.web_keys','theme.web_desc','theme.status',
                 'theme.label_attr','theme.attributes'
-            ]);
+            ])
+            ->with(['theme' => ['product' => function($query) {
+                $query->field('id,name,price,mobile_imgs_url,main_img_url,introduce');
+            }]])->find();
         return $data;
     }
 

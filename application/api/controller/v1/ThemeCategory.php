@@ -45,7 +45,8 @@ class ThemeCategory extends BaseController
     public function getProductByTheme($cate_id=0){
         (new CateValidate())->goCheck();
         $data = ThemeCategoryModel::getProducts($cate_id);
-        return $data;
+        if(!$data) $data = [];
+        return json($data);
     }
 
 
