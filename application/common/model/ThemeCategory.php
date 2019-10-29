@@ -189,13 +189,17 @@ class ThemeCategory extends Common
     }
 
     public static function getProducts($cate_id) {
-        $cateTree = new Catetree();
-        $ids = $cateTree->childrenids($cate_id, new self());
         $data = self::where([
-            ['id', 'in', $ids],
-            ['status', '=', 1]
-        ])->with(['theme.product'])
-        ->select();
+                ['status', '=', 1],
+                ['id', '=', $cate_id]
+            ])
+            ->with(['theme' => ['product' => function($query) {
+                $query->field('id,name,price,mobile_imgs_url,main_img_url,introduce');
+            }]])->find()->hidden([
+                'status','pid','listorder','create_time','update_time',
+                'theme.content','theme.web_keys','theme.web_desc','theme.status',
+                'theme.label_attr','theme.attributes'
+            ]);
         return $data;
     }
 

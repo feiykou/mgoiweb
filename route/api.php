@@ -55,9 +55,9 @@ Route::get('api/:version/product/search', 'api/:version.Product/search');
 
 // 主题 改动
 Route::get('api/:version/theme/:id/detail', 'api/:version.Theme/getThemeDetail',[],['id'=>'\d+']);
-Route::get('api/:version/theme/list/:cate_id', 'api/:version.Theme/getThemeByCate',[],['cate_id'=>'\d+']);
+Route::get('api/:version/theme/list/:cate_id', 'api/:version.ThemeCategory/getProductByTheme',[],['cate_id'=>'\d+']);
 Route::get('api/:version/themeCate/sonCate/:id', 'api/:version.ThemeCategory/getSonCate',[],['id'=>'\d+']);
-Route::get('api/:version/themeCate/product/:cate_id', 'api/:version.ThemeCategory/getProductByTheme',[],['cate_id'=>'\d+']);
+//Route::get('api/:version/themeCate/product/:cate_id', 'api/:version.ThemeCategory/getProductByTheme',[],['cate_id'=>'\d+']);
 
 
 // 新闻
