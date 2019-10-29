@@ -166,25 +166,32 @@ class Theme extends Common
     }
 
     public static function getThemeByCate($cate_id){
-        $idArr = self::getAllSonId($cate_id);
         $data = [
             ['status','=',1],
-            ['category_id','in',$idArr]
+            ['category_id','=',$cate_id]
         ];
-        $result = self::where($data)->order('listorder desc')->select();
+        $result = self::where($data)
+            ->order('listorder desc')
+            ->field('main_img_url,mobile_imgs_url,description,id,name')
+            ->with(['product'=>function($query){
+                $query->field('id,name,main_img_url,price');
+            }])
+            ->select();
         return $result;
     }
 
-    private static function getAllSonId($id){
-        $cateTree = new Catetree();
-        $ids = $cateTree->childrenids($id, model('theme_category'));
-        $idArr = [];
-        if(count($ids) > 0){
-            array_push($idArr,$ids);
-        }
-        $idArr[] = $id;
-        return $idArr;
-    }
+//    private static function getAllSonId($id){
+//        $cateTree = new Catetree();
+//        $ids = $cateTree->childrenids($id, model('theme_category'));
+//        $idArr = [];
+//        if(count($ids) > 0){
+//            array_push($idArr,$ids);
+//        }
+//        $idArr[] = $id;
+//        return $idArr;
+//    }
+
+
 
 
 }

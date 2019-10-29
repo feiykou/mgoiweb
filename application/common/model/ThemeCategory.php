@@ -10,14 +10,19 @@ namespace app\common\model;
 
 
 
+use catetree\Catetree;
+
 class ThemeCategory extends Common
 {
     protected $hidden = [
         'create_time','update_time'
     ];
 
-    protected function getImgUrlAttr($val,$data){
-        return $this->handleImgUrl($val);
+    protected function getMainImgUrlAttr($val,$data){
+        return self::handleImgUrl($val);
+    }
+    protected function getMobileImgsUrlAttr($val,$data){
+        return self::handleImgUrl($val);
     }
 
     private function handleImgUrl($val){
@@ -31,6 +36,10 @@ class ThemeCategory extends Common
 
     protected function productCate(){
         return $this->belongsToMany('product','product_cate','product_id','cate_id');
+    }
+
+    public function theme() {
+        return $this->hasMany('theme','category_id','id');
     }
 
 
@@ -143,8 +152,51 @@ class ThemeCategory extends Common
             'listorder' => 'desc',
             'id'        => 'desc'
         ];
-        $column =self::where($data)->order($order)->field('id,name,img_url')->select();
+        $column =self::where($data)->order($order)->field('id,name,main_img_url,mobile_imgs_url,introduce')->select();
         return $column;
+    }
+
+    /**
+     * 获取下级分类
+     * @url
+     * @http
+     * @param $cateId
+     * @return array
+     */
+    public static function getSonData($cateId){
+        $cateTree = new Catetree();
+        $ids = $cateTree->sonids($cateId, new self(),['status'=>1]);
+        $data = [];
+        if(count($ids) > 0){
+            $data = self::_getSelCate($ids);
+        }
+        return $data;
+    }
+
+    /*
+     * 获取分类信息  --- 多个分类
+     */
+    private static function _getSelCate($ids=[],$fieldStr=''){
+        $field = 'id,pid,name,main_img_url,mobile_imgs_url,introduce';
+        if($fieldStr) $field .= $fieldStr;
+        $data = self::where('status','=',1)
+            ->field($field)
+            ->order([
+                'listorder' => 'desc',
+                'id' => 'desc'
+            ])->select($ids);
+        return $data;
+    }
+
+    public static function getProducts($cate_id) {
+        $cateTree = new Catetree();
+        $ids = $cateTree->childrenids($cate_id, new self());
+        $data = self::where([
+            ['id', 'in', $ids],
+            ['status', '=', 1]
+        ])->with(['theme.product'])
+        ->select();
+        return $data;
     }
 
 }
