@@ -19,17 +19,19 @@ class Catetree {
 
 
     //获取子所有id
-    public function childrenids($cateid,$obj){
-        $data=$obj->field('id,pid,name')->order('listorder desc')->select();
+    public function childrenids($cateid,$obj,$where=[]){
+        $data=$obj->field('id,pid,name')
+            ->where($where)
+            ->order('listorder desc')
+            ->select();
         return $this->_childrenids($data,$cateid,TRUE);
     }
 
     // 获取下一级子类的id
-    public function sonids($cateid,$obj){
-        $data=$obj->field('id,pid')->order('listorder desc')->select();
+    public function sonids($cateid,$obj,$where=[]){
+        $data=$obj->field('id,pid')->where($where)->order('listorder desc')->select();
         return $this->_getSonids($data,$cateid,TRUE);
     }
-
 
 
     public function parentids($cateid,$obj,$addField=''){

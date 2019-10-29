@@ -33,6 +33,9 @@ class Gift extends Common
     protected function getMobileImgsUrlAttr($val,$data){
         return $this->handleImgUrl($val);
     }
+    protected function getImgUrlAttr($val,$data){
+        return $this->handleImgUrl($val);
+    }
     protected function getContentAttr($val){
         $val = str_replace('src="','src='.config('APISetting.img_prefix'),$val);
         return str_replace('" title=',' title=',$val);
@@ -222,7 +225,7 @@ class Gift extends Common
     }
 
     /**
-     * 获取分类产品
+     * 获取当前分类产品
      */
     public static function getProductByCate($cate_id=0) {
         $data = [
@@ -237,6 +240,60 @@ class Gift extends Common
             }])
             ->find();
         return $result;
+    }
+
+
+    /**
+     * 获取下级分类
+     * @url
+     * @http
+     * @param $cateId
+     * @return array
+     */
+    public static function getSonData($cateId){
+        $cateTree = new Catetree();
+        $ids = $cateTree->sonids($cateId, new self(),['status'=>1,'show'=>1]);
+        $data = [];
+        if(count($ids) > 0){
+            $data = self::_getSelCate($ids);
+        }
+        return $data;
+    }
+
+    /**
+     *  获取顶级分类
+     */
+    public function getTopCate(){
+        $data = [
+            'status'    =>  1,
+            'pid' =>  0,
+            'show' => 1
+        ];
+        $order = [
+            'listorder' => 'desc',
+            'id'        => 'desc'
+        ];
+        $column =self::where($data)
+            ->order($order)
+            ->field('id,name,img_url')
+            ->select();
+        return $column;
+    }
+
+    /*
+     * 获取分类信息  --- 多个分类
+     */
+    private static function _getSelCate($ids=[],$fieldStr=''){
+        $field = 'id,pid,name,img_url';
+        if($fieldStr) $field .= $fieldStr;
+        $data = self::where('status','=',1)
+            ->field($field)
+            ->order([
+                'listorder' => 'desc',
+                'id' => 'desc',
+                'show' => 1
+            ])->select($ids);
+        return $data;
     }
 
 }

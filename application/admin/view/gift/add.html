@@ -53,13 +53,19 @@
 					</div>
 				</div>
 				<div class="row cl">
-					<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>封面图：</label>
+					<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>PC图：</label>
 					<div class="formControls col-xs-8 col-sm-9">
 						{Uploader:webuploader btnVal="上传封面图" uploadId="mainImg"}{/Uploader:webuploader}
 					</div>
 				</div>
 				<div class="row cl">
-					<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>移动端产品图：</label>
+					<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>icon图：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						{Uploader:webuploader btnVal="icon图" uploadId="urlImg"}{/Uploader:webuploader}
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>移动端图：</label>
 					<div class="formControls col-xs-8 col-sm-9">
 						{Uploader:webuploader btnVal="上传移动端图" uploadId="mobileImgs"}{/Uploader:webuploader}
 					</div>
@@ -177,6 +183,13 @@
         server: config.upload_server,
         fileNumLimit: 5
     });
+	feiy_upload.init({
+		wrap:$("#urlImg"),
+		filePicker: $("#urlImg").find(".filePicker"),
+		uploadId: "#urlImg",
+		server: config.upload_server,
+		fileNumLimit: 5
+	});
 
 
 	// tab切换
@@ -257,13 +270,14 @@
             var $main_img_childs = $("#mainImg .filelist > li");
             var $mobileImgs_childs = $("#mobileImgs .filelist > li");
             var $headImg_childs = $("#headImg .filelist > li");
+			var $urlImg_childs = $("#urlImg .filelist > li");
 
             var head_img = setUpdateUrl($headImg_childs);
             var main_img_url = setUpdateUrl($main_img_childs);
             var mobileImgs = setUpdateUrl($mobileImgs_childs);
+			var urlImg = setUpdateUrl($urlImg_childs);
 
-
-            var params = "&head_img_url="+head_img+"&main_img_url="+main_img_url+"&mobile_imgs_url="+mobileImgs;
+            var params = "&head_img_url="+head_img+"&main_img_url="+main_img_url+"&mobile_imgs_url="+mobileImgs+"&img_url="+urlImg;
             $.ajax({
                 url: "{:url('save')}",
                 type: "post",

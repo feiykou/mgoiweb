@@ -39,6 +39,7 @@ Route::get('api/:version/product/label','api/:version.Product/getProductByLabel'
 Route::get('api/:version/giftCate/resc','api/:version.GiftCate/getRescGiftCate');
 
 
+
 // 公共
 Route::get('api/:version/cate/second','api/BaseController/cate');
 Route::get('api/:version/cate/all','api/:version.Cate/getAllCate');
@@ -78,11 +79,12 @@ Route::get('api/:version/album/list/:cate_id', 'api/:version.Album/getThemeByCat
 
 // 礼品
 Route::get('api/:version/gift/cate','api/:version.Gift/getCate');
+Route::get('api/:version/gift/sonCate','api/:version.Gift/getSonCate');
 Route::get('api/:version/gift/season','api/:version.Gift/getSeasonResc');
 Route::get('api/:version/gift/banner','api/:version.Gift/getGiftBanner');
 Route::get('api/:version/gift/list','api/:version.Gift/getProductByGiftCate');
 Route::get('api/:version/gift/filter','api/:version.Product/getProductByPrice');
-
+Route::get('api/:version/gift/productByCate','api/:version.Gift/getProductByGiftSonCate');
 
 
 

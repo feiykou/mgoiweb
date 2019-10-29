@@ -301,6 +301,32 @@ class Product extends Model
         return $result;
     }
 
+    // 通过礼品分类获取产品
+    public static function getProductsByGiftCate($cateIds,$sort=0,$page=1,$size=10){
+        $cateIds = implode(',',$cateIds);
+        $data = [
+            ['p.status','=',1]
+        ];
+        if($sort){
+            $type = $sort == 1 ? 'desc' : 'asc';
+            $order['p.price'] = $type;
+        }
+        $order['id'] = 'desc';
+        $order['listorder'] = 'desc';
+        $result = db('product')->alias('p')
+            ->where($data)
+            ->field('p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.price,p.name_desc')
+            ->rightJoin('gift_product g',['g.product_id = p.id',"g.gift_id in ($cateIds)"])
+            ->order($order)
+            ->group('p.id')
+            ->paginate($size,true,['page'=>$page])
+            ->each(function($item, $key){
+                $item['main_img_url'] = self::handleImgUrl($item['main_img_url']);
+                return $item;
+            });
+        return $result;
+    }
+
     /*
      * 获取产品详情
      */
