@@ -295,7 +295,7 @@ class Category extends Model
                 $query->field('id, name, price, main_img_url, description');
             }])
             ->hidden(['product.pivot'])
-            ->field('id, name, mobile_imgs_url, main_img_url')
+            ->field('id, name, mobile_imgs_url, main_img_url, description')
             ->select();
         return $result;
     }
