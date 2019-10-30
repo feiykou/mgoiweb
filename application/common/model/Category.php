@@ -251,7 +251,7 @@ class Category extends Model
             $result = self::where([
                 'pid' => $idData['id']
             ])->where('','exp',"find_in_set($attr_id, attributes)")
-                ->field('mobile_imgs_url,main_img_url,name,id')
+                ->field('mobile_imgs_url,main_img_url,name,id,description')
                 ->order([
                     'listorder' => 'desc',
                     'id' => 'desc'
