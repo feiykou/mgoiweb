@@ -270,7 +270,7 @@ class Category extends Model
         ];
         $result = self::where($data)
             ->where('','exp',"find_in_set($attr_id,attributes)")
-            ->field('id, name, mobile_imgs_url, main_img_url,link_url')
+            ->field('id, name, mobile_imgs_url, main_img_url,link_url,description')
             ->find();
 
         return $result;
