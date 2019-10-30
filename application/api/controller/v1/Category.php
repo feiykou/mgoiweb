@@ -35,6 +35,7 @@ class Category extends BaseController
                 break;
             case 2:
                 $data = CategoryModel::getGiftData($cate_id, $type_id, $attr_id);
+                if(!$data) $data = [];
                 break;
             case 3:
                 $data = CategoryModel::getProductData($cate_id, $type_id, $attr_id);
