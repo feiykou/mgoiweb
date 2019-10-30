@@ -117,7 +117,7 @@ class Category extends Model
     }
 
     // 获取列表数据，并获取父类name
-    public function getIndexCateData()
+    public function getIndexCateData($size=12, $page=1)
     {
         $cateData = self::alias('a1')
             ->field('a1.*,a2.name as pname')
@@ -127,7 +127,7 @@ class Category extends Model
                 'a1.id' => 'desc'
             ])
             ->join('category a2', 'a1.pid=a2.id', 'left')
-            ->paginate();
+            ->paginate($size, false, ['page'=>$page]);
         return $cateData;
     }
 

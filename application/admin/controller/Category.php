@@ -25,8 +25,8 @@ class Category extends Base
 
 
     // 获取分类列表和子类列表
-    public function index(){
-        $categorys = $this->model->getIndexCateData();
+    public function index($size=12, $page=1){
+        $categorys = $this->model->getIndexCateData($size, $page);
         $page = $categorys->render();
         $sortArr = sortData($categorys);
         return $this->fetch('', [
