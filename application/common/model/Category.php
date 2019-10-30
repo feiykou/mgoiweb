@@ -251,7 +251,7 @@ class Category extends Model
             $result = self::where([
                 'pid' => $idData['id']
             ])->where('','exp',"find_in_set($attr_id, attributes)")
-                ->field('mobile_imgs_url,main_img_url,name,id,description')
+                ->field('mobile_imgs_url,main_img_url,name,id,description,link_url')
                 ->order([
                     'listorder' => 'desc',
                     'id' => 'desc'
@@ -270,7 +270,7 @@ class Category extends Model
         ];
         $result = self::where($data)
             ->where('','exp',"find_in_set($attr_id,attributes)")
-            ->field('id, name, mobile_imgs_url, main_img_url')
+            ->field('id, name, mobile_imgs_url, main_img_url,link_url')
             ->find();
 
         return $result;
@@ -295,7 +295,7 @@ class Category extends Model
                 $query->field('id, name, price, main_img_url, description');
             }])
             ->hidden(['product.pivot'])
-            ->field('id, name, mobile_imgs_url, main_img_url, description')
+            ->field('id, name, mobile_imgs_url, main_img_url, description,link_url')
             ->select();
         return $result;
     }
