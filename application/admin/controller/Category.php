@@ -40,9 +40,14 @@ class Category extends Base
         $categorys = $this->model->getAllCate();
         $sortArr = sortData($categorys);
         $category_type = config('attributes.category_type');
+        $attrData = config('attributes.category_attr_type');
+        // 获取全部商品
+        $proAllData = model('product')->getAllProData();
         return $this->fetch('',[
             "categorys"  =>  $sortArr,
-            "category_type" => $category_type
+            "category_type" => $category_type,
+            "attrData" => $attrData,
+            "proAllData" => $proAllData
         ]);
     }
 
@@ -63,6 +68,8 @@ class Category extends Base
         if($is_unique){
             $this->result('','0','存在同名类');
         }
+
+        $data['attributes'] = keyInArray($data,'attributes') ? implode(',',$data['attributes']):'';
 
         // 更新数据
         if(!$is_exist_id){
@@ -85,12 +92,20 @@ class Category extends Base
         }
         $categorys = $this->model->getAllCate();
         $sortArr = sortData($categorys);
-        $category = $this->model->get($id);
+        $category = $this->model->getCategoryDetail($id);
+        $category['category_product'] = $this->_setThemeProduct($category['product']);
         $category_type = config('attributes.category_type');
+        $attrData = config('attributes.category_attr_type');
+        $category['attributes'] = explode(',',$category['attributes']);
+
+        // 获取全部商品
+        $proAllData = model('product')->getAllProData();
         return $this->fetch('',[
             'categorys'     => $sortArr,
             'category'      => $category,
-            "category_type" => $category_type
+            "category_type" => $category_type,
+            "attrData"      => $attrData,
+            "proAllData"    => $proAllData
         ]);
     }
 
@@ -162,5 +177,15 @@ class Category extends Base
 //        }
 //        return $str;
 //    }
+
+    private function _setThemeProduct($data){
+        $sData = [];
+        if(count($data) >= 1){
+            foreach ($data as $k => $v){
+                array_push($sData, $v['id']);
+            }
+        }
+        return $sData;
+    }
 
 }

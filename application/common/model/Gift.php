@@ -75,8 +75,8 @@ class Gift extends Common
         Gift::afterUpdate(function ($theme) {
             // 接收表单数据
             $themeData = input('post.');
+            model('gift_product')->where('gift_id',$theme->id)->delete();
             if(isset($themeData['product_ids'])){
-                model('gift_product')->where('gift_id',$theme->id)->delete();
                 $theme->product()->saveAll($themeData['product_ids']);
             }
         });
@@ -84,9 +84,7 @@ class Gift extends Common
         Gift::beforeDelete(function($theme){
             $themeId = $theme->id;
 
-            if(isset($theme->product_ids)){
-                model('gift_product')->delete($themeId);
-            }
+            model('gift_product')->delete($themeId);
 
             // 删除内存中的主图
             $main_img_url = $theme->main_img_url;

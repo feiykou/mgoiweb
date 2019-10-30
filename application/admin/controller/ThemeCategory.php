@@ -32,8 +32,10 @@ class ThemeCategory extends Base
 
     public function add(){
         $categorys = $this->model->getCateData();
+        $attrData = config('attributes.them_cate_attr_type');
         return $this->fetch('',[
-            "categorys" => $categorys
+            "categorys" => $categorys,
+            "attrData"  => $attrData
         ]);
     }
 
@@ -44,9 +46,12 @@ class ThemeCategory extends Base
 
         $categorys = $this->model->getCateData($id);
         $cateCurrentData = $this->model->getCateById($id);
+        $attrData = config('attributes.them_cate_attr_type');
+        $cateCurrentData['attributes'] = explode(',',$cateCurrentData['attributes']);
         return $this->fetch('',[
             "categorys"   => $categorys,
-            'cateCurrent' => $cateCurrentData
+            'cateCurrent' => $cateCurrentData,
+            "attrData" => $attrData
         ]);
     }
 
@@ -69,6 +74,8 @@ class ThemeCategory extends Base
 //        if($is_unique){
 //            $this->result('','0','存在同名类');
 //        }
+
+        $data['attributes'] = keyInArray($data,'attributes') ? implode(',',$data['attributes']):'';
 
         // 更新数据
         if(!$is_exist_id){

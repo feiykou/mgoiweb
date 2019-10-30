@@ -32,6 +32,16 @@
                 </div>
             </div>
             <div class="row cl">
+                <label class="form-label col-xs-2 col-sm-3">推荐位：</label>
+                <div class="formControls skin-minimal col-xs-3 col-sm-3">
+                    {volist name="attrData" id="attr" key="k"}
+                    <div class="check-box">
+                        <label class="checkbox-input"><input type="checkbox" name="attributes[]" value="{$k}"><span class="checkbox-name">{$attr}</span></label>
+                    </div>
+                    {/volist}
+                </div>
+            </div>
+            <div class="row cl">
                 <label class="form-label col-xs-2 col-sm-3"><span class="c-red"></span>产品介绍：</label>
                 <div class="formControls col-xs-8 col-sm-8">
                     <textarea name="introduce" cols="" rows="" class="textarea" placeholder="说点什么..."></textarea>
@@ -50,7 +60,7 @@
                 </div>
             </div>
             <div class="row cl">
-                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
                     <button class="btn btn-primary radius save-btn" type="button" data-id="1"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
                     <button class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
                 </div>

@@ -89,5 +89,8 @@ Route::get('api/:version/gift/filter','api/:version.Product/getProductByPrice');
 Route::get('api/:version/gift/productByCate','api/:version.Gift/getProductByGiftSonCate');
 
 
+// 专区推荐
+Route::get('api/:version/pets/resc/:cate_id', 'api/:version.Category/getCategoryData',[],['cate_id'=>'\d+']);
+
 
 return [];

@@ -9,8 +9,6 @@
 namespace app\common\model;
 
 
-use catetree\Catetree;
-
 class Theme extends Common
 {
     protected $field = true;
@@ -18,10 +16,6 @@ class Theme extends Common
     protected $hidden = [
         'create_time','update_time','price','category_id','on_sale','listorder'
     ];
-
-//    public function product(){
-//        return $this->hasMany('product','theme_id','id')->field('id,theme_id,name,main_img_url,price,mobile_imgs_url,introduce');
-//    }
 
     public function product(){
         return $this->belongsToMany('product','theme_product','product_id','theme_id');
@@ -71,8 +65,8 @@ class Theme extends Common
         Theme::afterUpdate(function ($theme) {
             // 接收表单数据
             $themeData = input('post.');
+            model('theme_product')->where('theme_id',$theme->id)->delete();
             if(isset($themeData['product_ids'])){
-                model('theme_product')->where('theme_id',$theme->id)->delete();
                 $theme->product()->saveAll($themeData['product_ids']);
             }
         });
@@ -80,10 +74,7 @@ class Theme extends Common
         Theme::beforeDelete(function($theme){
             $themeId = $theme->id;
 
-            if(isset($theme->product_ids)){
-                model('theme_product')->delete($themeId);
-            }
-
+            model('theme_product')->delete($themeId);
             // 删除内存中的主图
             $main_img_url = $theme->main_img_url;
             if($main_img_url){
@@ -100,8 +91,8 @@ class Theme extends Common
             // 删除内存中的主图
             $head_img_url = $theme->head_img_url;
             if($head_img_url){
-                if(is_array($main_img_url)){
-                    foreach ($main_img_url as $val){
+                if(is_array($head_img_url)){
+                    foreach ($head_img_url as $val){
                         $delurl = '/upload/images/' . $val;
                         if(file_exists($delurl)){
                             @unlink($delurl);

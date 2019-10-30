@@ -25,7 +25,7 @@
     <div class="cl pd-5 bg-1 bk-gray mt-20">
 		<span class="l">
 			<span class="btn btn-danger radius selectAll-del"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</span>
-			<span class="btn btn-primary radius ml-10 btn-add" onclick="s_edit('添加专栏','{:url(\'category/add\')}','',560)"><i class="Hui-iconfont">&#xe600;</i> 添加专栏</span>
+			<span class="btn btn-primary radius ml-10 btn-add" onclick="s_edit('添加栏目','{:url(\'category/add\')}','',560)"><i class="Hui-iconfont">&#xe600;</i> 添加栏目</span>
 		</span></div>
     <div class="mt-20">
         <table class="table table-border table-bordered table-bg table-sort table-hover">
@@ -53,9 +53,11 @@
             </tr>
             {/volist}
 
-            {$page}
             </tbody>
         </table>
+        <div class="paging">
+            {$page|raw}
+        </div>
     </div>
 </div>
 

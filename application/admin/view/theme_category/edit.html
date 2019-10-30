@@ -33,6 +33,16 @@
                 </div>
             </div>
             <div class="row cl">
+                <label class="form-label col-xs-2 col-sm-3">推荐位：</label>
+                <div class="formControls skin-minimal col-xs-3 col-sm-3">
+                    {volist name="attrData" id="attr" key="k"}
+                    <div class="check-box">
+                        <label class="checkbox-input"><input type="checkbox" {if condition="in_array($k,$cateCurrent.attributes)"}checked{/if} name="attributes[]" value="{$k}"><span class="checkbox-name">{$attr}</span></label>
+                    </div>
+                    {/volist}
+                </div>
+            </div>
+            <div class="row cl">
                 <label class="form-label col-xs-2 col-sm-3"><span class="c-red"></span>产品介绍：</label>
                 <div class="formControls col-xs-8 col-sm-8">
                     <textarea name="introduce" cols="" rows="" class="textarea" placeholder="说点什么...">{$cateCurrent.introduce}</textarea>

@@ -68,8 +68,8 @@ class Album extends Common
         Album::afterUpdate(function ($theme) {
             // 接收表单数据
             $themeData = input('post.');
+            model('album_product')->where('album_id',$theme->id)->delete();
             if(isset($themeData['product_ids'])){
-                model('album_product')->where('album_id',$theme->id)->delete();
                 $theme->product()->saveAll($themeData['product_ids']);
             }
         });
@@ -77,9 +77,7 @@ class Album extends Common
         Theme::beforeDelete(function($theme){
             $themeId = $theme->id;
 
-            if(isset($theme->product_ids)){
-                model('album_product')->delete($themeId);
-            }
+            model('album_product')->delete($themeId);
 
             // 删除内存中的主图
             $main_img_url = $theme->main_img_url;
