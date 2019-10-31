@@ -45,6 +45,7 @@ class Gift extends BaseController
     public function getGiftBanner($cate_id=0) {
         (new GiftValidate())->goCheck('cate');
         $data = GiftModel::getGiftBanner($cate_id);
+        if(!$data) $data = null;
         return $data;
     }
 

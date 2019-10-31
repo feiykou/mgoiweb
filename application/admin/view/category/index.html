@@ -44,7 +44,7 @@
             <tr class="text-c" data-id="{$catelist.id}">
                 <td><input class="checkbox_sel" name="" type="checkbox" value=""></td>
                 <td>{$catelist.id}</td>
-                <td class="text-l">{if condition="$catelist.pid != 0"}┞{/if}{$catelist.level|str_repeat='┄',###*2}{$catelist.name}</td>
+                <td class="text-l">{if condition="$catelist.pid != 0"}┞{/if}{$catelist.level|str_repeat='┄┄',###*2}{$catelist.name}</td>
                 <td class="listorder"><input size="3" data-id="{$catelist.id}" name="listorder" value="{$catelist.listorder}"/></td>
                 <td>{if condition="$catelist.pid == 0"}顶级分类{else /}{$catelist.pname}{/if}</td>
                 <td class="f-14 product-brand-manage">
