@@ -4,6 +4,7 @@
 namespace app\common\model;
 
 
+use catetree\Catetree;
 use think\Db;
 use think\Model;
 
@@ -148,5 +149,14 @@ class Common extends Model
             ->setDec($field,$step);
     }
 
+
+    /**
+     *  获取面包屑链接
+     */
+    public static function getCrumb($cateId, $model){
+        $cateTree = new Catetree();
+        $parentArr = $cateTree->parentids($cateId, $model);
+        return $parentArr;
+    }
 
 }

@@ -6,6 +6,7 @@ namespace app\api\controller\v1;
 
 use app\api\controller\BaseController;
 use app\api\validate\IDMustBePositiveInt;
+use app\common\model\Procate;
 use app\common\model\Theme as ThemeModel;
 use app\api\validate\Theme as ThemeValidate;
 use app\api\validate\Cate as CateValidate;
@@ -56,4 +57,6 @@ class Theme extends BaseController
 //        $ids = trim($ids, ',');
 //
 //    }
+
+
 }
