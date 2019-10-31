@@ -22,13 +22,7 @@ class Category extends BaseController
     public function getCate($times=1, $resc_id=0){
         (new CategoryValidate())->goCheck();
         $pid = input('cate_id', 0, 'int');
-        $where = [];
-        if($resc_id){
-            $where = [
-              ['','exp',"find_in_set($resc_id, attributes)"]
-            ];
-        }
-        $proCateData = CategoryModel::getCateJson('type, link_url, main_img_url, mobile_imgs_url, description', $times, $pid, $where);
+        $proCateData = CategoryModel::getCateJson('type, link_url, main_img_url, mobile_imgs_url, description', $times, $pid, $resc_id);
         return json($proCateData);
     }
 

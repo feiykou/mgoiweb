@@ -10,6 +10,7 @@ namespace app\common\model;
 
 
 use catetree\Catetree;
+use think\Db;
 use think\Model;
 
 class Category extends Model
@@ -215,18 +216,22 @@ class Category extends Model
     }
 
 
-    public static function getCateJson($field = '', $times, $pid = 0, $where)
+    public static function getCateJson($field = '', $times, $pid = 0, $resc_id)
     {
-        $data = self::_cateData($field, $times, $pid);
+        $data = self::_cateData($field, $times, $pid, $resc_id);
         return $data;
     }
 
 
-    private static function _cateData($fieldStr = '', $times, $pid = 0, $where=[])
+    private static function _cateData($fieldStr = '', $times, $pid = 0, $resc_id=0)
     {
         $cateTree = new Catetree();
         $field = "id,pid,name";
         $field .= ',' . $fieldStr;
+        $where = [];
+        if($resc_id){
+            $where[] = ['','exp',Db::raw("FIND_IN_SET(1, attributes)")];
+        }
         $arr = self::field($field)
             ->order(['listorder' => 'desc', 'id' => 'desc'])
             ->where($where)
