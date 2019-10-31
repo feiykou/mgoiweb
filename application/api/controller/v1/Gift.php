@@ -117,7 +117,7 @@ class Gift extends BaseController
      */
     public function getParentCate($id){
         (new IDMustBeIsInteger())->goCheck();
-        $cateData = GiftModel::getCrumb($id);
+        $cateData = GiftModel::getCrumb($id, $this->model);
         return json($cateData);
     }
 

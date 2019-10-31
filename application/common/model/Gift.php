@@ -294,13 +294,13 @@ class Gift extends Common
         return $data;
     }
 
-    /**
-     *  获取面包屑链接
-     */
-    public static function getCrumb($cateId){
-        $cateTree = new Catetree();
-        $parentArr = $cateTree->parentids($cateId,new self());
-        return $parentArr;
-    }
+//    /**
+////     *  获取面包屑链接
+////     */
+////    public static function getCrumb($cateId){
+////        $cateTree = new Catetree();
+////        $parentArr = $cateTree->parentids($cateId,new self());
+////        return $parentArr;
+////    }
 
 }

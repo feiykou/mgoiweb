@@ -57,7 +57,7 @@ class ThemeCategory extends BaseController
      * @return \think\response\Json
      * @throws \app\lib\exception\ParameterException
      */
-    public function getParentCate($id){
+    public function getParentCate($id) {
         (new IDMustBeIsInteger())->goCheck();
         $cateData = ThemeCategoryModel::getCrumb($id, $this->model);
         return json($cateData);
