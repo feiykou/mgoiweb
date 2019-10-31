@@ -9,6 +9,7 @@ class Category extends BaseValidate
     protected $rule = [
         'times' => 'isInteger',
         'cate_id' => 'isInteger',
+        'resc_id' => 'isInteger'
     ];
 
 

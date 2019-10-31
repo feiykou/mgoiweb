@@ -215,23 +215,22 @@ class Category extends Model
     }
 
 
-    public static function getCateJson($field = '', $times, $pid = 0)
+    public static function getCateJson($field = '', $times, $pid = 0, $where)
     {
         $data = self::_cateData($field, $times, $pid);
         return $data;
     }
 
 
-    private static function _cateData($fieldStr = '', $times, $pid = 0)
+    private static function _cateData($fieldStr = '', $times, $pid = 0, $where=[])
     {
         $cateTree = new Catetree();
         $field = "id,pid,name";
         $field .= ',' . $fieldStr;
         $arr = self::field($field)
             ->order(['listorder' => 'desc', 'id' => 'desc'])
-            ->select()
-            ->each(function ($data) {
-            });
+            ->where($where)
+            ->select();
         // 生成无限极分类树
         return $cateTree->hTree($arr, $pid, $times);
     }

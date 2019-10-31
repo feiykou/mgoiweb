@@ -19,13 +19,29 @@ class Category extends BaseController
      * @return \think\response\Json
      * @throws \app\lib\exception\ParameterException
      */
-    public function getCate($times){
+    public function getCate($times=1, $resc_id=0){
         (new CategoryValidate())->goCheck();
         $pid = input('cate_id', 0, 'int');
-        $proCateData = CategoryModel::getCateJson('type, link_url, main_img_url, mobile_imgs_url, description', $times, $pid);
+        $where = [];
+        if($resc_id){
+            $where = [
+              ['','exp',"find_in_set($resc_id, attributes)"]
+            ];
+        }
+        $proCateData = CategoryModel::getCateJson('type, link_url, main_img_url, mobile_imgs_url, description', $times, $pid, $where);
         return json($proCateData);
     }
 
+    /**
+     * 获取专区内容
+     * @url
+     * @http
+     * @param $cate_id
+     * @param $attr_id
+     * @param $type_id
+     * @return \think\response\Json
+     * @throws \app\lib\exception\ParameterException
+     */
     public function getCategoryData($cate_id, $attr_id, $type_id) {
         (new CategoryResc())->goCheck();
         $data = [];
@@ -42,5 +58,8 @@ class Category extends BaseController
         }
         return json($data);
     }
+
+
+
 
 }
