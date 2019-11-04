@@ -46,7 +46,7 @@ class ThemeCategory extends BaseController
     public function getCate($times=1){
         (new CategoryValidate())->goCheck();
         $pid = input('cate_id', 0, 'int');
-        $proCateData = ThemeCategoryModel::getCateJson('main_img_url, mobile_imgs_url', $times, $pid,0);
+        $proCateData = ThemeCategoryModel::getCateJson('main_img_url, mobile_imgs_url, introduce', $times, $pid,0);
         return json($proCateData);
     }
 
