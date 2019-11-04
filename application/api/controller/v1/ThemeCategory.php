@@ -7,6 +7,7 @@ namespace app\api\controller\v1;
 use app\api\controller\BaseController;
 use app\api\validate\IDMustBeIsInteger;
 use app\api\validate\Cate as CateValidate;
+use app\api\validate\Category as CategoryValidate;
 use app\common\model\ThemeCategory as ThemeCategoryModel;
 
 class ThemeCategory extends BaseController
@@ -31,14 +32,22 @@ class ThemeCategory extends BaseController
      * @param int $cateid
      * @return array|false|\PDOStatement|string|\think\Collection
      */
-    public function getSonCate($id=0){
-        (new IDMustBeIsInteger())->goCheck();
-        if($id == 0){
-            $data = $this->model->getTopCate();
-        }else{
-            $data = ThemeCategoryModel::getSonData($id);
-        }
-        return json($data);
+//    public function getSonCate($id=0){
+//        (new IDMustBeIsInteger())->goCheck();
+//        if($id == 0){
+//            $data = $this->model->getTopCate();
+//        }else{
+//            $data = ThemeCategoryModel::getSonData($id);
+//        }
+//        return json($data);
+//    }
+
+
+    public function getCate($times=1){
+        (new CategoryValidate())->goCheck();
+        $pid = input('cate_id', 0, 'int');
+        $proCateData = ThemeCategoryModel::getCateJson('main_img_url, mobile_imgs_url', $times, $pid,0);
+        return json($proCateData);
     }
 
 
