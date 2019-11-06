@@ -64,10 +64,9 @@ class Param
 
     // 设置参数
     protected function setReflex():void {
-        $controller = lcfirst(str_replace('.',DIRECTORY_SEPARATOR,$this->request->controller()));
+        $controller = str_replace('.',DIRECTORY_SEPARATOR,$this->request->controller());
         $class = env('APP_NAMESPACE').DIRECTORY_SEPARATOR.$this->request->module().DIRECTORY_SEPARATOR.
             config('url_controller_layer').DIRECTORY_SEPARATOR.$controller;
-//        var_dump($this->request->module());die;
         $class = str_replace('/','\\',$class);
         $this->reflex = (new Reflex(new $class))->setMethod($this->request->action());
     }
