@@ -68,6 +68,7 @@ class Param
         $class = env('APP_NAMESPACE').DIRECTORY_SEPARATOR.$this->request->module().DIRECTORY_SEPARATOR.
             config('url_controller_layer').DIRECTORY_SEPARATOR.$controller;
         $class = str_replace('/','\\',$class);
+        var_dump($class);die;
         $this->reflex = (new Reflex(new $class))->setMethod($this->request->action());
     }
 
