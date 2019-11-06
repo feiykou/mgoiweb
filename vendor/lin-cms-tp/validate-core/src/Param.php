@@ -65,7 +65,7 @@ class Param
     // 设置参数
     protected function setReflex():void {
         $controller = str_replace('.',DIRECTORY_SEPARATOR,$this->request->controller());
-        if(stripos($controller, "\\")){
+        if(stripos($controller, "\\") || stripos($controller, "//")){
             $controller = lcfirst($controller);
             var_dump(1);
             var_dump($controller);
