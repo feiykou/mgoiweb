@@ -66,8 +66,8 @@ class Param
     protected function setReflex():void {
         $controller = str_replace('.',DIRECTORY_SEPARATOR,$this->request->controller());
         var_dump($controller);
-        var_dump(stripos($controller, "//"));
-        if(stripos($controller, "\\") || stripos($controller, "//")){
+        var_dump(stripos($controller, "/"));
+        if(stripos($controller, "\\") || stripos($controller, "/")){
             $controller = lcfirst($controller);
             var_dump(1);
             var_dump($controller);
