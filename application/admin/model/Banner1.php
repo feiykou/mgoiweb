@@ -13,5 +13,5 @@ use think\Model;
 
 class Banner extends Model
 {
-
+    
 }

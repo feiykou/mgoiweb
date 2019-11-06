@@ -17,6 +17,22 @@ class Common extends Model
         parent::__construct($data);
     }
 
+
+    /**
+     * 处理图片前缀
+     */
+    protected function handleImgUrl($val)
+    {
+        $val = str_replace('\\', '/', $val);
+        $arr = explode(';', $val);
+        foreach ($arr as &$item){
+            if(empty($item)) continue;
+            $item = config('APISetting.img_prefix').$item;
+        }
+        return $arr;
+    }
+
+
     /**
      * 获取一条数据
      * @param array $where
@@ -157,6 +173,41 @@ class Common extends Model
         $cateTree = new Catetree();
         $parentArr = $cateTree->parentids($cateId, $model);
         return $parentArr;
+    }
+
+
+    /**
+     * 获取子分类
+     * @param string $field 添加字段值
+     * @param $times 分类层级
+     * @param int $pid 当前分类id
+     * @param $resc_id 推荐位id
+     * @return |null
+     */
+    public static function getCateJson($field = '', $times, $pid = 0, $resc_id=0)
+    {
+        $data = self::_cateData($field, $times, $pid, $resc_id);
+        return $data;
+    }
+
+    /**
+     *  分类生成无限极分类树
+     */
+    private static function _cateData($fieldStr = '', $times, $pid = 0, $resc_id=0)
+    {
+        $cateTree = new Catetree();
+        $field = "id,pid,name";
+        $field .= ',' . $fieldStr;
+        $where = [];
+        if($resc_id){
+            $where[] = ['','exp',Db::raw("FIND_IN_SET(1, attributes)")];
+        }
+        $arr = self::field($field)
+            ->order(['listorder' => 'desc', 'id' => 'desc'])
+            ->where($where)
+            ->select();
+        // 生成无限极分类树
+        return $cateTree->hTree($arr, $pid, $times);
     }
 
 }

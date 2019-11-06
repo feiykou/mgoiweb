@@ -3,39 +3,22 @@
 
 namespace app\common\model;
 
+use think\model\concern\SoftDelete;
+
 class BannerItem extends Common
 {
 
-    protected function getImgUrlAttr($val, $data)
+    use SoftDelete;
+
+    protected $hidden = ['delete_time', 'create_time', 'update_time', 'listorder', 'banner_id', 'key_word'];
+
+    protected function getMainImgUrlAttr($val, $data)
     {
         return $this->handleImgUrl($val);
     }
 
-    protected function getThumbUrlAttr($val, $data)
+    protected function getMobileImgsUrlAttr($val, $data)
     {
-        $val = str_replace('\\', '/', $val);
-        return config('APISetting.img_prefix') . $val;
-    }
-
-    private function handleImgUrl($val)
-    {
-        $val = str_replace('\\', '/', $val);
-        $arr = explode(';', $val);
-        foreach ($arr as &$item){
-            $item = config('APISetting.img_prefix').$item;
-        }
-        return $arr;
-    }
-
-    public static function getIndexBanner()
-    {
-        $data = [
-            'banner_id' => 1
-        ];
-        $order = [
-            'listorder' => 'desc'
-        ];
-        $result = self::where($data)->order($order)->select();
-        return $result;
+        return $this->handleImgUrl($val);
     }
 }

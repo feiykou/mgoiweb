@@ -58,7 +58,7 @@ class Login extends Controller
             if($result === 2){
                 $this->success('登录成功',url('/admin'),'','1');
             }
-        }else{
+        } else {
             // 获取session
             $account = session('user_id');
             if($account){

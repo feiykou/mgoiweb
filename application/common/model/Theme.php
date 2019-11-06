@@ -31,15 +31,6 @@ class Theme extends Common
         return $this->handleImgUrl($val);
     }
 
-    private function handleImgUrl($val){
-        $val = str_replace('\\','/',$val);
-        $arr = explode(';',$val);
-        foreach ($arr as &$item){
-            $item = config('APISetting.img_prefix').$item;
-        }
-        return $arr;
-    }
-
     public function getAllTheme(){
         $data = [
             'status' => 1

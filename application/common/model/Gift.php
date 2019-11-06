@@ -41,15 +41,6 @@ class Gift extends Common
         return str_replace('" title=',' title=',$val);
     }
 
-    private function handleImgUrl($val){
-        $val = str_replace('\\','/',$val);
-        $arr = explode(';',$val);
-        foreach ($arr as &$item){
-            $item = config('APISetting.img_prefix').$item;
-        }
-        return $arr;
-    }
-
     public function getAllTheme(){
         $data = [
             'status' => 1
@@ -159,31 +150,6 @@ class Gift extends Common
         return $result;
     }
 
-
-    /**
-     *  获取分类
-     */
-    public static function getCateJson($field='',$times,$pid=0){
-        $data = self::_cateData($field, $times,$pid);
-        return $data;
-    }
-
-
-    private static function _cateData($fieldStr='',$times, $pid=0){
-        $cateTree = new Catetree();
-        $data = [
-            'show' => 1,
-            'status' => 1
-        ];
-        $field = "id,pid,name";
-        $field .= ',' . $fieldStr;
-        $arr = self::field($field)
-            ->where($data)
-            ->order(['listorder'=> 'desc','id' => 'desc'])
-            ->select();
-        // 生成无限极分类树
-        return $cateTree->hTree($arr, $pid, $times);
-    }
 
     /**
      * 获取季节推荐

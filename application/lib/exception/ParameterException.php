@@ -7,7 +7,7 @@
  */
 
 namespace app\lib\exception;
-
+use LinCmsTp5\exception\BaseException;
 /**
  * Class ParameterException
  * 通用参数类异常错误

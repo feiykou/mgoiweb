@@ -8,6 +8,8 @@
 
 namespace app\lib\exception;
 
+use LinCmsTp5\exception\BaseException;
+
 /**
  * 404时抛出此异常
  */

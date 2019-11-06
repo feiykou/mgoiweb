@@ -74,6 +74,27 @@ function btn_del(obj,url){
     });
 }
 
+// api删除
+function api_btn_del(obj, url='', ids='', method='delete'){
+    if(ids === '') layer.msg('id参数错误!',{icon:1,time:1000});
+    if(!(ids instanceof Array)) ids = [ids]
+    layer.confirm('确认要删除吗？',function(index){
+        $.ajax({
+            type: method,
+            url: url,
+            data: { ids },
+            dataType: 'json',
+            success: function(data){
+                $(obj).parents("tr").remove();
+                layer.msg('已删除!',{icon:1,time:1000});
+            },
+            error:function({responseJSON}) {
+                layer.msg(responseJSON.msg||'删除失败',{icon:1,time:1000});
+            },
+        });
+    });
+}
+
 
 var loadPage = {
     trimBr: function (str) {

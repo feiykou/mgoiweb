@@ -12,6 +12,24 @@
 // 应用公共文件
 
 /**
+ * @param $code
+ * @param $errorCode
+ * @param $data
+ * @param $msg
+ * @return \think\response\Json
+ */
+
+function writeJson($code, $data, $msg = 'ok', $errorCode = 0)
+{
+    $data = [
+        'error_code' => $errorCode,
+        'result' => $data,
+        'msg' => $msg
+    ];
+    return json($data, $code);
+}
+
+/**
  * 获取栏目名
  */
 function getColumn($template_id){

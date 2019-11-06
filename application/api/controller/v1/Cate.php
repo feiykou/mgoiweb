@@ -23,17 +23,20 @@ class Cate extends BaseController
         $this->model = model('procate');
     }
 
-    public function getAllCate(){
+    public function getAllCate()
+    {
         $proCateData = $this->model->getCateJson();
         return $proCateData;
     }
 
-    public function getTopCate(){
+    public function getTopCate()
+    {
         $cateData = $this->model->getTopCate();
         return $cateData;
     }
 
-    public function getSonById(){
+    public function getSonById()
+    {
         $id = input('cate_id',0,'intval');
         $cateData = $this->model->getAllSonData($id);
         return json($cateData);
@@ -46,7 +49,8 @@ class Cate extends BaseController
      * @param int $cateid
      * @return array|false|\PDOStatement|string|\think\Collection
      */
-    public function getSonCate($id=0){
+    public function getSonCate($id=0)
+    {
         (new IDMustBeIsInteger())->goCheck();
         if($id == 0){
             $data = $this->model->getTopCate();
@@ -64,7 +68,8 @@ class Cate extends BaseController
      * @return \think\response\Json
      * @throws \app\lib\exception\ParameterException
      */
-    public function getParentCate($id){
+    public function getParentCate($id)
+    {
         (new IDMustBePositiveInt())->goCheck();
         $cateData = Procate::getCrumb($id);
         return json($cateData);

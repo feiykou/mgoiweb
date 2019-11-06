@@ -25,14 +25,6 @@ class ThemeCategory extends Common
         return self::handleImgUrl($val);
     }
 
-    private function handleImgUrl($val){
-        $val = str_replace('\\','/',$val);
-        $arr = explode(';',$val);
-        foreach ($arr as &$item){
-            $item = config('APISetting.img_prefix').$item;
-        }
-        return $arr;
-    }
 
     protected function productCate(){
         return $this->belongsToMany('product','product_cate','product_id','cate_id');
@@ -204,29 +196,5 @@ class ThemeCategory extends Common
         return $data;
     }
 
-
-    public static function getCateJson($field = '', $times, $pid = 0, $resc_id)
-    {
-        $data = self::_cateData($field, $times, $pid, $resc_id);
-        return $data;
-    }
-
-
-    private static function _cateData($fieldStr = '', $times, $pid = 0, $resc_id=0)
-    {
-        $cateTree = new Catetree();
-        $field = "id,pid,name";
-        $field .= ',' . $fieldStr;
-        $where = [];
-        if($resc_id){
-            $where[] = ['','exp',Db::raw("FIND_IN_SET(1, attributes)")];
-        }
-        $arr = self::field($field)
-            ->order(['listorder' => 'desc', 'id' => 'desc'])
-            ->where($where)
-            ->select();
-        // 生成无限极分类树
-        return $cateTree->hTree($arr, $pid, $times);
-    }
 
 }

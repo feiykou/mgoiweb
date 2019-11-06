@@ -24,13 +24,12 @@ class Theme extends BaseController
     /**
      * 获取分类下的主题和主题对应的产品
      * @url
-     * @http
+     * @validate('CateValidate')
      * @param $cate_id
      * @return \think\response\Json
      * @throws \app\lib\exception\ParameterException
      */
     public function getThemeByCate($cate_id){
-        (new CateValidate())->goCheck();
         $themeData = [];
         if(intval($cate_id) != 0){
             $themeData = ThemeModel::getThemeByCate($cate_id);
