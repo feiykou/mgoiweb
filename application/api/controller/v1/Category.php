@@ -8,6 +8,7 @@ use app\api\controller\BaseController;
 use app\api\validate\CategoryResc;
 use app\common\model\Category as CategoryModel;
 use app\api\validate\Category as CategoryValidate;
+use app\lib\exception\CategoryException;
 
 class Category extends BaseController
 {
@@ -27,9 +28,24 @@ class Category extends BaseController
     }
 
     /**
+     * 获取栏目推荐
+     * @param('resc_id','推荐id','require|number')
+     * @param('count','限制数量','number')
+     *
+     */
+    public function getRescData($resc_id, $count=10)
+    {
+        $data = CategoryModel::getDataByResc($resc_id, $count);
+        if(!$data) throw new CategoryException([
+            'msg' => '未找到推荐分类',
+            'error_code' => 50001
+        ]);
+        return $data;
+    }
+
+
+    /**
      * 获取专区内容
-     * @url
-     * @http
      * @param $cate_id
      * @param $attr_id
      * @param $type_id

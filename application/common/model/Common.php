@@ -200,7 +200,7 @@ class Common extends Model
         $field .= ',' . $fieldStr;
         $where = [];
         if($resc_id){
-            $where[] = ['','exp',Db::raw("FIND_IN_SET(1, attributes)")];
+            $where[] = ['','exp',Db::raw("FIND_IN_SET($resc_id, attributes)")];
         }
         $arr = self::field($field)
             ->order(['listorder' => 'desc', 'id' => 'desc'])
@@ -208,6 +208,23 @@ class Common extends Model
             ->select();
         // 生成无限极分类树
         return $cateTree->hTree($arr, $pid, $times);
+    }
+
+    /**
+     * 根据推荐获取数据
+     */
+    public static function getDataByResc($resc_id=0, $count=10)
+    {
+        $where[] = ['','exp',Db::raw("FIND_IN_SET($resc_id, attributes)")];
+        $data = [
+            'status' => 1
+        ];
+        $result = self::where($where)
+            ->order('listorder desc')
+            ->where($data)
+            ->limit($count)
+            ->select();
+        return $result;
     }
 
 }

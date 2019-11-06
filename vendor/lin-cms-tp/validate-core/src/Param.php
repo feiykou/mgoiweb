@@ -64,6 +64,7 @@ class Param
 
     // 设置参数
     protected function setReflex():void {
+        // 2019-11-06修改bug
         $controller = str_replace('.',DIRECTORY_SEPARATOR,$this->request->controller());
         if(stripos($controller, "\\") || stripos($controller, "/")){
             $controller = lcfirst($controller);

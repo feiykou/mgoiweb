@@ -105,6 +105,8 @@ Route::group('', function () {
         Route::group('category', function () {
             // 获取栏目列表
             Route::get('list','api/:version.Category/getCate');
+            // 获取推荐栏目
+            Route::get('resc', 'api/:version.Category/getRescData');
         });
 
         // 礼品接口

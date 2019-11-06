@@ -8,12 +8,7 @@
 
 namespace app\common\model;
 
-
-use catetree\Catetree;
-use think\Db;
-use think\Model;
-
-class Category extends Model
+class Category extends Common
 {
 
     public function product()
@@ -29,16 +24,6 @@ class Category extends Model
     protected function getMobileImgsUrlAttr($val, $data)
     {
         return $this->handleImgUrl($val);
-    }
-
-    private function handleImgUrl($val)
-    {
-        $val = str_replace('\\', '/', $val);
-        $arr = explode(';', $val);
-        foreach ($arr as &$item) {
-            $item = config('APISetting.img_prefix') . $item;
-        }
-        return $arr;
     }
 
     protected static function init()
@@ -178,16 +163,16 @@ class Category extends Model
     }
 
     // 判断是否存在同名
-    public function is_unique($name = "", $id = 0)
-    {
-        $data = [
-            'status' => ['neq', -1],
-            'id' => ['neq', $id],
-            'name' => ['=', $name]
-        ];
-        $result = $this->where($data)->find();
-        return $result;
-    }
+//    public function is_unique($name = "", $id = 0)
+//    {
+//        $data = [
+//            'status' => ['neq', -1],
+//            'id' => ['neq', $id],
+//            'name' => ['=', $name]
+//        ];
+//        $result = $this->where($data)->find();
+//        return $result;
+//    }
 
 
     public function getAllColumn()
@@ -215,30 +200,6 @@ class Category extends Model
         return $column;
     }
 
-
-    public static function getCateJson($field = '', $times, $pid = 0, $resc_id)
-    {
-        $data = self::_cateData($field, $times, $pid, $resc_id);
-        return $data;
-    }
-
-
-    private static function _cateData($fieldStr = '', $times, $pid = 0, $resc_id=0)
-    {
-        $cateTree = new Catetree();
-        $field = "id,pid,name";
-        $field .= ',' . $fieldStr;
-        $where = [];
-        if($resc_id){
-            $where[] = ['','exp',Db::raw("FIND_IN_SET(1, attributes)")];
-        }
-        $arr = self::field($field)
-            ->order(['listorder' => 'desc', 'id' => 'desc'])
-            ->where($where)
-            ->select();
-        // 生成无限极分类树
-        return $cateTree->hTree($arr, $pid, $times);
-    }
 
     public static function getWenData($cate_id, $type_id, $attr_id)
     {
