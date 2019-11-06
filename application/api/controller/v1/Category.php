@@ -35,7 +35,8 @@ class Category extends BaseController
      */
     public function getRescData($resc_id, $count=10)
     {
-        $data = CategoryModel::getDataByResc($resc_id, $count);
+        $field = 'listorder,pid,attributes';
+        $data = CategoryModel::getDataByResc($resc_id, $field, $count);
         if(!$data) throw new CategoryException([
             'msg' => '未找到推荐分类',
             'error_code' => 50001
