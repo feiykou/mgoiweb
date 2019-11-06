@@ -213,7 +213,7 @@ class Common extends Model
     /**
      * 根据推荐获取数据
      */
-    public static function getDataByResc($resc_id=0, $count=10)
+    public static function getDataByResc($resc_id=0, $field='', $count=10)
     {
         $where[] = ['','exp',Db::raw("FIND_IN_SET($resc_id, attributes)")];
         $data = [
@@ -222,6 +222,7 @@ class Common extends Model
         $result = self::where($where)
             ->order('listorder desc')
             ->where($data)
+            ->field($field)
             ->limit($count)
             ->select();
         return $result;
