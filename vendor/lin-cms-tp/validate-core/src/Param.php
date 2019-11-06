@@ -67,11 +67,13 @@ class Param
         $controller = str_replace('.',DIRECTORY_SEPARATOR,$this->request->controller());
         if(stripos($controller, "\\")){
             $controller = lcfirst($controller);
+            var_dump(1);
+            var_dump($controller);
         }
         $class = env('APP_NAMESPACE').DIRECTORY_SEPARATOR.$this->request->module().DIRECTORY_SEPARATOR.
             config('url_controller_layer').DIRECTORY_SEPARATOR.$controller;
         $class = str_replace('/','\\',$class);
-        var_dump($class);die;
+        var_dump($controller);die;
         $this->reflex = (new Reflex(new $class))->setMethod($this->request->action());
     }
 
