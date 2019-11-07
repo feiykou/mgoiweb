@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!--包含头部文件-->
+    {include file="public/header" /}
+    <!--引入webuploaderCss-->
+    {Uploader:webuploadercss /}
+    <style>
+        .form .row{ margin-bottom: 25px;}
+        .form .save-btn-wrap{ margin-top: 30px;}
+    </style>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 产品管理<a class="btn btn-success radius r" href="javascript:history.back()" style="line-height:1.6em;margin-top:3px" title="返回" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <form class="form form-horizontal form-o2o-add" id="form-wrapper">
+        <input type="hidden" name="banner_id" value="{$bannerItem.banner_id}">
+        <input type="hidden" name="id" value="{$bannerItem.id}">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-1">名称：</label>
+            <div class="formControls col-xs-8 col-sm-4">
+                <input type="text" class="input-text" value="{$bannerItem.name}" placeholder="" name="name">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-1">关键字：</label>
+            <div class="formControls col-xs-8 col-sm-4">
+                <input type="text" class="input-text" value="{$bannerItem.key_word}" placeholder="" name="key_word">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-1"><span class="c-red">*</span>类型：</label>
+            <div class="formControls col-xs-8 col-sm-4">
+                <input type="text" class="input-text" value="{$bannerItem.type}" placeholder="" name="type">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-1"><span class="c-red"></span>PC端图：</label>
+            <div class="formControls col-xs-8 col-sm-4">
+                {Uploader:webuploader btnVal="上传PC端图" uploadId="mainImg"}
+                <ul class="filelist filelist-exist clearfix">
+                    {volist name="$bannerItem.main_img_url" id="imgs_arr"}
+                    <li class="state-complete" data-src="{$imgs_arr}">
+                        <p class="imgWrap"><img src="{$imgs_arr}" width="110" height="110"></p>
+                        <div class="file-panel"><span class="cancel">删除</span></div>
+                        <span class="success"></span>
+                    </li>
+                    {/volist}
+                </ul>
+                {/Uploader:webuploader}
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-1"><span class="c-red"></span>移动端图：</label>
+            <div class="formControls col-xs-8 col-sm-4">
+                {Uploader:webuploader btnVal="上传移动端图" uploadId="mobileImgs"}
+                <ul class="filelist filelist-exist clearfix">
+                    {if condition="count($bannerItem.mobile_imgs_url) lt 0"}
+                    {volist name="$bannerItem.mobile_imgs_url" id="imgs_arr"}
+                    <li class="state-complete" data-src="{$imgs_arr}">
+                        <p class="imgWrap"><img src="{$imgs_arr}" width="110" height="110"></p>
+                        <div class="file-panel"><span class="cancel">删除</span></div>
+                        <span class="success"></span>
+                    </li>
+                    {/volist}
+                    {/if}
+                </ul>
+                {/Uploader:webuploader}
+            </div>
+        </div>
+        <div class="row save-btn-wrap cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-1 col-sm-offset-1">
+                <button type="button" class="btn btn-primary radius save-btn" ><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+                <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!--包含头部文件-->
+{include file="public/footer" /}
+<script type="text/javascript" src="__STATIC__/admin/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/lib/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" src="__STATIC__/admin/lib/ueditor/1.4.3/ueditor.all.js"></script>
+<script>
+    var config = {
+        "upload_server": "{:url('getImg')}"
+    };
+</script>
+<!--引入webuploaderJS-->
+{Uploader:webuploaderjs/}
+<script>
+
+    function goBack() {
+        window.history.go(-2);
+    }
+    feiy_upload.init({
+        wrap:$("#mainImg"),
+        filePicker: $("#mainImg").find(".filePicker"),
+        uploadId: "#mainImg",
+        server: config.upload_server,
+        fileNumLimit: 2
+    });
+    feiy_upload.init({
+        wrap:$("#mobileImgs"),
+        filePicker: $("#mobileImgs").find(".filePicker"),
+        uploadId: "#mobileImgs",
+        server: config.upload_server,
+        fileNumLimit: 2
+    });
+
+</script>
+<script>
+
+
+    $(".save-btn").on("click",function(){
+        $("#form-wrapper").submit();
+    });
+
+    cancelImg();
+    // 检查图片数量是否超过设置值，超出则禁止
+    $(function () {
+        checkUpload();
+    });
+
+    function checkUpload(){
+        var $mobileImgs_childs = $("#mobileImgs .filelist > li");
+        var $main_list_childs = $("#mainImg .filelist > li");
+
+        setTimeout(function(){
+            setNoDrop($main_list_childs,2);
+            setNoDrop($mobileImgs_childs,2);
+        },500);
+    }
+
+
+    // 表单验证
+    $("#form-wrapper").validate({
+        rules: {
+            name: "required",
+            key_word: {
+                required: true,
+                digits:true,
+                min:1
+            }
+        },
+        messages: {
+            name: "标题不能为空",
+            key_word: "id不能为空,不能小于1"
+        },
+        submitHandler: function(form){
+            // 获取产品详情页
+            var $mobileImgs_childs = $("#mobileImgs .filelist > li");
+            var $main_list_childs = $("#mainImg .filelist > li");
+            var main_img_url = setUpdateUrl($main_list_childs);
+            var mobileImgs = setUpdateUrl($mobileImgs_childs);
+            var params = "&main_img_url="+main_img_url+"&mobile_imgs_url="+mobileImgs;
+            $.ajax({
+                url: "/admin/banner/item",
+                type: "patch",
+                data: $('#form-wrapper').serialize()+params,
+                success: function(res){
+                    layer.msg(res.msg, {icon: 6,time:1000}, function () {
+                        window.location = "{:url('banner/edit',['id' => $bannerItem.banner_id])}";
+                    });
+                },
+                error: function ({responseJSON}) {
+                    let msg = ''
+                    for (let key in responseJSON.msg) {
+                        msg += responseJSON.msg[key] + ','
+                    }
+                    msg = msg.substring(0, msg.length-1)
+                    layer.msg(msg, {icon: 6,time:1000});
+                }
+            });
+        }
+    });
+
+</script>
+</body>
+</html>
+
