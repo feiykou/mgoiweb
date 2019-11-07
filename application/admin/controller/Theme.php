@@ -36,7 +36,7 @@ class Theme extends Base
         $CategoryRes=$Category->Catetree($CategoryRes);
 
         // 获取全部商品
-        $proAllData = model('product')->getAllProData(1);
+        $proAllData = model('product')->getAllProData([],1);
         $attrData = config('attributes.theme_type');
         $labelsData = config('attributes.labels_type');
         $this->assign([

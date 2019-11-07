@@ -185,8 +185,12 @@ class Product extends Model
 
     }
 
-    public function getAllProData($sdata=[]){
-        $data = [['status','neq',-1]];
+    public function getAllProData($sdata=[], $status=-1){
+        if($status == 1){
+            $data = [['status','eq',$status]];
+        }else{
+            $data = [['status','neq',$status]];
+        }
         $data = array_merge($data, $sdata);
         $order = [
             'listorder' => 'desc',
