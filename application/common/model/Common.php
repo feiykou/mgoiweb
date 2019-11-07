@@ -184,20 +184,15 @@ class Common extends Model
      * @param $resc_id 推荐位id
      * @return |null
      */
-    public static function getCateJson($field = '', $times, $pid = 0, $resc_id=0)
+    public static function getCateJson($field = '', $times, $pid = 0, $resc_id = 0)
     {
-        $data = self::_cateData($field, $times, $pid, $resc_id);
+        $arr = self::getCateData($field, [], $resc_id);
+        $data = self::cateData($arr, $times, $pid);
         return $data;
     }
 
-    /**
-     *  分类生成无限极分类树
-     */
-    private static function _cateData($fieldStr = '', $times, $pid = 0, $resc_id=0)
-    {
-        $cateTree = new Catetree();
-        $field = "id,pid,name";
-        $field .= ',' . $fieldStr;
+    protected static function getCateData($fieldStr = '', $data = [], $resc_id = 0){
+        $field = 'id,pid,name,' . $fieldStr;
         $where = [];
         if($resc_id){
             $where[] = ['','exp',Db::raw("FIND_IN_SET($resc_id, attributes)")];
@@ -205,7 +200,17 @@ class Common extends Model
         $arr = self::field($field)
             ->order(['listorder' => 'desc', 'id' => 'desc'])
             ->where($where)
+            ->where($data)
             ->select();
+        return $arr;
+    }
+
+    /**
+     *  分类生成无限极分类树
+     */
+    protected static function cateData( $arr=[], $times, $pid = 0)
+    {
+        $cateTree = new Catetree();
         // 生成无限极分类树
         return $cateTree->hTree($arr, $pid, $times);
     }

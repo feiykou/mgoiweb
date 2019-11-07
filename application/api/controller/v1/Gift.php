@@ -26,7 +26,9 @@ class Gift extends BaseController
     public function getCate($times){
         (new CategoryValidate())->goCheck();
         $pid = input('cate_id', 0, 'int');
-        $proCateData = GiftModel::getCateJson('main_img_url, mobile_imgs_url, description', $times, $pid);
+        $field = 'main_img_url, mobile_imgs_url, description';
+        $giftData = GiftModel::getCateData($field, ['show'=>1]);
+        $proCateData = GiftModel::cateData($giftData, $times, $pid);
         return json($proCateData);
     }
 

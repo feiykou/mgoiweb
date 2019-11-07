@@ -20,12 +20,14 @@ class Category extends BaseController
      * @return \think\response\Json
      * @throws \app\lib\exception\ParameterException
      */
-    public function getCate($times=1, $resc_id=0){
+    public function getCate($times=1, $resc_id=0)
+    {
         (new CategoryValidate())->goCheck();
         $pid = input('cate_id', 0, 'int');
         $proCateData = CategoryModel::getCateJson('type, link_url, main_img_url, mobile_imgs_url, description', $times, $pid, $resc_id);
         return json($proCateData);
     }
+
 
     /**
      * 获取栏目推荐
@@ -69,8 +71,6 @@ class Category extends BaseController
         }
         return json($data);
     }
-
-
 
 
 }
