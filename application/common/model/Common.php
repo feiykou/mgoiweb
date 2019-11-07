@@ -191,7 +191,7 @@ class Common extends Model
         return $data;
     }
 
-    protected static function getCateData($fieldStr = '', $data = [], $resc_id = 0){
+    public static function getCateData($fieldStr = '', $data = [], $resc_id = 0){
         $field = 'id,pid,name,' . $fieldStr;
         $where = [];
         if($resc_id){
@@ -208,7 +208,7 @@ class Common extends Model
     /**
      *  分类生成无限极分类树
      */
-    protected static function cateData( $arr=[], $times, $pid = 0)
+    public static function cateData( $arr=[], $times, $pid = 0)
     {
         $cateTree = new Catetree();
         // 生成无限极分类树
