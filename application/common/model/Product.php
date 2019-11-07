@@ -185,8 +185,9 @@ class Product extends Model
 
     }
 
-    public function getAllProData(){
-        $data = [['status','eq',1]];
+    public function getAllProData($sdata=[]){
+        $data = [['status','neq',-1]];
+        $data = array_merge($data, $sdata);
         $order = [
             'listorder' => 'desc',
             'id'        => 'desc',
@@ -214,7 +215,7 @@ class Product extends Model
             ['id','in',$idArr]
         ];
         $result = $this->where($data)->update(['status'=>-1]);
-        db('product_prop')->where(['product_id','in',$idArr])->delete();
+        db('product_prop')->where([['product_id','in',$idArr]])->delete();
         return $result;
     }
 
@@ -245,6 +246,19 @@ class Product extends Model
     /**
      * 前台数据调用
      */
+    // 获取全部产品
+    public function getAPIAllProData()
+    {
+        $data = [['status','eq',1]];
+        $order = [
+            'listorder' => 'desc',
+            'id'        => 'desc'
+        ];
+        $result = self::where($data)
+            ->order($order)
+            ->select();
+        return $result;
+    }
     // 获取分类下的产品
     public static function getRescCateProducts($cateIds, $rescId){
         $cateIds = implode(',',$cateIds);

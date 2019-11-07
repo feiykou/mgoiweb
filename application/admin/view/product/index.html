@@ -133,7 +133,6 @@ $(".listorder>input").blur(function () {
 
 /*产品-删除*/
 function product_del(obj,id){
-    console.log(11111)
     var url = "{:url('del')}?id="+id;
     layer.confirm('确认要删除吗？',function(index){
         $.ajax({

@@ -12,23 +12,17 @@ namespace app\common\model;
 use catetree\Catetree;
 use think\Model;
 
-class Procate extends Model
+class Procate extends Common
 {
     protected $hidden = [
-        'create_time','update_time'
+        'create_time','update_time','delete_time','status','show','listorder'
     ];
 
-    protected function getImgUrlAttr($val,$data){
+    protected function getMainImgUrlAttr($val,$data){
         return $this->handleImgUrl($val);
     }
-
-    private function handleImgUrl($val){
-        $val = str_replace('\\','/',$val);
-        $arr = explode(';',$val);
-        foreach ($arr as &$item){
-            $item = config('APISetting.img_prefix').$item;
-        }
-        return $arr;
+    protected function getMobileImgsUrlAttr($val,$data){
+        return $this->handleImgUrl($val);
     }
 
     protected function productCate(){
@@ -121,15 +115,15 @@ class Procate extends Model
     }
 
     // 判断是否存在同名
-    public function is_unique($name="",$id=0){
-        $data = [
-            ['status','=',1],
-            ['id','neq',$id],
-            ['name','=',$name]
-        ];
-        $result = $this->where($data)->find();
-        return $result;
-    }
+//    public function is_unique($name="",$id=0){
+//        $data = [
+//            ['status','=',1],
+//            ['id','neq',$id],
+//            ['name','=',$name]
+//        ];
+//        $result = $this->where($data)->find();
+//        return $result;
+//    }
 
     // 判断当前id是否存在子类
     public function is_child($id=-1){
@@ -199,6 +193,7 @@ class Procate extends Model
         $data = [
             'status'    =>  1,
             'pid' =>  0,
+            'show' => 1
         ];
         $order = [
             'listorder' => 'desc',
@@ -206,12 +201,6 @@ class Procate extends Model
         ];
         $column =self::where($data)->order($order)->field('id,name,img_url')->select();
         return $column;
-    }
-
-    public static function getCateJson(){
-        $cateTree = new Catetree();
-        $data = $cateTree->cateData(new self());
-        return $data;
     }
 
     /*
@@ -247,7 +236,8 @@ class Procate extends Model
      * @param $cateId
      * @return array
      */
-    public static function getAllSonData($cateId){
+    public static function getAllSonData($cateId)
+    {
         $cateTree = new Catetree();
         $ids = $cateTree->childrenids($cateId, new self());
         $data = [];
@@ -272,7 +262,8 @@ class Procate extends Model
         ];
         $parentId = self::where([
             'pid' => 0,
-            'status' => 1
+            'status' => 1,
+            'show' => 1
         ])->order($order)
           ->field('id')
           ->select();
@@ -288,7 +279,8 @@ class Procate extends Model
         ];
         $result = self::where([
             'pid' => $cateId,
-            'status' => 1
+            'status' => 1,
+            'show' => 1
         ])->order($order)
             ->field('id,name,img_url')
             ->select();
@@ -325,11 +317,6 @@ class Procate extends Model
         return $arr;
     }
 
-    public static function getCrumb($cateId){
-        $cateTree = new Catetree();
-        $parentArr = $cateTree->parentids($cateId,new self());
-        return $parentArr;
-    }
 
 
 

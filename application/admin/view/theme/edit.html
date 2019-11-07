@@ -113,7 +113,17 @@
 						</select>
 					</div>
 				</div>
-
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">产品选择：</label>
+					<div class="formControls col-xs-2 col-sm-2">
+						<select name="product_id" class="select template_sel">
+							<option value="">选择产品</option>
+							{volist name="proAllData" id="productData" key="k"}
+							<option value="{$productData.id}" {if condition="$productData.id eq $themeData.product_id"} selected="selected"{/if}>{$productData.name}</option>
+							{/volist}
+						</select>
+					</div>
+				</div>
 				<div class="row cl">
 					<label class="form-label col-xs-4 col-sm-2">是否上架：</label>
 					<div class="formControls skin-minimal col-xs-8">

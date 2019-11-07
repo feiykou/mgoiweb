@@ -22,6 +22,12 @@
                 </div>
             </div>
             <div class="row cl">
+                <label class="form-label col-xs-2 col-sm-3"><span class="c-red"></span>描述：</label>
+                <div class="formControls col-xs-8 col-sm-8">
+                    <textarea name="description" cols="" rows="" class="textarea" placeholder="说点什么...">{$cateCurrent.description}</textarea>
+                </div>
+            </div>
+            <div class="row cl">
                 <label class="form-label col-xs-2 col-sm-3"><span class="c-red">*</span>分类：</label>
                 <div class="formControls col-xs-3 col-sm-3">
                     <select class='select' name='pid'>
@@ -33,20 +39,49 @@
                 </div>
             </div>
             <div class="row cl">
-                <label class="form-label col-xs-2 col-sm-3">缩略图：</label>
+                <label class="form-label col-xs-2 col-sm-3">是否展示：</label>
+                <div class="formControls skin-minimal col-xs-8 col-sm-8">
+                    <div class="radio-box">
+                        <label class="radio-input"><input type="radio" name="show" value="1" {if condition="$cateCurrent.show eq 1"}checked{/if}><span class="radio-name">展示</span></label>
+                    </div>
+                    <div class="radio-box">
+                        <label class="radio-input"><input type="radio" name="show" value="0" {if condition="$cateCurrent.show eq 0"}checked{/if}><span class="radio-name">不展示</span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-2 col-sm-3"><span class="c-red">*</span>封面图：</label>
                 <div class="formControls col-xs-8 col-sm-8">
-                    {Uploader:webuploader btnVal="上传轮播图" uploadId="imgUrl"}
+                    {Uploader:webuploader btnVal="上传封面图" uploadId="mainImg"}
+                    {if condition="$cateCurrent.main_img_url neq ['']"}
                     <ul class="filelist filelist-exist clearfix">
-                        {if condition="count($cateCurrent.img_url) egt 1"}
-                        {volist name="$cateCurrent.img_url" id="imgs_arr"}
+                        {volist name="$cateCurrent.main_img_url" id="imgs_arr"}
                         <li class="state-complete" data-src="{$imgs_arr}">
                             <p class="imgWrap"><img src="{$imgs_arr}" width="110" height="110"></p>
                             <div class="file-panel"><span class="cancel">删除</span></div>
                             <span class="success"></span>
                         </li>
                         {/volist}
-                        {/if}
                     </ul>
+                    {/if}
+                    {/Uploader:webuploader}
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-2 col-sm-3"><span class="c-red">*</span>移动端产品图：</label>
+                <div class="formControls col-xs-8 col-sm-8">
+                    {Uploader:webuploader btnVal="上传移动端图" uploadId="mobileImgs"}
+                    {if condition="$cateCurrent.mobile_imgs_url neq ['']"}
+                    <ul class="filelist filelist-exist clearfix">
+                        {volist name="$cateCurrent.mobile_imgs_url" id="imgs_arr"}
+                        <li class="state-complete" data-src="{$imgs_arr}">
+                            <p class="imgWrap"><img src="{$imgs_arr}" width="110" height="110"></p>
+                            <div class="file-panel"><span class="cancel">删除</span></div>
+                            <span class="success"></span>
+                        </li>
+                        {/volist}
+                    </ul>
+                    {/if}
                     {/Uploader:webuploader}
                 </div>
             </div>
@@ -72,11 +107,18 @@
 {Uploader:webuploaderjs/}
 <script>
     feiy_upload.init({
-        wrap:$("#imgUrl"),
-        filePicker: $("#imgUrl").find(".filePicker"),
-        uploadId: "#imgUrl",
+        wrap:$("#mainImg"),
+        filePicker: $("#mainImg").find(".filePicker"),
+        uploadId: "#mainImg",
         server: config.upload_server,
-        fileNumLimit: 3
+        fileNumLimit: 2
+    });
+    feiy_upload.init({
+        wrap:$("#mobileImgs"),
+        filePicker: $("#mobileImgs").find(".filePicker"),
+        uploadId: "#mobileImgs",
+        server: config.upload_server,
+        fileNumLimit: 2
     });
 </script>
 <script>
@@ -139,14 +181,13 @@
         },
         submitHandler: function(form){
             // 获取产品详情页
-            var $img_list_childs = $("#imgUrl .filelist > li");
-            var img_url = setUpdateUrl($img_list_childs);
-            if(img_url == 'undefined'){
-                layer.msg('图片不存在，或者更改图片名称重新上传', {icon: 6,time:1000});
-                return ;
-            }
+            var $main_img_childs = $("#mainImg .filelist > li");
+            var $mobileImgs_childs = $("#mobileImgs .filelist > li");
 
-            params = "&img_url="+img_url;
+            var main_img_url = setUpdateUrl($main_img_childs);
+            var mobileImgs = setUpdateUrl($mobileImgs_childs);
+
+            var params = "&main_img_url="+main_img_url+"&mobile_imgs_url="+mobileImgs;
             $.ajax({
                 url: "{:url('save')}",
                 type: "post",

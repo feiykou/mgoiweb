@@ -28,6 +28,12 @@ class Product extends BaseController
         $this->model = model('product');
     }
 
+    /**
+     * 获取产品分类下推荐的产品
+     * @url  /product/rescbycate?cateId=1&rescId=6
+     * @return \think\response\Json
+     * @throws \app\lib\exception\ParameterException
+     */
     public function getRescProductByCate(){
         (new MustBePositiveInt())->goCheck('productResc');
         $cateId = input('cateId',0,'intval');
@@ -39,7 +45,7 @@ class Product extends BaseController
 
     public function lst($cate_id=0){
         if($cate_id == 0){
-            $products = $this->model->getAllProData();
+            $products = $this->model->getAPIAllProData();
         }else{
             $cate_ids = Procate::getAllCateById($cate_id);
             $productIdsArr = model('product_cate')
@@ -122,7 +128,7 @@ class Product extends BaseController
                 ->order($order)
                 ->field('id,name,introduce,main_img_url,price,name_desc')
                 ->paginate($size,true,['page'=>$page]);
-        }else{
+        } else {
             $catetree = new Catetree();
             $sonids = $catetree->childrenids($cateid, new Procate());
             $sonids[] = intval($cateid);

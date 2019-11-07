@@ -75,6 +75,24 @@ Route::group('', function () {
             Route::get('column','api/:version.Product/getProductByCategory');
         });
 
+        // 分类
+        Route::group('cate', function () {
+            // 获取当前分类数据
+            Route::get(':id','api/:version.Cate/getCurrentCate',[],['id'=>'\d+']);
+            // 获取二级分类
+            Route::get('second','api/BaseController/cate');
+            // 获取全部分类
+            Route::get('all','api/:version.Cate/getAllCate');
+            // 获取顶级分类
+            Route::get('topCate','api/:version.Cate/getTopCate');
+            // 获取子分类 --- 暂不清楚
+            Route::get('sonAllCate/:cate_id','api/:version.Cate/getSonById',[],['cate_id'=>'\d+']);
+            // 获取子分类  --- 暂不清楚
+            Route::get('sonCate/:id','api/:version.Cate/getSonCate',[],['id'=>'\d+']);
+            // 获取父级分类
+            Route::get('parents/:id','api/:version.Cate/getParentCate',[],['id'=>'\d+']);
+        });
+
         // 文创接口
         Route::group('theme', function () {
             // 获取文创详情
@@ -129,21 +147,7 @@ Route::group('', function () {
             Route::get('allProduct','api/:version.Gift/getAllGiftProduct');
         });
 
-        // 分类
-        Route::group('cate', function () {
-            // 获取二级分类
-            Route::get('second','api/BaseController/cate');
-            // 获取全部分类
-            Route::get('all','api/:version.Cate/getAllCate');
-            // 获取顶级分类
-            Route::get('topCate','api/:version.Cate/getTopCate');
-            // 获取子分类 --- 暂不清楚
-            Route::get('sonAllCate/:cate_id','api/:version.Cate/getSonById',[],['cate_id'=>'\d+']);
-            // 获取子分类  --- 暂不清楚
-            Route::get('sonCate/:id','api/:version.Cate/getSonCate',[],['id'=>'\d+']);
-            // 获取父级分类
-            Route::get('parents/:id','api/:version.Cate/getParentCate',[],['id'=>'\d+']);
-        });
+
 
     });
 

@@ -39,8 +39,19 @@
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>slogan：</label>
 			<div class="formControls col-xs-8 col-sm-9 col-lg-6">
 				<script id="sloganCon" type="text/plain" name="slogan" style="width:100%;height:400px;">{$proAllData.slogan|html_entity_decode}</script>
-                </div>
-                </div>
+        	</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">是否上架：</label>
+			<div class="formControls skin-minimal col-xs-8">
+				<div class="radio-box">
+					<label class="radio-input"><input type="radio" name="status" value="1" {if condition="$proAllData.status eq 1"}checked{/if}><span class="radio-name">上架</span></label>
+				</div>
+				<div class="radio-box">
+					<label class="radio-input"><input type="radio" name="status" value="0" {if condition="$proAllData.status eq 0"}checked{/if}><span class="radio-name">下架</span></label>
+				</div>
+			</div>
+		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>选择所属栏目：</label>
 			<div class="formControls col-xs-2 col-sm-2"> <span class="select-box">

@@ -13,6 +13,7 @@ use app\api\controller\BaseController;
 use app\api\validate\IDMustBeIsInteger;
 use app\api\validate\IDMustBePositiveInt;
 use app\common\model\Procate;
+use app\lib\exception\ProductException;
 
 class Cate extends BaseController
 {
@@ -25,7 +26,9 @@ class Cate extends BaseController
 
     public function getAllCate()
     {
-        $proCateData = $this->model->getCateJson();
+        $field = 'main_img_url, mobile_imgs_url, description';
+        $giftData = Procate::getACateData($field, ['show' => 1, 'status' => 1]);
+        $proCateData = Procate::cateData($giftData);
         return $proCateData;
     }
 
@@ -40,6 +43,22 @@ class Cate extends BaseController
         $id = input('cate_id',0,'intval');
         $cateData = $this->model->getAllSonData($id);
         return json($cateData);
+    }
+
+    /**
+     * 获取当前id数据
+     * @param('id','分类id','require|number')
+     */
+    public function getCurrentCate($id)
+    {
+        $data = Procate::where('status',1)->get($id);
+        if(!$data){
+            throw new ProductException([
+                'msg' => '产品分类数据不存在',
+                'error_code' => '30001'
+            ]);
+        }
+        return json($data);
     }
 
     /**
@@ -71,7 +90,7 @@ class Cate extends BaseController
     public function getParentCate($id)
     {
         (new IDMustBePositiveInt())->goCheck();
-        $cateData = Procate::getCrumb($id);
+        $cateData = Procate::getCrumb($id, $this->model);
         return json($cateData);
     }
 

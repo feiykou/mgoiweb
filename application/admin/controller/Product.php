@@ -24,9 +24,9 @@ class Product extends Base
         $sdata = [];
         // 时间条件范围
         if(!empty($data['start_time']) && !empty($data['end_time']) && strtotime($data['end_time']) > strtotime($data['start_time'])){
-            $sdata['create_time'] = [
-                ['gt',strtotime($data['start_time'])],
-                ['lt',strtotime($data['end_time'])+10000]
+            $sdata[] = [
+                ['create_time','gt',strtotime($data['start_time'])],
+                ['create_time','lt',strtotime($data['end_time'])+10000]
             ];
         }
         if(!empty($data['pro_cate_id'])){
@@ -35,13 +35,11 @@ class Product extends Base
                 $ids .= $data['pro_cate_id'];
             }
 
-            $sdata['pro_cate_id'] = [
-                'in',$ids
-            ];
+            $sdata[] = ['pro_cate_id','in',$ids];
         }
 
         if(!empty($data['name'])){
-            $sdata['name'] = ['like','%'.$data['name'].'%'];
+            $sdata[] = ['name','like','%'.$data['name'].'%'];
         }
 
         $proAllData = $this->model->getAllProData($sdata);

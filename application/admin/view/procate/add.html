@@ -21,6 +21,12 @@
                 </div>
             </div>
             <div class="row cl">
+                <label class="form-label col-xs-2 col-sm-3"><span class="c-red"></span>描述：</label>
+                <div class="formControls col-xs-8 col-sm-8">
+                    <textarea name="description" cols="" rows="" class="textarea" placeholder="说点什么..."></textarea>
+                </div>
+            </div>
+            <div class="row cl">
                 <label class="form-label col-xs-2 col-sm-3"><span class="c-red">*</span>分类：</label>
                 <div class="formControls col-xs-3 col-sm-3">
                     <select class='select' name='pid'>
@@ -32,13 +38,30 @@
                 </div>
             </div>
             <div class="row cl">
-                <label class="form-label col-xs-2 col-sm-3">缩略图：</label>
-                <div class="formControls col-xs-8 col-sm-8">
-                    {Uploader:webuploader btnVal="上传缩略图" uploadId="imgUrl"}{/Uploader:webuploader}
+                <label class="form-label col-xs-2 col-sm-3">是否展示：</label>
+                <div class="formControls skin-minimal col-xs-8">
+                    <div class="radio-box">
+                        <label class="radio-input"><input type="radio" name="show" value="1" checked><span class="radio-name">展示</span></label>
+                    </div>
+                    <div class="radio-box">
+                        <label class="radio-input"><input type="radio" name="show" value="0"><span class="radio-name">不展示</span></label>
+                    </div>
                 </div>
             </div>
             <div class="row cl">
-                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <label class="form-label col-xs-2 col-sm-3"><span class="c-red">*</span>封面图：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    {Uploader:webuploader btnVal="上传封面图" uploadId="mainImg"}{/Uploader:webuploader}
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-2 col-sm-3"><span class="c-red">*</span>移动端产品图：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    {Uploader:webuploader btnVal="上传移动端图" uploadId="mobileImgs"}{/Uploader:webuploader}
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
                     <button class="btn btn-primary radius save-btn" type="button" data-id="1"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
                     <button class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
                 </div>
@@ -59,11 +82,18 @@
 {Uploader:webuploaderjs/}
 <script>
     feiy_upload.init({
-        wrap:$("#imgUrl"),
-        filePicker: $("#imgUrl").find(".filePicker"),
-        uploadId: "#imgUrl",
+        wrap:$("#mainImg"),
+        filePicker: $("#mainImg").find(".filePicker"),
+        uploadId: "#mainImg",
         server: config.upload_server,
-        fileNumLimit: 3
+        fileNumLimit: 2
+    });
+    feiy_upload.init({
+        wrap:$("#mobileImgs"),
+        filePicker: $("#mobileImgs").find(".filePicker"),
+        uploadId: "#mobileImgs",
+        server: config.upload_server,
+        fileNumLimit: 2
     });
 </script>
 <script>
@@ -96,14 +126,13 @@
         },
         submitHandler: function(form){
             // 获取产品详情页
-            var $img_list_childs = $("#imgUrl .filelist > li");
-            var img_url = setUpdateUrl($img_list_childs);
-            if(img_url == 'undefined'){
-                layer.msg('图片不存在，或者更改图片名称重新上传', {icon: 6,time:1000});
-                return ;
-            }
+            var $main_img_childs = $("#mainImg .filelist > li");
+            var $mobileImgs_childs = $("#mobileImgs .filelist > li");
 
-            params = "&img_url="+img_url;
+            var main_img_url = setUpdateUrl($main_img_childs);
+            var mobileImgs = setUpdateUrl($mobileImgs_childs);
+
+            var params = "&main_img_url="+main_img_url+"&mobile_imgs_url="+mobileImgs;
             $.ajax({
                 url: "{:url('save')}",
                 type: "post",
