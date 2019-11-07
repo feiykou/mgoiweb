@@ -171,22 +171,6 @@ class Gift extends Common
         return $result;
     }
 
-    /**
-     * 获取轮播图
-     * @url
-     */
-    public static function getGiftBanner($cate_id=0) {
-        $data = [
-            'status' => 1,
-            'show' => 0,
-            'pid' => $cate_id
-        ];
-        $result = self::where($data)
-            ->where('','exp',"find_in_set(1,attributes)")
-            ->field('id,name,main_img_url,mobile_imgs_url')
-            ->find();
-        return $result;
-    }
 
     /**
      * 获取当前分类产品

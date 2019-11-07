@@ -119,17 +119,17 @@ Route::group('', function () {
             Route::get('parents/:id','api/:version.Gift/getParentCate',[],['id'=>'\d+']);
             // 获取季节推荐
             Route::get('season','api/:version.Gift/getSeasonResc');
-            // 获取banner轮播
-            Route::get('banner','api/:version.Gift/getGiftBanner');
             // 获取礼品分类下的产品
             Route::get('list','api/:version.Gift/getProductByGiftCate');
             // 通过价格筛选
             Route::get('filter','api/:version.Product/getProductByPrice');
-            // 通过礼品子分类获取产品  --- 暂不清楚
+            // 通过礼品子分类获取产品  --- 暂不清楚getAllGiftProduct
             Route::get('productByCate','api/:version.Gift/getProductByGiftSonCate');
+            // 获取全部礼品产品
+            Route::get('allProduct','api/:version.Gift/getAllGiftProduct');
         });
 
-        // 礼品接口
+        // 分类
         Route::group('cate', function () {
             // 获取二级分类
             Route::get('second','api/BaseController/cate');

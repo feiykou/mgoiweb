@@ -11,6 +11,7 @@ use app\common\model\Gift as GiftModel;
 use app\api\validate\Category as CategoryValidate;
 use app\api\validate\Gift as GiftValidate;
 use app\api\validate\Product as ProductValidate;
+use app\common\model\GiftProduct;
 use app\common\model\Product as ProductModel;
 use catetree\Catetree;
 
@@ -23,11 +24,17 @@ class Gift extends BaseController
         $this->model = model('gift');
     }
 
+    /**
+     * 获取分类
+     * @param $times 级别
+     * @return \think\response\Json
+     * @throws \app\lib\exception\ParameterException
+     */
     public function getCate($times){
         (new CategoryValidate())->goCheck();
         $pid = input('cate_id', 0, 'int');
         $field = 'main_img_url, mobile_imgs_url, description';
-        $giftData = GiftModel::getCateData($field, ['show'=>1]);
+        $giftData = GiftModel::getCateData($field, ['show' => 1, 'status' => 1]);
         $proCateData = GiftModel::cateData($giftData, $times, $pid);
         return json($proCateData);
     }
@@ -44,13 +51,12 @@ class Gift extends BaseController
         return $data;
     }
 
-    public function getGiftBanner($cate_id=0) {
-        (new GiftValidate())->goCheck('cate');
-        $data = GiftModel::getGiftBanner($cate_id);
-        if(!$data) $data = null;
-        return $data;
-    }
-
+    /**
+     * 获取当前分类下的产品
+     * @param int $cate_id
+     * @return array|\PDOStatement|string|\think\Model|null
+     * @throws \app\lib\exception\ParameterException
+     */
     public function getProductByGiftCate($cate_id=0) {
         (new GiftValidate())->goCheck('cate');
         $data = GiftModel::getProductByCate($cate_id);
@@ -92,7 +98,6 @@ class Gift extends BaseController
         return json($productArr);
     }
 
-
     /**
      * 获取下一级分类
      * @url   /cate/sonCate/:id
@@ -124,6 +129,17 @@ class Gift extends BaseController
         return json($cateData);
     }
 
-
+    public function getAllGiftProduct()
+    {
+        $product_ids = GiftProduct::distinct(true)->column('product_id');
+        $data = [];
+        if(!empty($product_ids)){
+            $data = ProductModel::where([
+                ['id', 'in', $product_ids],
+                ['status', '=', 1]
+            ])->field('id, name, name_desc, main_img_url, price')->select();
+        }
+        return json($data);
+    }
 
 }
