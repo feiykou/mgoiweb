@@ -191,15 +191,15 @@ class Procate extends Common
      */
     public function getTopCate(){
         $data = [
-            'status'    =>  1,
-            'pid' =>  0,
+            'status' => 1,
+            'pid' => 0,
             'show' => 1
         ];
         $order = [
             'listorder' => 'desc',
             'id'        => 'desc'
         ];
-        $column =self::where($data)->order($order)->field('id,name,img_url')->select();
+        $column =self::where($data)->order($order)->field('id,name,main_img_url,mobile_imgs_url')->select();
         return $column;
     }
 
@@ -207,7 +207,7 @@ class Procate extends Common
      * 获取分类信息  --- 多个分类
      */
     private static function _getSelCate($ids=[],$fieldStr=''){
-        $field = 'id,pid,name,img_url';
+        $field = 'id,pid,name,main_img_url,mobile_imgs_url';
         if($fieldStr) $field .= $fieldStr;
         $data = self::where('status','=',1)
             ->field($field)

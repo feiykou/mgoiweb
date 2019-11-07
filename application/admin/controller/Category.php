@@ -75,6 +75,7 @@ class Category extends Base
         if(!$is_exist_id){
             return $this->update($data);
         }
+
         // 添加数据
         $result = $this->model->save($data);
         if($result){
