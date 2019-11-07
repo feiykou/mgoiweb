@@ -186,12 +186,12 @@ class Common extends Model
      */
     public static function getCateJson($field = '', $times, $pid = 0, $resc_id = 0)
     {
-        $arr = self::getCateData($field, [], $resc_id);
+        $arr = self::getACateData($field, [], $resc_id);
         $data = self::cateData($arr, $times, $pid);
         return $data;
     }
 
-    public static function getCateData($fieldStr = '', $data = [], $resc_id = 0){
+    public static function getACateData($fieldStr = '', $data = [], $resc_id = 0){
         $field = 'id,pid,name,' . $fieldStr;
         $where = [];
         if($resc_id){

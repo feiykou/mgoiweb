@@ -34,7 +34,7 @@ class Gift extends BaseController
         (new CategoryValidate())->goCheck();
         $pid = input('cate_id', 0, 'int');
         $field = 'main_img_url, mobile_imgs_url, description';
-        $giftData = GiftModel::getCateData($field, ['show' => 1, 'status' => 1]);
+        $giftData = GiftModel::getACateData($field, ['show' => 1, 'status' => 1]);
         $proCateData = GiftModel::cateData($giftData, $times, $pid);
         return json($proCateData);
     }
