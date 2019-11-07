@@ -99,6 +99,7 @@ Route::group('', function () {
             Route::get(':id/detail','api/:version.Theme/getThemeDetail',[],['id'=>'\d+']);
             // 获取分类下的产品 --- 暂不清楚
             Route::get('list/:cateid','api/:version.ThemeCategory/getProductByTheme',[],['cate_id'=>'\d+']);
+            Route::get('product','api/:version.Theme/getProductByThemeCate');
         });
 
         // 文创分类接口

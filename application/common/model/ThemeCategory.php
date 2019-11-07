@@ -34,6 +34,30 @@ class ThemeCategory extends Common
         return $this->hasMany('theme','category_id','id');
     }
 
+    // 获取分类主题下的产品id
+    public static function getProductId($id)
+    {
+        $data = self::where('id',$id)
+            ->with(['theme' => ['themeProduct'=> function($query){
+                $query->field('product_id');
+            }]])
+            ->visible(['id','theme.product'])
+            ->select();
+        $ids = [];
+        if(isset($data[0]) && $data[0]){
+            $result = $data[0]['theme'];
+            foreach ($result as $v){
+                if(empty($v['theme_product'])) continue;
+                foreach ($v['theme_product'] as $pv){
+                    array_push($ids, $pv['product_id']);
+                }
+            }
+            if(count($ids) > 0){
+                $ids = array_unique($ids);
+            }
+        }
+        return $ids;
+    }
 
     public function getAllCateData(){
         $cateData = self::alias('a1')

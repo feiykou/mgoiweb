@@ -10,6 +10,8 @@ use app\common\model\Procate;
 use app\common\model\Theme as ThemeModel;
 use app\api\validate\Theme as ThemeValidate;
 use app\api\validate\Cate as CateValidate;
+use app\common\model\ThemeCategory;
+use app\common\model\Product;
 
 class Theme extends BaseController
 {
@@ -51,11 +53,23 @@ class Theme extends BaseController
         return $data;
     }
 
-//    public function getProductByCates($ids='') {
-//        (new ThemeValidate())->goCheck('cates');
-//        $ids = trim($ids, ',');
-//
-//    }
+
+    /**
+     * 获取主题分类下的所有产品
+     * @param('id','主题id','require|number')
+     * @param $id
+     */
+    public function getProductByThemeCate($id)
+    {
+        $productIds = ThemeCategory::getProductId($id);
+        $productData = [];
+        if(count($productIds) > 0){
+            $productData = Product::where(['status'=>1])
+                ->field('id,name,price,main_img_url')
+                ->select($productIds);
+        }
+        return json($productData);
+    }
 
 
 }

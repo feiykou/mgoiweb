@@ -21,6 +21,11 @@ class Theme extends Common
         return $this->belongsToMany('product','theme_product','product_id','theme_id');
     }
 
+    public function themeProduct()
+    {
+        return $this->hasMany('theme_product','product_id','id');
+    }
+
     protected function getHeadImgUrlAttr($val,$data){
         return $this->handleImgUrl($val);
     }
