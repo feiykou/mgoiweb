@@ -61,11 +61,6 @@ class ThemeCategory extends BaseController
         return $data;
     }
 
-    public function getProductByTheme($cate_id=0)
-    {
-        echo 1;
-    }
-
     /**
      * 获取当前分类id的所有父级id
      * @url   /cate/parents/:id
