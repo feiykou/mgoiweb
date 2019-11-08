@@ -14,46 +14,54 @@ class Theme extends Common
     protected $field = true;
 
     protected $hidden = [
-        'create_time','update_time','price','category_id','on_sale','listorder'
+        'create_time', 'update_time', 'price', 'category_id', 'on_sale', 'listorder'
     ];
 
-    public function product(){
-        return $this->belongsToMany('product','theme_product','product_id','theme_id');
+    public function product()
+    {
+        return $this->belongsToMany('product', 'theme_product', 'product_id', 'theme_id');
     }
 
     public function themeProduct()
     {
-        return $this->hasMany('theme_product','product_id','id');
+        return $this->hasMany('theme_product', 'product_id', 'id');
     }
 
-    protected function getHeadImgUrlAttr($val,$data){
-        return $this->handleImgUrl($val);
-    }
-    protected function getMainImgUrlAttr($val,$data){
-        return $this->handleImgUrl($val);
-    }
-    protected function getMobileImgsUrlAttr($val,$data){
+    protected function getHeadImgUrlAttr($val, $data)
+    {
         return $this->handleImgUrl($val);
     }
 
-    public function getAllTheme(){
+    protected function getMainImgUrlAttr($val, $data)
+    {
+        return $this->handleImgUrl($val);
+    }
+
+    protected function getMobileImgsUrlAttr($val, $data)
+    {
+        return $this->handleImgUrl($val);
+    }
+
+    public function getAllTheme()
+    {
         $data = [
             'status' => 1
         ];
         $order = [
             'listorder' => 'desc',
-            'id'   => 'desc'
+            'id' => 'desc'
         ];
         $result = $this->where($data)->order($order)->select();
         return $result;
     }
 
-    protected static function init(){
+    protected static function init()
+    {
 
         Theme::afterInsert(function ($theme) {
             // 接收表单数据
             $themeData = input('post.');
-            if(isset($themeData['product_ids'])){
+            if (isset($themeData['product_ids'])) {
                 $theme->product()->saveAll($themeData['product_ids']);
             }
         });
@@ -61,23 +69,23 @@ class Theme extends Common
         Theme::afterUpdate(function ($theme) {
             // 接收表单数据
             $themeData = input('post.');
-            model('theme_product')->where('theme_id',$theme->id)->delete();
-            if(isset($themeData['product_ids'])){
+            model('theme_product')->where('theme_id', $theme->id)->delete();
+            if (isset($themeData['product_ids'])) {
                 $theme->product()->saveAll($themeData['product_ids']);
             }
         });
 
-        Theme::beforeDelete(function($theme){
+        Theme::beforeDelete(function ($theme) {
             $themeId = $theme->id;
 
             model('theme_product')->delete($themeId);
             // 删除内存中的主图
             $main_img_url = $theme->main_img_url;
-            if($main_img_url){
-                if(is_array($main_img_url)){
-                    foreach ($main_img_url as $val){
+            if ($main_img_url) {
+                if (is_array($main_img_url)) {
+                    foreach ($main_img_url as $val) {
                         $delsrc = '/upload/images/' . $val;
-                        if(file_exists($delsrc)){
+                        if (file_exists($delsrc)) {
                             @unlink($delsrc);
                         }
                     }
@@ -86,11 +94,11 @@ class Theme extends Common
             }
             // 删除内存中的主图
             $head_img_url = $theme->head_img_url;
-            if($head_img_url){
-                if(is_array($head_img_url)){
-                    foreach ($head_img_url as $val){
+            if ($head_img_url) {
+                if (is_array($head_img_url)) {
+                    foreach ($head_img_url as $val) {
                         $delurl = '/upload/images/' . $val;
-                        if(file_exists($delurl)){
+                        if (file_exists($delurl)) {
                             @unlink($delurl);
                         }
                     }
@@ -117,16 +125,17 @@ class Theme extends Common
     /**
      * 获取主题详情
      */
-    public static function getThemeDetail($id, $on_sale = -1){
+    public static function getThemeDetail($id, $on_sale = -1)
+    {
         $data = [
             'id' => $id
         ];
-        if($on_sale !== -1){
-            $data = array_merge($data,['on_sale' => $on_sale]);
+        if ($on_sale !== -1) {
+            $data = array_merge($data, ['on_sale' => $on_sale]);
         }
         $products = self::where($data)
             ->hidden(['product.pivot'])
-            ->with(['product'=>function($query){
+            ->with(['product' => function ($query) {
                 $query->field('id,name,main_img_url,price');
             }])
             ->find();
@@ -136,7 +145,8 @@ class Theme extends Common
     /**
      * 获取推荐的主题
      */
-    public static function getRescTheme($rescId=1){
+    public static function getRescTheme($rescId = 1)
+    {
         $data = [
             'status' => 1
         ];
@@ -145,26 +155,47 @@ class Theme extends Common
             'id' => 'desc'
         ];
         $result = self::where($data)
-            ->where('','exp',"find_in_set($rescId,attributes)")
+            ->where('', 'exp', "find_in_set($rescId,attributes)")
             ->field('id,name,description,main_img_url,mobile_imgs_url')
             ->order($order)
             ->select();
         return $result;
     }
 
-    public static function getThemeByCate($cate_id){
+    public static function getThemeByCate($cate_id)
+    {
         $data = [
-            ['status','=',1],
-            ['category_id','=',$cate_id]
+            ['status', '=', 1],
+            ['category_id', '=', $cate_id]
         ];
         $result = self::where($data)
             ->order('listorder desc')
             ->field('main_img_url,mobile_imgs_url,description,id,name')
-            ->with(['product'=>function($query){
-                $query->field('id,name,main_img_url,price');
+            ->with(['product' => function ($query) {
+                $query->field('id,name,main_img_url,price')->hidden(['pivot']);
             }])
             ->select();
-        return $result;
+        $productList = [];
+        if(count($result) > 0) $productList = self::solveProduct($result);
+        return [
+            'theme' => $result,
+            'product' => $productList
+        ];
+    }
+
+    private static function solveProduct($data)
+    {
+        $product = [];
+        foreach ($data as $v){
+            if(empty($v['product'])) continue;
+            foreach ($v['product'] as $pv){
+                array_push($product, $pv);
+            }
+        }
+        if(count($product) > 0){
+            $product = array_unique($product);
+        }
+        return $product;
     }
 
 //    private static function getAllSonId($id){

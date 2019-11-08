@@ -50,12 +50,20 @@ class ThemeCategory extends BaseController
         return json($proCateData);
     }
 
+    /**
+     * 获取当前分类数据
+     * @param('id','分类id','require|number')
+     * @param $id
+     */
+    public function getCurCateData($id)
+    {
+        $data = $this->model->getCateById($id);
+        return $data;
+    }
 
-    public function getProductByTheme($cate_id=0){
-        (new CateValidate())->goCheck();
-        $data = ThemeCategoryModel::getProducts($cate_id);
-        if(!$data) $data = [];
-        return json($data);
+    public function getProductByTheme($cate_id=0)
+    {
+        echo 1;
     }
 
     /**

@@ -15,7 +15,7 @@ use catetree\Catetree;
 class ThemeCategory extends Common
 {
     protected $hidden = [
-        'create_time','update_time'
+        'create_time','update_time','status','listorder'
     ];
 
     protected function getMainImgUrlAttr($val,$data){
@@ -38,25 +38,25 @@ class ThemeCategory extends Common
     public static function getProductId($id)
     {
         $data = self::where('id',$id)
-            ->with(['theme' => ['themeProduct'=> function($query){
-                $query->field('product_id');
+            ->with(['theme' => ['product'=> function($query){
+                $query->field('id')->hidden(['pivot']);
             }]])
             ->visible(['id','theme.product'])
             ->select();
         $ids = [];
-        if(isset($data[0]) && $data[0]){
-            $result = $data[0]['theme'];
-            foreach ($result as $v){
-                if(empty($v['theme_product'])) continue;
-                foreach ($v['theme_product'] as $pv){
-                    array_push($ids, $pv['product_id']);
-                }
-            }
-            if(count($ids) > 0){
-                $ids = array_unique($ids);
-            }
-        }
-        return $ids;
+//        if(isset($data[0]) && $data[0]){
+//            $result = $data[0]['theme'];
+//            foreach ($result as $v){
+//                if(empty($v['theme_product'])) continue;
+//                foreach ($v['theme_product'] as $pv){
+//                    array_push($ids, $pv['product_id']);
+//                }
+//            }
+////            if(count($ids) > 0){
+////                $ids = array_unique($ids);
+////            }
+//        }
+        return $data;
     }
 
     public function getAllCateData(){
@@ -126,7 +126,8 @@ class ThemeCategory extends Common
             'status' => 1,
             'id'     => $id
         ];
-        $modelDatas = self::where($data)->find();
+        $modelDatas = self::where($data)
+            ->find();
         return $modelDatas;
     }
 
@@ -204,21 +205,21 @@ class ThemeCategory extends Common
         return $data;
     }
 
-    public static function getProducts($cate_id) {
-        $data = self::where([
-                ['status', '=', 1],
-                ['id', '=', $cate_id]
-            ])
-            ->hidden([
-                'status','pid','listorder','create_time','update_time',
-                'theme.content','theme.web_keys','theme.web_desc','theme.status',
-                'theme.label_attr','theme.attributes'
-            ])
-            ->with(['theme' => ['product' => function($query) {
-                $query->field('id,name,price,mobile_imgs_url,main_img_url,introduce');
-            }]])->find();
-        return $data;
-    }
+//    public static function getProducts($cate_id) {
+//        $data = self::where([
+//                ['status', '=', 1],
+//                ['id', '=', $cate_id]
+//            ])
+//            ->hidden([
+//                'status','pid','listorder','create_time','update_time',
+//                'theme.content','theme.web_keys','theme.web_desc','theme.status',
+//                'theme.label_attr','theme.attributes'
+//            ])
+//            ->with(['theme' => ['product' => function($query) {
+//                $query->field('id,name,price,mobile_imgs_url,main_img_url,introduce');
+//            }]])->find();
+//        return $data;
+//    }
 
 
 }

@@ -25,17 +25,15 @@ class Theme extends BaseController
 
     /**
      * 获取分类下的主题和主题对应的产品
-     * @url
-     * @validate('CateValidate')
+     * @url  theme/list/:cateid
+     * @param('cate_id','分类id','require|number')
      * @param $cate_id
      * @return \think\response\Json
      * @throws \app\lib\exception\ParameterException
      */
-    public function getThemeByCate($cate_id){
-        $themeData = [];
-        if(intval($cate_id) != 0){
-            $themeData = ThemeModel::getThemeByCate($cate_id);
-        }
+    public function getThemeByCate($cate_id=0)
+    {
+        $themeData = ThemeModel::getThemeByCate($cate_id);
         return json($themeData);
     }
 
@@ -59,17 +57,17 @@ class Theme extends BaseController
      * @param('id','主题id','require|number')
      * @param $id
      */
-    public function getProductByThemeCate($id)
-    {
-        $productIds = ThemeCategory::getProductId($id);
-        $productData = [];
-        if(count($productIds) > 0){
-            $productData = Product::where(['status'=>1])
-                ->field('id,name,price,main_img_url')
-                ->select($productIds);
-        }
-        return json($productData);
-    }
+//    public function getProductByThemeCate($id)
+//    {
+//        $productIds = ThemeCategory::getProductId($id);
+//        $productData = [];
+//        if(count($productIds) > 0){
+//            $productData = Product::where(['status'=>1])
+//                ->field('id,name,price,main_img_url')
+//                ->select($productIds);
+//        }
+//        return json($productIds);
+//    }
 
 
 }

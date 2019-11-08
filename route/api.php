@@ -97,9 +97,8 @@ Route::group('', function () {
         Route::group('theme', function () {
             // 获取文创详情
             Route::get(':id/detail','api/:version.Theme/getThemeDetail',[],['id'=>'\d+']);
-            // 获取分类下的产品 --- 暂不清楚
-            Route::get('list/:cateid','api/:version.ThemeCategory/getProductByTheme',[],['cate_id'=>'\d+']);
-            Route::get('product','api/:version.Theme/getProductByThemeCate');
+            // 获取分类下的主题及产品
+            Route::get('list','api/:version.Theme/getThemeByCate');
         });
 
         // 文创分类接口
@@ -108,6 +107,8 @@ Route::group('', function () {
             Route::get(':cate_id','api/:version.ThemeCategory/getCate',[],['cate_id'=>'\d+']);
             // 获取文创面包屑
             Route::get('crumb','api/:version.ThemeCategory/getParentCate');
+            // 获取文创当前分类数据
+            Route::get('', 'api/:version.ThemeCategory/getCurCateData');
         });
 
         // 新闻接口
