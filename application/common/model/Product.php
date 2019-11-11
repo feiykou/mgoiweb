@@ -385,7 +385,12 @@ class Product extends Model
             ->where('','exp',"find_in_set($rescId,attributes)")
             ->limit($count)
             ->field('id,name,price,mobile_imgs_url,main_img_url,introduce,create_time')
-            ->select();
+            ->select()
+            ->each(function($item, $key){
+                $item['main_img_url'] = self::handleImgUrl($item['main_img_url']);
+                $item['mobile_imgs_url'] = self::handleImgUrl($item['mobile_imgs_url']);
+                return $item;
+            });
         return $result;
     }
 
