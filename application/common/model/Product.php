@@ -385,12 +385,17 @@ class Product extends Model
             ->where('','exp',"find_in_set($rescId,attributes)")
             ->limit($count)
             ->field('id,name,price,mobile_imgs_url,main_img_url,introduce,create_time')
-            ->select()
-            ->each(function($item, $key){
-                $item['main_img_url'] = self::handleImgUrl($item['main_img_url']);
-                $item['mobile_imgs_url'] = self::handleImgUrl($item['mobile_imgs_url']);
-                return $item;
-            });
+            ->select();
+        if($result && count($result) >= 1){
+            foreach ($result as &$val){
+                if($val['main_img_url']){
+                    $val['main_img_url'] = self::handleImgUrl($val['main_img_url']);
+                }
+                if($val['mobile_imgs_url']){
+                    $val['mobile_imgs_url'] = self::handleImgUrl($val['mobile_imgs_url']);
+                }
+            }
+        }
         return $result;
     }
 
