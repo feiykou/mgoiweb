@@ -278,7 +278,7 @@ class Product extends Model
         ];
         $result = db('product')->alias('p')
             ->where($data)
-            ->field('p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.price')
+            ->field('p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.mobile_imgs_url,p.price')
             ->rightJoin('product_cate c',['c.product_id = p.id',"c.cate_id in ($cateIds)"])
             ->where('','exp',"find_in_set($rescId,attributes)")
             ->order($order)
@@ -289,6 +289,9 @@ class Product extends Model
             foreach ($result as &$val){
                 if($val['main_img_url']){
                     $val['main_img_url'] = self::handleImgUrl($val['main_img_url']);
+                }
+                if($val['mobile_imgs_url']){
+                    $val['mobile_imgs_url'] = self::handleImgUrl($val['mobile_imgs_url']);
                 }
             }
         }
@@ -310,13 +313,14 @@ class Product extends Model
         $order['listorder'] = 'desc';
         $result = db('product')->alias('p')
             ->where($data)
-            ->field('p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.price,p.name_desc')
+            ->field('p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.mobile_imgs_url,p.price,p.name_desc')
             ->rightJoin('product_cate c',['c.product_id = p.id',"c.cate_id in ($cateIds)"])
             ->order($order)
             ->group('p.id')
             ->paginate($size,true,['page'=>$page])
             ->each(function($item, $key){
                 $item['main_img_url'] = self::handleImgUrl($item['main_img_url']);
+                $item['mobile_imgs_url'] = self::handleImgUrl($item['mobile_imgs_url']);
                 return $item;
             });
         return $result;
@@ -336,13 +340,14 @@ class Product extends Model
         $order['listorder'] = 'desc';
         $result = db('product')->alias('p')
             ->where($data)
-            ->field('p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.price,p.name_desc')
+            ->field('p.id,p.name,p.name_desc,p.introduce,p.main_img_url,mobile_imgs_url,p.price,p.name_desc')
             ->rightJoin('gift_product g',['g.product_id = p.id',"g.gift_id in ($cateIds)"])
             ->order($order)
             ->group('p.id')
             ->paginate($size,true,['page'=>$page])
             ->each(function($item, $key){
                 $item['main_img_url'] = self::handleImgUrl($item['main_img_url']);
+                $item['mobile_imgs_url'] = self::handleImgUrl($item['mobile_imgs_url']);
                 return $item;
             });
         return $result;
@@ -466,7 +471,7 @@ class Product extends Model
         ];
         $result = db('procate')->alias('c')
             ->where($data)
-            ->field('c.name as cateName,p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.price')
+            ->field('c.name as cateName,p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.mobile_imgs_url,p.price')
             ->join('product p',['c.id = p.cate_id','p.status = 1'])
             ->order($order)
             ->order('p.listorder desc')
@@ -555,7 +560,7 @@ class Product extends Model
             ->order('listorder desc')
             ->paginate($size,false,['page'=>$page])
             ->visible([
-                'main_img_url', 'name', 'name_desc', 'introduce','id', 'price'
+                'main_img_url', 'mobile_imgs_url', 'name', 'name_desc', 'introduce','id', 'price'
             ]);
         return $result;
     }
@@ -568,7 +573,7 @@ class Product extends Model
             ->where('','exp',"find_in_set($label,label_attr)")
             ->order('listorder desc')
             ->visible([
-                'main_img_url', 'name', 'name_desc', 'introduce','id', 'price'
+                'main_img_url', 'mobile_imgs_url', 'name', 'name_desc', 'introduce','id', 'price'
             ])
             ->select();
         return $result;
