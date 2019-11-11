@@ -53,6 +53,9 @@ class Product extends Model
     protected function getMainImgUrlAttr($val,$data){
         return self::handleImgUrl($val);
     }
+    protected function getMobileImgsDetailAttr($val,$data){
+        return self::handleImgUrl($val);
+    }
     protected function getMobileImgsUrlAttr($val,$data){
         return self::handleImgUrl($val);
     }

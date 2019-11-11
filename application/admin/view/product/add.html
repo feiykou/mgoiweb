@@ -110,15 +110,21 @@
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>缩略图：</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>PC端缩略图：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				{Uploader:webuploader btnVal="上传缩略图" uploadId="mainImg"}{/Uploader:webuploader}
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>移动端产品图：</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>移动端缩略图：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				{Uploader:webuploader btnVal="上传移动端图" uploadId="mobileImgs"}{/Uploader:webuploader}
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>移动端详情图：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				{Uploader:webuploader btnVal="上传移动端详情图" uploadId="mobileDetail"}{/Uploader:webuploader}
 			</div>
 		</div>
 
@@ -260,24 +266,32 @@
         filePicker: $("#mobileImgs").find(".filePicker"),
         uploadId: "#mobileImgs",
         server: config.upload_server,
-        fileNumLimit: 5
+        fileNumLimit: 2
     });
+	feiy_upload.init({
+		wrap:$("#mobileDetail"),
+		filePicker: $("#mobileDetail").find(".filePicker"),
+		uploadId: "#mobileDetail",
+		server: config.upload_server,
+		fileNumLimit: 6
+	});
     feiy_upload.init({
         wrap:$("#pro_uploader"),
         filePicker: $("#pro_uploader").find(".filePicker"),
         uploadId: "#pro_uploader",
         server: config.upload_server,
-        fileNumLimit: 5
+        fileNumLimit: 6
     });
-    feiy_upload.init({
-        wrap:$("#codeImg"),
-        filePicker: $("#codeImg").find(".filePicker"),
-        uploadId: "#codeImg",
-        server: config.upload_server,
-        fileNumLimit: 1
-    });
-</script>
+	feiy_upload.init({
+		wrap:$("#codeImg"),
+		filePicker: $("#codeImg").find(".filePicker"),
+		uploadId: "#codeImg",
+		server: config.upload_server,
+		fileNumLimit: 1
+	});
 
+
+</script>
 
 
 <script type="text/javascript">
@@ -342,8 +356,6 @@
         });
         $(".edit_wrapper").val('');
 
-
-
 	});
 
     // 保存并审核提交
@@ -383,11 +395,14 @@
             var $mobileImgs_childs = $("#mobileImgs .filelist > li");
             var $main_list_childs = $("#mainImg .filelist > li");
             var $code_img_childs = $("#codeImg .filelist > li");
+			var $mobile_detail_childs = $("#mobileDetail .filelist > li");
+
 
             var imgs_url = setUpdateUrl($img_list_childs);
             var main_img_url = setUpdateUrl($main_list_childs);
             var mobileImgs = setUpdateUrl($mobileImgs_childs);
-            var code_img = setUpdateUrl($code_img_childs);
+			var mobileDetail = setUpdateUrl($mobile_detail_childs);
+			var code_img = setUpdateUrl($code_img_childs);
 
             var selVal = '';
 			$(".cate-sel-wrap option:selected").each(function(index,val){
@@ -401,9 +416,7 @@
 			})
 			giftSelVal = giftSelVal.substring(0,giftSelVal.length-1);
 
-
-
-            var params = "&imgs_url="+imgs_url+"&main_img_url="+main_img_url+"&mobile_imgs_url="+mobileImgs+"&code_img="+code_img+"&cate_id="+selVal+"&gift_cate_id="+giftSelVal;
+            var params = "&imgs_url="+imgs_url+"&main_img_url="+main_img_url+"&mobile_imgs_detail="+mobileDetail+"&mobile_imgs_url="+mobileImgs+"&code_img="+code_img+"&cate_id="+selVal+"&gift_cate_id="+giftSelVal;
             $.ajax({
                 url: "{:url('save')}",
                 type: "post",

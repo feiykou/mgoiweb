@@ -93,6 +93,7 @@ class Product extends Base
             'main_img_url'   =>      empty($data['main_img_url'])?'':$data['main_img_url'],
             'imgs_url'       =>      empty($data['imgs_url'])?'':$data['imgs_url'],
             'mobile_imgs_url'=>      empty($data['mobile_imgs_url'])?'':$data['mobile_imgs_url'],
+            'mobile_imgs_detail'=>   empty($data['mobile_imgs_detail'])?'':$data['mobile_imgs_detail'],
             'code_img'       =>      empty($data['code_img'])?'':$data['code_img'],
             'keywords'       =>      $data['keywords'],
             'description'    =>      $data['description'],
