@@ -68,7 +68,7 @@ class Gift extends Base
         $themeData['label_attr'] = explode(',',$themeData['label_attr']);
 
         // 获取全部商品
-        $proAllData = model('product')->getAllProData(1);
+        $proAllData = model('product')->getAllProData();
         $this->assign([
             'themeData'      => $themeData,
             'CategoryRes'    => $CategoryRes,
