@@ -392,8 +392,6 @@ class Product extends Model
     }
 
 
-
-
     public function getProAndPropData($id=0){
         $data = [
             'id'     => $id,

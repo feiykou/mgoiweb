@@ -172,7 +172,7 @@ class Theme extends Common
             ->order('listorder desc')
             ->field('main_img_url,mobile_imgs_url,description,id,name')
             ->with(['product' => function ($query) {
-                $query->field('id,name,main_img_url,price')->hidden(['pivot']);
+                $query->field('id,name,main_img_url,price,description')->hidden(['pivot']);
             }])
             ->select();
         $productList = [];
