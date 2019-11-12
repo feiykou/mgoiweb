@@ -165,7 +165,7 @@ class Gift extends Common
             ->field('id,name')
             ->hidden(['product.pivot'])
             ->with(['product'=>function($query){
-                $query->field('id,name,main_img_url,price');
+                $query->field('id,name,main_img_url,mobile_imgs_url,description,price');
             }])
             ->find();
         return $result;
