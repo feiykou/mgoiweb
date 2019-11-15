@@ -128,6 +128,17 @@ class Column extends BaseController
 //        return $data;
 //    }
 
+    /**
+     * 获取上下篇
+     * @url   /column/topBottom/:id
+     * @http
+     * @param $id
+     * @return \think\response\Json
+     * @throws \app\lib\exception\ParameterException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
     public function getTopAndBottom($id){
         (new IDMustBePositiveInt())->goCheck();
         $data = [
@@ -172,7 +183,7 @@ class Column extends BaseController
 
     /**
      * 专栏搜索
-     * @url
+     * @url   /column/search?q=''&page=&size
      * @http
      * @param $data
      * @param int $page
