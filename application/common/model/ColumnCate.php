@@ -174,16 +174,16 @@ class ColumnCate extends Model
      * @param $cateId
      * @return array
      */
-    public static function getAllSonData($cateId){
-        $cateTree = new Catetree();
-        $ids = $cateTree->childrenids($cateId, new self());
-        $data = [];
-        if(count($ids) > 0){
-            $data = self::_getSelCate($ids)->toArray();
-            $data = $cateTree->generateTree($data);
-        }
-        return $data;
-    }
+//    public static function getAllSonData($cateId){
+//        $cateTree = new Catetree();
+//        $ids = $cateTree->childrenids($cateId, new self());
+//        $data = [];
+//        if(count($ids) > 0){
+//            $data = self::_getSelCate($ids)->toArray();
+//            $data = $cateTree->generateTree($data);
+//        }
+//        return $data;
+//    }
 
     /*
      * 获取分类信息  --- 多个分类
@@ -289,5 +289,66 @@ class ColumnCate extends Model
         $cateTree = new Catetree();
         $parentArr = $cateTree->parentids($cateId, new self(),'img_url');
         return $parentArr;
+    }
+
+    /**
+     * 获取所有分类
+     */
+    public static function getAllCate() {
+        $data = [
+            'status' => 1
+        ];
+        $order = [
+            'listorder' => 'desc',
+            'id' => 'desc'
+        ];
+        $result = self::where($data)
+            ->order($order)
+            ->withCount(['column' => function($query) {
+                return $query->where('status',1);
+            }])
+            ->visible(['id','name','column_count'])
+            ->select();
+        return $result;
+    }
+
+    // 获取分类下的所有专栏
+    public static function getColumnAndCateByCate($id=0)
+    {
+        $data = [
+            'status' => 1,
+            'id' => $id
+        ];
+        $result = self::where($data)
+            ->with(['column' => function($query){
+                $query->where(['status' => 1])->order('listorder desc');
+            }])
+            ->visible(['id','name','column.introduce','column.id','column.name','column.main_img_url','column.mobile_imgs_url'])
+            ->find();
+        return $result;
+    }
+
+    // 获取首页推荐分类及专栏
+    public static function getRescCateAndColumn($resc_id, $simple=1)
+    {
+        $data = [
+            'status' => 1
+        ];
+
+        $with = [];
+        $visiable = ['id','name'];
+        if(intval($simple) === 0){
+            $with = ['column' => function($query){
+                $query->where(['status' => 1])->order('listorder desc')->limit(4);
+            }];
+            $visiable = array_merge($visiable, ['column.introduce','column.id','column.name','column.main_img_url','column.mobile_imgs_url']);
+        }
+
+        $result = self::where($data)
+            ->where('','exp',"find_in_set($resc_id,attributes)")
+            ->with($with)
+            ->visible($visiable)
+            ->select();
+        return $result;
     }
 }

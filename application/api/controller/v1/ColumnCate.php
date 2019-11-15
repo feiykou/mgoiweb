@@ -22,20 +22,66 @@ class ColumnCate extends BaseController
         $this->model = model('column_cate');
     }
 
-    public function getColumnCateById($id){
+    /**
+     * 获取全部的分类和分类下的文章数量
+     * @url   /columnCate/all
+     * @return array|\PDOStatement|string|\think\Collection
+     */
+    public function getAllColumnCate()
+    {
+        $result = ColumnCateModel::getAllCate();
+        return $result;
+    }
+
+
+    /**
+     * 获取当前分类及分类下的所有专栏
+     * @url   /columnCate/column/:id
+     * @param('id','专栏分类','require|number')
+     * @param $id
+     */
+    public function getColumnAndCate($id)
+    {
+        $result = ColumnCateModel::getColumnAndCateByCate($id);
+        return $result;
+    }
+
+
+
+    /**
+     * 获取当前专栏分类数据
+     * @url
+     * @http
+     * @param $id
+     */
+    public function getColumnCateById($id) {
         if(intval($id) <= 0) return;
         $cateData = $this->model->getCateById($id);
         return $cateData;
     }
 
     /**
+     * 获取推荐分类
+     * @url columnCate/resc?resc_id=1&simple=0|1
+     * simple: 1 代表分类下无专栏   0 代表分类下有专栏
+     * attr_id（推荐id）：1：首页推荐  2：栏目推荐
+     * @param('resc_id','推荐','number')
+     * @param('simple','是否存在专栏','number')
+     */
+    public function getIndexRescCateAndColumn($resc_id=1, $simple=1)
+    {
+        $result = ColumnCateModel::getRescCateAndColumn($resc_id, $simple);
+        return $result;
+    }
+
+    /**
      * 获取当前分类下的所有子分类，并设置成树形结构
      */
-    public function getSonById(){
-        $id = input('cate_id',0,'intval');
-        $cateData = $this->model->getAllSonData($id);
-        return json($cateData);
-    }
+//    public function getSonById(){
+//        $id = input('cate_id',0,'intval');
+//        $cateData = $this->model->getAllSonData($id);
+//        return json($cateData);
+//    }
 
     /**
      * 获取分类
@@ -52,9 +98,17 @@ class ColumnCate extends BaseController
         return json($proCateData);
     }
 
+    /**
+     * 获取面包屑数据
+     * @param int $cate_id
+     * @return \think\response\Json
+     * @throws \app\lib\exception\ParameterException
+     */
     public function getCrumbCate($cate_id=0){
         (new CateValidate())->goCheck();
         $result = ColumnCateModel::getCrumb($cate_id);
         return json($result);
     }
+
+
 }

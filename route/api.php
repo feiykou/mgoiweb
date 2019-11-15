@@ -33,6 +33,8 @@ Route::group('', function () {
             Route::get('top_cate','api/:version.Column/getTopCate');
             // 获取推荐专栏  --- 暂不清楚
             Route::get('resc','api/:version.Column/getRescColumn');
+            // 获取最新专栏文章
+            Route::get('news','api/:version.Column/getNewsColumn');
             // 获取上下篇专栏
             Route::get('topBottom/:id','api/:version.Column/getTopAndBottom',[],['id'=>'\d+']);
             // 获取搜索专栏
@@ -43,7 +45,11 @@ Route::group('', function () {
 
         // 专栏分类接口
         Route::group('columnCate', function () {
-            // 获取专栏分类 --  暂不清楚
+            // 获取全部分类
+            Route::get('all', 'api/:version.ColumnCate/getAllColumnCate');
+            // 获取分类下的全部专栏
+            Route::get('column/:id', 'api/:version.ColumnCate/getColumnAndCate');
+            // 获取专栏分类当前id数据
             Route::get(':id','api/:version.ColumnCate/getColumnCateById',[],['id'=>'\d+']);
             // 获取当前分类下的子分类
             Route::get('sonCate','api/:version.ColumnCate/getSonById');
@@ -53,6 +59,8 @@ Route::group('', function () {
             Route::get('cateList','api/:version.ColumnCate/getColumnList');
             // 获取专栏面包屑
             Route::get('crumb','api/:version.ColumnCate/getCrumbCate');
+            // 分类推荐：首页和栏目页
+            Route::get('resc','api/:version.ColumnCate/getIndexRescCateAndColumn');
         });
 
         // 产品接口

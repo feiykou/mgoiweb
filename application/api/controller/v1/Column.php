@@ -28,14 +28,40 @@ class Column extends BaseController
         $this->model = model('column');
     }
 
+    /**
+     * 获取专栏详情
+     * @url   column/detail/:id
+     * @param $id  专栏id
+     */
     public function detail($id){
         if(intval($id) <= 0) return;
         $detailData = $this->model->getNewsData($id);
         return $detailData;
     }
 
+    /**
+     * 获取最新的专栏文章
+     * @url  /column/news?count=6
+     * @param('count','专栏数量','number')
+     * @param int $count 专栏数量
+     * @return array|\PDOStatement|string|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function getNewsColumn($count=6)
+    {
+        $result = ColumnModel::where([
+            'status' => 1
+        ])->limit($count)
+          ->field('id,name,introduce,main_img_url,mobile_imgs_url,cate_id,create_time')
+          ->order('create_time desc')
+          ->select();
+        return $result;
+    }
 
 
+    // 暂无用处
     public function getTopCate(){
         $cate = ColumnCate::getTopCate();
         return $cate;
@@ -59,7 +85,7 @@ class Column extends BaseController
     }
 
     /**
-     *
+     * 获取推荐的专栏
      * @url
      * @http  column/resc
      * @param int $rescId
@@ -173,7 +199,7 @@ class Column extends BaseController
     }
 
     /**
-     * 获取分类下的专栏
+     * 获取子分类下的专栏
      */
     public function getColumnList($cate_id=0){
         (new CateValidate())->goCheck();

@@ -19,23 +19,24 @@ class Column extends Model
         'delete_time','update_time','status','column_id','listorder','click_num'
     ];
 
-    public function cate(){
-        return $this->hasMany('column_cate','id','cate_id');
+    public function cate() {
+        return $this->belongsTo('column_cate','cate_id','id');
     }
 
-    protected function getMainImgUrlAttr($val,$data){
-        return $this->handleImgUrl($val);
-    }
-    protected function getMobileImgsUrlAttr($val,$data){
+    protected function getMainImgUrlAttr($val,$data) {
         return $this->handleImgUrl($val);
     }
 
-    protected function getContentAttr($val){
+    protected function getMobileImgsUrlAttr($val,$data) {
+        return $this->handleImgUrl($val);
+    }
+
+    protected function getContentAttr($val) {
         $val = str_replace('src="','src="'.config('APISetting.img_prefix'),$val);
         return $val;
     }
 
-    private function handleImgUrl($val){
+    private function handleImgUrl($val) {
         $val = str_replace('\\','/',$val);
         $arr = explode(';',$val);
         foreach ($arr as &$item){
@@ -193,6 +194,8 @@ class Column extends Model
         // 生成无限极分类树
         return $cateTree->hTree($arr, $pid, $times);
     }
+
+
 
 
 }
