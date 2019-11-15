@@ -83,7 +83,7 @@ class Column extends Model
     /**
      * 前端和后台公用
      */
-    public function getNewsData($id=0, $mark=false){
+    public function getNewsData($id=0, $mark=false) {
         $data = [
             'id'     => $id
         ];

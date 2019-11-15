@@ -46,8 +46,6 @@ class ColumnCate extends BaseController
         return $result;
     }
 
-
-
     /**
      * 获取当前专栏分类数据
      * @url
