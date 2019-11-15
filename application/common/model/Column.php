@@ -20,7 +20,7 @@ class Column extends Model
     ];
 
     public function cate() {
-        return $this->belongsTo('column_cate','id','cate_id');
+        return $this->hasMany('column_cate','id','cate_id');
     }
 
     protected function getMainImgUrlAttr($val,$data) {
