@@ -323,7 +323,7 @@ class ColumnCate extends Model
             ->with(['column' => function($query){
                 $query->where(['status' => 1])->order('listorder desc');
             }])
-            ->visible(['id','name','column.introduce','column.id','column.name','column.create_time','column.main_img_url','column.mobile_imgs_url'])
+            ->visible(['id','name','column.introduce','column.id','column.name','column.create_time','column.sub_name','column.main_img_url','column.mobile_imgs_url'])
             ->find();
         return $result;
     }
