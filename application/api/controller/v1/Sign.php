@@ -4,7 +4,9 @@
 namespace app\api\controller\v1;
 
 
-class Sign
+use think\Controller;
+
+class Sign extends Controller
 {
     public function checkSignature()
     {
