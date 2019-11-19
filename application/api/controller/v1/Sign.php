@@ -10,9 +10,9 @@ class Sign extends BaseController
 {
     public function checkSignature()
     {
-        $signature = $_GET["signature"];
-        $timestamp = $_GET["timestamp"];
-        $nonce = $_GET["nonce"];
+        $signature = input("signature");
+        $timestamp = input("timestamp");
+        $nonce = input("nonce");
 
         $token = 'mgoi';
         $tmpArr = array($token, $timestamp, $nonce);
@@ -21,7 +21,7 @@ class Sign extends BaseController
         $tmpStr = sha1( $tmpStr );
 
         if( $tmpStr == $signature ){
-            return true;
+            return input('echostr');
         }else{
             return false;
         }
