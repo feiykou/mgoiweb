@@ -8,12 +8,21 @@ use app\api\controller\BaseController;
 
 class Sign extends BaseController
 {
-    public function checkSignature()
+
+    public function token()
     {
         $signature = input("signature");
         $timestamp = input("timestamp");
         $nonce = input("nonce");
+        $echostr = input("echostr");
+        if($this->checkSignature($signature,$timestamp,$nonce)){
+            return $echostr;
+        };
+    }
 
+
+    private function checkSignature($signature, $timestamp, $nonce)
+    {
         $token = 'mgoi';
         $tmpArr = array($token, $timestamp, $nonce);
         sort($tmpArr, SORT_STRING);
@@ -21,7 +30,7 @@ class Sign extends BaseController
         $tmpStr = sha1( $tmpStr );
 
         if( $tmpStr == $signature ){
-            return input('echostr');
+            return true;
         }else{
             return false;
         }

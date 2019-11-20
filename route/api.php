@@ -7,7 +7,7 @@ use think\facade\Route;
 Route::group('', function () {
     Route::group('api/:version', function () {
 
-        Route::get('sign', 'api/:version.Sign/checkSignature');
+        Route::get('sign', 'api/:version.Sign/token');
 
         Route::group('banner', function () {
             Route::get('name', 'api/:version.Banner/getBanner');
