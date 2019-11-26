@@ -523,7 +523,6 @@ class Product extends Model
             ->visible([
                 'main_img_url', 'mobile_imgs_url', 'name', 'name_desc', 'introduce','id', 'price'
             ]);
-
         return $data;
     }
 
