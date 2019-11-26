@@ -13,6 +13,9 @@ use think\Model;
 
 class ProductCate extends Model
 {
+
     protected $updateTime = false;
     protected $createTime = false;
+
+
 }

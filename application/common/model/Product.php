@@ -10,6 +10,7 @@ namespace app\common\model;
 
 
 use catetree\Catetree;
+use think\Db;
 use think\Model;
 
 class Product extends Model
@@ -300,32 +301,7 @@ class Product extends Model
     }
 
 
-    // 通过分类获取产品
-    public static function getProductsByCate($cateIds,$sort=0,$page=1,$size=10){
-        $cateIds = implode(',',$cateIds);
-        $data = [
-            ['p.status','=',1]
-        ];
-        if($sort){
-            $type = $sort == 1 ? 'desc' : 'asc';
-            $order['p.price'] = $type;
-        }
-        $order['id'] = 'desc';
-        $order['listorder'] = 'desc';
-        $result = db('product')->alias('p')
-            ->where($data)
-            ->field('p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.mobile_imgs_url,p.price,p.name_desc')
-            ->rightJoin('product_cate c',['c.product_id = p.id',"c.cate_id in ($cateIds)"])
-            ->order($order)
-            ->group('p.id')
-            ->paginate($size,true,['page'=>$page])
-            ->each(function($item, $key){
-                $item['main_img_url'] = self::handleImgUrl($item['main_img_url']);
-                $item['mobile_imgs_url'] = self::handleImgUrl($item['mobile_imgs_url']);
-                return $item;
-            });
-        return $result;
-    }
+
 
     // 通过礼品分类获取产品
     public static function getProductsByGiftCate($cateIds,$sort=0,$page=1,$size=10){
@@ -565,6 +541,9 @@ class Product extends Model
         return $result;
     }
 
+    /**
+     * 通过标签获取产品
+     */
     public static function getProductByLabel($label=1){
         $data = [
             ['status','=',1]
@@ -578,4 +557,57 @@ class Product extends Model
             ->select();
         return $result;
     }
+
+    /**
+     * 获取分类下的产品
+     */
+    public static function getProductByCateAndPage($params)
+    {
+        $order = [];
+        $cateid = $params['cateid'];
+        if(array_key_exists('sort', $params)){
+            $sort = $params['sort'];
+            $type = $sort == 1 ? 'desc' : 'asc';
+            $order['p.price'] = $type;
+        }
+        $catetree = new Catetree();
+        $sonids = $catetree->childrenids($cateid, new Procate());
+        $sonids[] = intval($cateid);
+        list($start, $count) = paginate();
+        $data = self::getProductsByCate($sonids, $order, $start, $count);
+        return $data;
+    }
+
+    // 通过分类获取产品
+    private static function getProductsByCate($cateIds,$sorder=[],$start=0,$count=10){
+        if(is_array($cateIds)){
+            $cateIds = implode(',',$cateIds);
+        }
+        $data = [
+            ['p.status','=',1]
+        ];
+        // 排序
+        $order = [
+            'p.id' => 'desc',
+            'p.listorder' => 'desc'
+        ];
+        $order = array_merge($sorder, $order);
+
+        $productSql = db('product')->alias('p')
+            ->where($data)
+            ->field('p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.mobile_imgs_url,p.price,p.name_desc')
+            ->rightJoin('product_cate c',['c.cate_id in ('.$cateIds.')']);
+        $productList = $productSql->order($order)
+            ->limit($start, $count)
+            ->group('p.id')
+            ->select();
+        $total_nums = $productSql->group('p.id')->count();
+        $result = [
+            'collection' => $productList,
+            'total_nums' => $total_nums
+        ];
+        return $result;
+    }
+
+
 }

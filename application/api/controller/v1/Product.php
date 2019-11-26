@@ -17,7 +17,7 @@ use app\api\validate\Search;
 use app\common\model\Procate;
 use app\common\model\Product as ProductModel;
 use app\api\validate\Product as ProductValidate;
-use catetree\Catetree;
+use think\facade\Request;
 
 class Product extends BaseController
 {
@@ -62,7 +62,7 @@ class Product extends BaseController
     }
 
     /**
-     *
+     * 搜索
      * @url
      * @http
      * @param $data
@@ -107,35 +107,43 @@ class Product extends BaseController
 
     /**
      * 获取分类下的所有产品
-     * @url  /product/list/:cateid?page=1&size=10
-     * @http
-     * @param $cateid
+     * @url  /product/list/:cateid?page=1&count=10
+     *
+     * @param('page','查询页码','require|number')
+     * @param('count','单页查询数量','require|number|between:1,15')
+     * @param('cateid','分类id','require|number')
      * @return false|\PDOStatement|string|\think\Collection
      * @throws CategoryException
      */
-    public function getProductByCate($cateid=0,$page=1,$size=10){
-        (new ProductValidate())->goCheck('all');
-        $sort = input('sort',0,'intval');
-        if($cateid == 0){
-            $order = ['listorder'=>'desc'];
-            if($sort){
-                $type = $sort == 1 ? 'desc' : 'asc';
-                array_push($order,[
-                    'price' => $type
-                ]);
-            }
-            $productArr = ProductModel::where('status','=',1)
-                ->order($order)
-                ->field('id,name,introduce,main_img_url,price,name_desc')
-                ->paginate($size,true,['page'=>$page]);
-        } else {
-            $catetree = new Catetree();
-            $sonids = $catetree->childrenids($cateid, new Procate());
-            $sonids[] = intval($cateid);
-            $productArr = ProductModel::getProductsByCate($sonids,$sort,$page,$size);
-        }
-        return json($productArr);
+    public function getProductByCate()
+    {
+        $params = Request::param();
+        $products = ProductModel::getProductByCateAndPage($params);
+        return json($products);
     }
+//    public function getProductByCate($cateid=0,$page=1,$size=10){
+//        (new ProductValidate())->goCheck('all');
+//        $sort = input('sort',0,'intval');
+//        if($cateid == 0){
+//            $order = ['listorder'=>'desc'];
+//            if($sort){
+//                $type = $sort == 1 ? 'desc' : 'asc';
+//                array_push($order,[
+//                    'price' => $type
+//                ]);
+//            }
+//            $productArr = ProductModel::where('status','=',1)
+//                ->order($order)
+//                ->field('id,name,introduce,main_img_url,price,name_desc')
+//                ->paginate($size,true,['page'=>$page]);
+//        } else {
+//            $catetree = new Catetree();
+//            $sonids = $catetree->childrenids($cateid, new Procate());
+//            $sonids[] = intval($cateid);
+//            $productArr = ProductModel::getProductsByCate($sonids,$sort,$page,$size);
+//        }
+//        return json($productArr);
+//    }
 
     /**
      *  获取推荐产品

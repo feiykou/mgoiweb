@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+use app\lib\exception\ParameterException;
 
 /**
  * @param $code
@@ -177,4 +178,23 @@ function getUrlArr($dataArr=[],$key){
             $data[$key] = explode(';',trim($data[$key],';'));
         }
     }
+}
+
+
+/**
+ * @return array
+ * @throws ParameterException
+ */
+function paginate()
+{
+    $count = intval(Request::get('count'));
+    $start = intval(Request::get('page'));
+
+    $count = $count >= 15 ? 15 : $count;
+
+    $start = $start * $count;
+
+    if ($start < 0 || $count < 0) throw new ParameterException();
+
+    return [$start, $count];
 }
