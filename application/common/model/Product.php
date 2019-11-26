@@ -68,6 +68,11 @@ class Product extends Model
         return str_replace('" title=',' title=',$val);
     }
 
+    protected function getCommentAttr($val){
+        $val = str_replace('src="','src='.config('APISetting.img_prefix'),$val);
+        return str_replace('" title=',' title=',$val);
+    }
+
     private static function handleImgUrl($val){
         $val = str_replace('\\','/',$val);
         $arr = explode(';',$val);
