@@ -593,7 +593,7 @@ class Product extends Model
         ];
         $order = array_merge($sorder, $order);
 
-        $productSql = db('product')->alias('p')
+        $productSql = self::alias('p')
             ->where($data)
             ->field('p.id,p.name,p.name_desc,p.introduce,p.main_img_url,p.mobile_imgs_url,p.price,p.name_desc')
             ->rightJoin('product_cate c',['c.cate_id in ('.$cateIds.')']);
