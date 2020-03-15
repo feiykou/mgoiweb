@@ -6,3 +6,4 @@
 config
 runtime
 public/upload
+!public/upload/20200315
