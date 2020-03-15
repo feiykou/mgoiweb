@@ -108,17 +108,16 @@ class Product extends BaseController
     /**
      * 获取分类下的所有产品
      * @url  /product/list/:cateid?page=1&count=10
-     *
-     * @param('page','查询页码','require|number')
-     * @param('count','单页查询数量','require|number|between:1,15')
+     * @param('sort','价格排序','number')
      * @param('cateid','分类id','require|number')
      * @return false|\PDOStatement|string|\think\Collection
      * @throws CategoryException
      */
-    public function getProductByCate()
+    public function getProductByCate($cateid)
     {
-        $params = Request::param();
-        $products = ProductModel::getProductByCateAndPage($params);
+        $cateid = input('cateid', 0, 'intval');
+        $sort = input('sort', 1, 'intval');
+        $products = ProductModel::getProductByCateAndPage($cateid, $sort);
         return json($products);
     }
 //    public function getProductByCate($cateid=0,$page=1,$size=10){

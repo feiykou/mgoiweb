@@ -6,6 +6,7 @@ namespace app\common\model;
 
 use catetree\Catetree;
 use think\Db;
+use think\facade\Request;
 use think\Model;
 
 class Common extends Model
@@ -27,7 +28,8 @@ class Common extends Model
         $arr = explode(';', $val);
         foreach ($arr as &$item){
             if(empty($item)) continue;
-            $item = config('APISetting.img_prefix').$item;
+            $item = Request::domain().$item;
+//            $item = config('APISetting.img_prefix').$item;
         }
         return $arr;
     }

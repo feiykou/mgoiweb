@@ -71,7 +71,7 @@ class Login extends Controller
     // 检查验证码
     public function check($code=''){
         if(!captcha_check($code)){
-            $this->error('验证码错误',url('/login'));
+            $this->error('验证码错误',url('/'));
         }else{
             return true;
         }
@@ -79,6 +79,6 @@ class Login extends Controller
 
     public function loginOut(){
         session(null);
-        $this->redirect(url('/login'));
+        $this->redirect(url('/'));
     }
 }

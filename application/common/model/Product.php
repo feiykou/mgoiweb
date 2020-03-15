@@ -565,18 +565,13 @@ class Product extends Model
     /**
      * 获取分类下的产品
      */
-    public static function getProductByCateAndPage($params)
+    public static function getProductByCateAndPage($cateid, $sort)
     {
-        $order = [];
-        $cateid = $params['cateid'];
-        if(array_key_exists('sort', $params)){
-            $sort = $params['sort'];
-            $type = $sort == 1 ? 'desc' : 'asc';
-            $order['p.price'] = $type;
-        }
+        $type = $sort == 1 ? 'desc' : 'asc';
+        $order['p.price'] = $type;
         $catetree = new Catetree();
         $sonids = $catetree->childrenids($cateid, new Procate());
-        $sonids[] = intval($cateid);
+        $sonids[] = $cateid;
         list($start, $count) = paginate();
         $data = self::getProductsByCate($sonids, $order, $start, $count);
         return $data;
