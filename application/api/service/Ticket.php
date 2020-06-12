@@ -22,6 +22,7 @@ class Ticket
         $url = config('wx.ticket_url');
         $url = sprintf($url, $token);
         $this->ticketUrl = $url;
+        var_dump(11);
         var_dump($this->ticketUrl);
     }
 
@@ -50,6 +51,7 @@ class Ticket
     {
         $ticket = curl_get($this->ticketUrl);
         $ticket = json_decode($ticket, true);
+        var_dump(111);
         var_dump($ticket);
         if (!$ticket)
         {
