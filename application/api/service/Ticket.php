@@ -22,6 +22,7 @@ class Ticket
         $url = config('wx.ticket_url');
         $url = sprintf($url, $token);
         $this->ticketUrl = $url;
+        var_dump($this->ticketUrl);
     }
 
     public function get()

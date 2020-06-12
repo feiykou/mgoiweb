@@ -38,7 +38,6 @@ class AccessToken
         return $token;
     }
 
-
     private function getFromWxServer()
     {
         $token = curl_get($this->tokenUrl);
@@ -57,6 +56,5 @@ class AccessToken
     private function saveToCache($token){
         cache(self::TOKEN_CACHED_KEY, $token, self::TOKEN_EXPIRE_IN);
     }
-
 
 }
