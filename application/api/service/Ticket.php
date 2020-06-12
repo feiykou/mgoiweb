@@ -20,10 +20,11 @@ class Ticket
             throw new Exception('token获取失败');
         }
         $url = config('wx.ticket_url');
+        var_dump($url);
         $url = sprintf($url, $token);
         $this->ticketUrl = $url;
         var_dump(11);
-        var_dump($this->ticketUrl);
+
     }
 
     public function get()
