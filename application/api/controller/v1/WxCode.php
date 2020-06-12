@@ -12,7 +12,7 @@ use think\facade\Request;
 class WxCode extends BaseController
 {
     public function wxValidate() {
-        $param = Request::get();
+        $param = Request::param();
         $signature = $param['signature'];
         $timestamp = $param['timestamp'];
         $nonce = $param['nonce'];
