@@ -20,23 +20,19 @@ class Ticket
             throw new Exception('token获取失败');
         }
         $url = config('wx.ticket_url');
-        var_dump($url);
         $url = sprintf($url, $token);
         $this->ticketUrl = $url;
-        var_dump(11);
-
     }
 
     public function get()
     {
-        return $this->getFromWxServer();
-//        $token = $this->getFromCache();
-//        if(!$token){
-//            return $this->getFromWxServer();
-//        }
-//        else{
-//            return $token['ticket'];
-//        }
+        $token = $this->getFromCache();
+        if(!$token){
+            return $this->getFromWxServer();
+        }
+        else{
+            return $token['ticket'];
+        }
     }
 
     private function getFromCache(){
@@ -52,8 +48,6 @@ class Ticket
     {
         $ticket = curl_get($this->ticketUrl);
         $ticket = json_decode($ticket, true);
-        var_dump(111);
-        var_dump($ticket);
         if (!$ticket)
         {
             throw new Exception('获取ticket异常');
