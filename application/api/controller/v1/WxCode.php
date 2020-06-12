@@ -39,7 +39,6 @@ class WxCode extends BaseController
         (new Wx())->goCheck('url');
         $ticketObj = new Ticket();
         $ticket = $ticketObj->get();
-        var_dump($ticket);
         if(!$ticket) {
             throw new Exception('临时票据不存在');
         }

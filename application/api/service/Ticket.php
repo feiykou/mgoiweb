@@ -27,13 +27,14 @@ class Ticket
 
     public function get()
     {
-        $token = $this->getFromCache();
-        if(!$token){
-            return $this->getFromWxServer();
-        }
-        else{
-            return $token['ticket'];
-        }
+        return $this->getFromWxServer();
+//        $token = $this->getFromCache();
+//        if(!$token){
+//            return $this->getFromWxServer();
+//        }
+//        else{
+//            return $token['ticket'];
+//        }
     }
 
     private function getFromCache(){
@@ -49,6 +50,7 @@ class Ticket
     {
         $ticket = curl_get($this->ticketUrl);
         $ticket = json_decode($ticket, true);
+        var_dump($ticket);
         if (!$ticket)
         {
             throw new Exception('获取ticket异常');
