@@ -33,14 +33,15 @@ class ExceptionHandler extends Handle
             $this->msg = $e->msg;
             $this->error_code = $e->error_code;
         } else {
-            if (config('app_debug')) {
-                return parent::render($e);
-            } else {
-                $this->code = 500;
-                $this->msg = '服務器內部錯誤，不想告訴你';
-                $this->error_code = 999;
-                $this->recordErrorLog($e);
-            }
+            return parent::render($e);
+//            if (config('app_debug')) {
+//                return parent::render($e);
+//            } else {
+//                $this->code = 500;
+//                $this->msg = '服務器內部錯誤，不想告訴你';
+//                $this->error_code = 999;
+//                $this->recordErrorLog($e);
+//            }
         }
 
         $result = [
