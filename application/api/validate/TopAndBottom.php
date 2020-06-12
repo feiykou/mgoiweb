@@ -10,4 +10,6 @@ class TopAndBottom extends BaseValidate
         'cateId' => 'isInteger',
         'id' => 'require|isPositiveInteger'
     ];
+
+
 }

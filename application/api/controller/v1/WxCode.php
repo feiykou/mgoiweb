@@ -6,6 +6,8 @@ namespace app\api\controller\v1;
 
 use app\api\controller\BaseController;
 use app\api\service\AccessToken;
+use app\api\service\Ticket;
+use app\api\validate\Wx;
 use think\Exception;
 use think\facade\Env;
 use think\facade\Log;
@@ -13,6 +15,7 @@ use think\facade\Request;
 
 class WxCode extends BaseController
 {
+    // 成为开发者
     public function wxValidate() {
         $param = Request::param();
         $signature = $param['signature'];
@@ -31,18 +34,30 @@ class WxCode extends BaseController
         }
     }
 
-    private function recordErrorLog($val)
+    public function getConfigParam($url)
     {
-        Log::init([
-            'type' => 'File',
-            'path' => Env::get('root_path').'/runtime/log_error',
-            'apart_level' => ['error'],
-            'max_files' =>  30,
-            'close' => false
+        (new Wx())->goCheck('url');
+        $ticketObj = new Ticket();
+        $ticket = $ticketObj->get();
+        if(!$ticket) {
+            throw new Exception('临时票据不存在');
+        }
+        $rand = date('d') . substr(time(), -5) . substr(microtime(), 2, 5) . sprintf(
+                '%02d', rand(0, 99));
+        $time = time();
+        $json = [
+            "jsapi_ticket" => $ticket,
+            "noncestr" => $rand,
+            "timestamp" => $time,
+            "url" => $url
+        ];
+        $jsonStr = implode('&', $json);
+        $jsonStr = sha1( $jsonStr );
+        return json([
+            "signature" => $jsonStr,
+            "nonceStr" => $rand,
+            "timestamp" => $time
         ]);
-
-        Log::write($val, 'error');
-        log::close();
-
     }
+
 }
