@@ -16,18 +16,14 @@ class WxCode extends BaseController
         $signature = $param['signature'];
         $timestamp = $param['timestamp'];
         $nonce = $param['nonce'];
-
-        $accessToken = new AccessToken();
-        $token = $accessToken->get();
-        if(!isset($token)) {
-            throw new Exception('获取AccessToken异常');
-        }
+        $echostr = $param['echostr'];
+        $token = '3901mgoi';
         $tmpArr = [$token, $timestamp, $nonce];
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode( $tmpArr );
         $tmpStr = sha1( $tmpStr );
         if( $tmpStr == $signature ){
-            return true;
+            return $echostr;
         }else{
             return false;
         }
