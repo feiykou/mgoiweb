@@ -7,6 +7,8 @@ namespace app\api\controller\v1;
 use app\api\controller\BaseController;
 use app\api\service\AccessToken;
 use think\Exception;
+use think\facade\Env;
+use think\facade\Log;
 use think\facade\Request;
 
 class WxCode extends BaseController
@@ -27,5 +29,20 @@ class WxCode extends BaseController
         }else{
             return false;
         }
+    }
+
+    private function recordErrorLog($val)
+    {
+        Log::init([
+            'type' => 'File',
+            'path' => Env::get('root_path').'/runtime/log_error',
+            'apart_level' => ['error'],
+            'max_files' =>  30,
+            'close' => false
+        ]);
+
+        Log::write($val, 'error');
+        log::close();
+
     }
 }
