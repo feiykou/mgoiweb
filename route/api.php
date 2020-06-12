@@ -8,7 +8,7 @@ Route::group('', function () {
     Route::group('api/:version', function () {
 
         Route::group('wx', function (){
-           Route::get('validate', 'api/:version.Wx/validate');
+           Route::get('', 'api/:version.WxCode/wxValidate');
         });
 
         Route::get('sign', 'api/:version.Sign/token');

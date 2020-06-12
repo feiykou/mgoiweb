@@ -9,13 +9,12 @@ use app\api\service\AccessToken;
 use think\Exception;
 use think\facade\Request;
 
-class Wx extends BaseController
+class WxCode extends BaseController
 {
-
-    public function validate() {
+    public function wxValidate() {
         $param = Request::get();
         $signature = $param['signature'];
-        $timestamp = $param['timestamp '];
+        $timestamp = $param['timestamp'];
         $nonce = $param['nonce'];
 
         $accessToken = new AccessToken();
