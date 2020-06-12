@@ -27,7 +27,7 @@ class WxCode extends BaseController
         if( $tmpStr == $signature ){
             return $echostr;
         }else{
-            return false;
+            return '';
         }
     }
 
