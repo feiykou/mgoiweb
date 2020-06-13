@@ -61,7 +61,8 @@ class WxCode extends BaseController
             "nonceStr" => $rand,
             "timestamp" => $time,
             "appId" => config('wx.app_id'),
-            "downloadUrl" => Request::url()
+            "downloadUrl" => Request::url(),
+            "jsapi_ticket" => $ticket
         ]);
     }
 
