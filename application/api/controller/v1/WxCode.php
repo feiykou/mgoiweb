@@ -54,7 +54,11 @@ class WxCode extends BaseController
             "timestamp" => $time,
             "url" => $url
         ];
-        $jsonStr1 = implode('&', $json);
+        $jsonStr1 = '';
+        foreach ($json as $key => $val) {
+            $jsonStr1 .= $key . '=' . $val . '&';
+        }
+        trim($jsonStr1, '&');
         $jsonStr = sha1( $jsonStr1 );
         return json([
             "signature" => $jsonStr,
