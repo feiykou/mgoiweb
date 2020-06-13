@@ -54,8 +54,8 @@ class WxCode extends BaseController
             "timestamp" => $time,
             "url" => $url
         ];
-        $jsonStr = implode('&', $json);
-        $jsonStr = sha1( $jsonStr );
+        $jsonStr1 = implode('&', $json);
+        $jsonStr = sha1( $jsonStr1 );
         return json([
             "signature" => $jsonStr,
             "nonceStr" => $rand,
@@ -63,7 +63,7 @@ class WxCode extends BaseController
             "appId" => config('wx.app_id'),
             "downloadUrl" => Request::url(),
             "jsapi_ticket" => $ticket,
-            "jsonstr" => $jsonStr,
+            "jsonstr" => $jsonStr1,
             "url" => $url
         ]);
     }
