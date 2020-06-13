@@ -36,7 +36,10 @@ class WxCode extends BaseController
 
     public function getConfigParam($url)
     {
-        (new Wx())->goCheck('url');
+        if(!isset($url) || !$url) {
+            throw new Exception('url参数错误');
+        }
+        $url = urldecode($url);
         $ticketObj = new Ticket();
         $ticket = $ticketObj->get();
         if(!$ticket) {
