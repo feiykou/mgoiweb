@@ -56,7 +56,9 @@ class WxCode extends BaseController
         return json([
             "signature" => $jsonStr,
             "nonceStr" => $rand,
-            "timestamp" => $time
+            "timestamp" => $time,
+            "appId" => config('wx.app_id'),
+            "downloadUrl" => Request::url()
         ]);
     }
 
