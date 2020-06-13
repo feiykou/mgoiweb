@@ -58,7 +58,7 @@ class WxCode extends BaseController
         foreach ($json as $key => $val) {
             $jsonStr1 .= $key . '=' . $val . '&';
         }
-        trim($jsonStr1, '&');
+        $jsonStr1 = trim($jsonStr1, '&');
         $jsonStr = sha1( $jsonStr1 );
         return json([
             "signature" => $jsonStr,
