@@ -62,7 +62,8 @@ class WxCode extends BaseController
             "timestamp" => $time,
             "appId" => config('wx.app_id'),
             "downloadUrl" => Request::url(),
-            "jsapi_ticket" => $ticket
+            "jsapi_ticket" => $ticket,
+            "jsonstr" => $jsonStr
         ]);
     }
 
