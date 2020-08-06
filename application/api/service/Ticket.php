@@ -26,6 +26,7 @@ class Ticket
 
     public function get()
     {
+        return $this->getFromWxServer();
         $token = $this->getFromCache();
         if(!$token){
             return $this->getFromWxServer();
