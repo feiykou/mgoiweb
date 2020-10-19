@@ -6,6 +6,7 @@ use think\facade\Route;
 
 Route::group('', function () {
     Route::group('api/:version', function () {
+        Route::post('partner','api/:version.Partner/createEmail');
 
         Route::group('wx', function (){
             Route::get('', 'api/:version.WxCode/wxValidate');
