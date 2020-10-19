@@ -19,6 +19,7 @@ class Partner extends Base
             PartnerModel::create(['email' => $email]);
             return writeJson(201,[],'ok');
         } catch(Exception $e){
+            return writeJson(404,[],'error');
         }
     }
 }
