@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=5.6.0",
-        "topthink/framework": "5.1.*",
+        "topthink/framework": "6.0.*",
         "lin-cms-tp/validate-core": "^0.0.1"
     },
     "autoload": {
